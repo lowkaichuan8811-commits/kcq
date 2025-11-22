@@ -657,7 +657,76 @@
       renderVideos();
     };
   </script>
-</body>
+</body>  
+  <!-- 主页 -->
+  <div id="home-page" style="display: none; width: 100%; height: 100vh; background-color: #f0f0f0;">
+    <div class="header">
+      <a href="#" onclick="showUserProfile()">我的</a>
+      <div class="search-bar">
+        <img src="search-icon.svg" alt="搜索图标">
+        <input type="text" placeholder="搜索视频">
+      </div>
+      <a href="#" onclick="showDiscoverPage()">发现</a>
+    </div>
+    <!-- 可以在这里添加主页的视频列表等其他内容 -->
+  </div>
 
+  <!-- 发现页 -->
+  <div id="discover-page" style="display: none; width: 100%; height: 100vh; background-color: #f0f0f0;">
+    <div class="header">
+      <a href="#" onclick="showHomePage()">主页</a>
+      <div class="search-bar">
+        <img src="search-icon.svg" alt="搜索图标">
+        <input type="text" placeholder="搜索视频">
+      </div>
+      <a href="#" onclick="showUserProfile()">我的</a>
+    </div>
+    <!-- 可以在这里添加发现页的视频推荐等其他内容 -->
+  </div>
+
+  <!-- 切换账号按钮，可放在合适位置，这里先放在用户主页示例 -->
+  <div id="user-profile" style="display: none;">
+    <!-- 其他用户主页内容... -->
+    <button onclick="switchAccount()">切换账号</button>
+  </div>
+// 显示主页
+function showHomePage() {
+  document.getElementById('home-page').style.display = 'block';
+  document.getElementById('discover-page').style.display = 'none';
+  document.getElementById('user-profile').style.display = 'none';
+  // 可以在这里添加主页初始化相关逻辑，比如加载视频列表等
+}
+
+// 显示发现页
+function showDiscoverPage() {
+  document.getElementById('discover-page').style.display = 'block';
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('user-profile').style.display = 'none';
+  // 可以在这里添加发现页初始化相关逻辑，比如加载推荐视频等
+}
+
+// 显示用户主页
+function showUserProfile() {
+  document.getElementById('user-profile').style.display = 'block';
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('discover-page').style.display = 'none';
+  // 可以在这里添加用户主页初始化相关逻辑，比如加载用户信息和视频等
+}
+
+// 切换账号功能，简单示例为清空当前用户信息并回到注册页
+function switchAccount() {
+  // 清空当前用户相关数据，这里简单示例
+  users = [];
+  nextUserId = 100000;
+  document.getElementById('username-display').textContent = '';
+  document.getElementById('user-id-display').textContent = '';
+  document.getElementById('following-count').textContent = '0';
+  document.getElementById('follower-count').textContent = '0';
+  document.getElementById('user-avatar').src = "default-avatar.jpg";
+  document.getElementById('user-profile').style.display = 'none';
+  document.getElementById('register-page').style.display = 'block';
+}
+
+  
 </html>
 
