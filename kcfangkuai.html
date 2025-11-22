@@ -328,12 +328,12 @@
     }
 
     // 显示注册页
-    document.getElementById('register - link').addEventListener('click', function () {
+    document.getElementById('register-link').addEventListener('click', function () {
       document.getElementById('register - page').style.display = 'block';
     });
 
     // 显示账号主页
-    document.getElementById('profile - link').addEventListener('click', function () {
+    document.getElementById('profile-link').addEventListener('click', function () {
       const username = prompt('请输入你的用户名');
       const user = users.find(u => u.username === username);
       if (user) {
