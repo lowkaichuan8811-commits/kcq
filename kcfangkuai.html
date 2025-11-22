@@ -1,149 +1,236 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>祝福页面</title>
+  <title>简易视频网站</title>
   <style>
+    /* 整体样式 */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
+    }
+
+    /* 头部样式 */
+    header {
+      background-color: #333;
+      color: white;
       text-align: center;
+      padding: 10px;
     }
 
-    h1 {
-      color: #333;
+    /* 导航栏样式 */
+    nav {
+      background-color: #444;
+      padding: 5px;
     }
 
-   .message {
-      font-size: 1.5em;
-      color: #666;
-      margin-bottom: 30px;
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
     }
 
-   .heart {
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      animation: fall 2s linear infinite;
-      transform-origin: top center;
+    /* 表单样式 */
+    form {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: white;
     }
 
-    @keyframes fall {
-      0% {
-        top: -20px;
-      }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
 
-      100% {
-        top: 100vh;
-      }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* 视频列表样式 */
+    #video-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+    }
+
+   .video-item {
+      width: 300px;
+      cursor: pointer;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+   .video-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    /* 视频播放区域样式 */
+    #video-player-section {
+      text-align: center;
+      margin: 20px;
+      display: none;
+    }
+
+    video {
+      max-width: 100%;
     }
   </style>
 </head>
 
 <body>
-  <h1>你好我是KC</h1>
-  <div class="message">这个代码怎么写呢就这样（<!DOCTYPE html>
-<html lang="zh-CN">
+  <!-- 头部 -->
+  <header>
+    <h1>简易视频网站</h1>
+  </header>
+  <!-- 导航栏 -->
+  <nav>
+    <a href="#" id="login-link">登录</a>
+    <a href="#" id="register-link">注册</a>
+  </nav>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>祝福页面</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-      text-align: center;
-    }
+  <!-- 登录表单 -->
+  <form id="login-form" style="display: none;">
+    <h2>登录</h2>
+    <label for="login-username">用户名:</label>
+    <input type="text" id="login-username" required>
+    <label for="login-password">密码:</label>
+    <input type="password" id="login-password" required>
+    <button type="button" id="login-button">登录</button>
+  </form>
 
-    h1 {
-      color: #333;
-    }
+  <!-- 注册表单 -->
+  <form id="register-form" style="display: none;">
+    <h2>注册</h2>
+    <label for="register-username">用户名:</label>
+    <input type="text" id="register-username" required>
+    <label for="register-password">密码:</label>
+    <input type="password" id="register-password" required>
+    <button type="button" id="register-button">注册</button>
+  </form>
 
-   .message {
-      font-size: 1.5em;
-      color: #666;
-      margin-bottom: 30px;
-    }
+  <!-- 视频列表 -->
+  <div id="video-list">
+    <!-- 模拟视频数据，实际可从 API 获取 -->
+    <div class="video-item">
+      <img src="https://picsum.photos/300/200" alt="视频缩略图">
+      <h3>视频 1</h3>
+      <p>这是视频 1 的描述</p>
+      <data value="https://www.sample-videos.com/video1.mp4"></data> <!-- 模拟视频链接 -->
+    </div>
+    <div class="video-item">
+      <img src="https://picsum.photos/300/200" alt="视频缩略图">
+      <h3>视频 2</h3>
+      <p>这是视频 2 的描述</p>
+      <data value="https://www.sample-videos.com/video2.mp4"></data> <!-- 模拟视频链接 -->
+    </div>
+  </div>
 
-   .heart {
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      animation: fall 2s linear infinite;
-      transform-origin: top center;
-    }
-
-    @keyframes fall {
-      0% {
-        top: -20px;
-      }
-
-      100% {
-        top: 100vh;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <h1>亲爱的朋友，祝你一切顺利！</h1>
-  <div class="message">愿你在生活中充满快乐，实现所有的梦想，每一天都充满阳光和希望。</div>
-  <button id="add-heart-btn">点击送爱心祝福</button>
+  <!-- 视频播放区域 -->
+  <div id="video-player-section">
+    <video id="video-player" controls></video>
+    <h2 id="video-title"></h2>
+    <p id="video-description"></p>
+  </div>
 
   <script>
-    const addHeartBtn = document.getElementById('add-heart-btn');
-    addHeartBtn.addEventListener('click', function () {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      const randomX = Math.random() * window.innerWidth;
-      heart.style.left = randomX + 'px';
-      const randomSize = Math.random() * 10 + 10;
-      heart.style.width = randomSize + 'px';
-      heart.style.height = randomSize + 'px';
-      document.body.appendChild(heart);
+    // 获取页面元素
+    const loginLink = document.getElementById('login-link');
+    const registerLink = document.getElementById('register-link');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const loginButton = document.getElementById('login-button');
+    const registerButton = document.getElementById('register-button');
+    const videoList = document.getElementById('video-list');
+    const videoPlayerSection = document.getElementById('video-player-section');
+    const videoPlayer = document.getElementById('video-player');
+    const videoTitle = document.getElementById('video-title');
+    const videoDescription = document.getElementById('video-description');
 
-      setTimeout(() => {
-        heart.remove();
-      }, 2000);
+    // 模拟用户数据存储（实际应使用后端数据库）
+    let users = [];
+
+    // 显示登录表单
+    loginLink.addEventListener('click', () => {
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
     });
-  </script>
-</body>
 
-</html> 点击复制写好了）
-</div>
+    // 显示注册表单
+    registerLink.addEventListener('click', () => {
+      registerForm.style.display = 'block';
+      loginForm.style.display = 'none';
+    });
 
-  <script>
-    const addHeartBtn = document.getElementById('add-heart-btn');
-    addHeartBtn.addEventListener('click', function () {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      const randomX = Math.random() * window.innerWidth;
-      heart.style.left = randomX + 'px';
-      const randomSize = Math.random() * 10 + 10;
-      heart.style.width = randomSize + 'px';
-      heart.style.height = randomSize + 'px';
-      document.body.appendChild(heart);
+    // 处理登录按钮点击事件
+    loginButton.addEventListener('click', () => {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        alert('登录成功');
+        loginForm.style.display = 'none';
+      } else {
+        alert('用户名或密码错误');
+      }
+    });
 
-      setTimeout(() => {
-        heart.remove();
-      }, 2000);
+    // 处理注册按钮点击事件
+    registerButton.addEventListener('click', () => {
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+      const existingUser = users.find(u => u.username === username);
+      if (existingUser) {
+        alert('用户名已存在');
+      } else {
+        users.push({ username, password });
+        alert('注册成功');
+        registerForm.style.display = 'none';
+      }
+    });
+
+    // 处理视频列表项点击事件
+    videoList.addEventListener('click', (e) => {
+      if (e.target.closest('.video-item')) {
+        const videoItem = e.target.closest('.video-item');
+        const videoUrl = videoItem.querySelector('data').value;
+        const videoTitleText = videoItem.querySelector('h3').textContent;
+        const videoDescriptionText = videoItem.querySelector('p').textContent;
+
+        videoPlayer.src = videoUrl;
+        videoTitle.textContent = videoTitleText;
+        videoDescription.textContent = videoDescriptionText;
+
+        videoPlayerSection.style.display = 'block';
+        videoPlayer.play();
+      }
     });
   </script>
 </body>
