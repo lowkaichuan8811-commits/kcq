@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -305,6 +305,12 @@
       margin: 10px;
       cursor: pointer;
     }
+
+    /* 视频预览样式 */
+   .video-preview {
+      margin-top: 10px;
+      max-width: 300px;
+    }
   </style>
 </head>
 
@@ -374,7 +380,8 @@
     <h2>上传视频</h2>
     <input type="text" placeholder="视频标题" id="video-title" required>
     <input type="text" placeholder="视频描述" id="video-desc">
-    <input type="file" id="video-upload" accept="video/*">
+    <input type="file" id="video-upload" accept="video/*" onchange="previewVideo(this)">
+    <div class="video-preview" id="video-preview"></div>
     <button type="button" onclick="uploadVideo()">提交</button>
     <button type="button" onclick="hideUploadForm()">取消</button>
   </div>
@@ -512,10 +519,25 @@
       }
     }
 
+    // 视频预览函数
+    function previewVideo(input) {
+      if (input.files && input.files[0]) {
+        const videoPreview = document.getElementById('video-preview');
+        videoPreview.innerHTML = '';
+        const video = document.createElement('video');
+        video.controls = true;
+        video.preload = 'metadata';
+        video.src = URL.createObjectURL(input.files[0]);
+        video.style.maxWidth = '100%';
+        videoPreview.appendChild(video);
+      }
+    }
+
     // 显示注册页
     document.getElementById('register-link').addEventListener('click', function () {
       document.getElementById('register-page').style.display = 'block';
- 
+    });
+
     // 显示用户主页
     document.getElementById('profile-link').addEventListener('click', function () {
       document.getElementById('user-profile').style.display = 'block';
@@ -639,5 +661,4 @@
 </body>
 
 </html>
- 
- 
+
