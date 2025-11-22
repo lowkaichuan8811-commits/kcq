@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>简易 Tetris（俄罗斯方块）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #111;
+      --grid: #333;
+      --piece: #ff4d4f;
+      --board: #1e1e1e;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .wrapper {
+      text-align: center;
+    }
+    canvas {
+      background: var(--bg);
+      image-rendering: pixelated;
+      border: 2px solid #888;
+      box-shadow: 0 0 20px rgba(0,0,0,.5);
+      display: block;
+      margin: 0 auto;
+    }
+    .hint {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <canvas id="game" width="240" height="480" aria-label="Tetris 游戏画布"></canvas>
+    <div class="hint">使用箭头键移动和旋转方块。向下加速请按向下箭头。</div>
+  </div>
+
+  <script>
+    // 画布与棋盘设置
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const COLS = 10;
+    const ROWS = 20;
+    const BLOCK = 24; // 每格像素大小
+    canvas.width = COLS * BLOCK;
+    canvas.height = ROWS * BLOCK;
+
+    // 形状集合（7 种 Tetris 形状，使用 0/1 表示占位格）
+    // 使用旋转后的效果，通过 rotate(shape) 实现 0,90,180,270 度旋转
+    const SHAPES = [
+      // I
+      [
+        [1,1,1,1]
+      ],
+      // O
+      [
+        [1,1],
+        [1,1]
+      ],
+      // T
+      [
+        [0,1,0],
+        [1,1,1]
+      ],
+      // J
+      [
+        [1,0,0],
+        [1,1,1]
+      ],
+      // L
+      [
+        [0,0,1],
+        [1,1,1]
+      ],
+      // S
+      [
+        [1,1,0],
+        [0,1,1]
+      ],
+      // Z
+      [
+        [0,1,1],
+        [1,1,0]
+      ]
+    ];
+
+    // 游戏状态
+    let board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+
+    // 当前方块
+    let current = {
+      shape: SHAPES[0],
+      x: 3, // 左上角格子坐标
+      y: -1
+    };
+
+    let dropCounter = 0;
+    let dropInterval = 500; // 初始下落间隔（毫秒）
+    let lastTime = 0;
+    let score = 0;
+    let linesCleared = 0;
+    let gameOver = false;
+
+    // 形状旋转：顺时针 90 度
+    function rotate(shape) {
+      const rows = shape.length;
+      const cols = shape[0].length;
+      const result = Array.from({length: cols}, () => Array(rows).fill(0));
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          result[c][rows - 1 - r] = shape[r][c];
+        }
+      }
+      return result;
+    }
+
+    // 碰撞检测：在给定位置和形状下，是否与边界或已放置的方块重叠
+    function collide(x, y, shape) {
+      for (let r = 0; r < shape.length; r++) {
+        for (let c = 0; c < shape[r].length; c++) {
+          if (shape[r][c]) {
+            const px = x + c;
+            const py = y + r;
+            if (px < 0 || px >= COLS || py >= ROWS) return true;
+            if (py >= 0 && board[py][px]) return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    // 将当前方块落到底部（合并到棋盘）
+    function merge() {
+      for (let r = 0; r < current.shape.length; r++) {
+        for (let c = 0; c < current.shape[r].length; c++) {
+          if (current.shape[r][c]) {
+            const x = current.x + c;
+            const y = current.y + r;
+            if (y >= 0) board[y][x] = 1;
+          }
+        }
+      }
+    }
+
+    // 消行
+    function clearLines() {
+      let lines = 0;
+      for (let r = ROWS - 1; r >= 0; r--) {
+        if (board[r].every(v => v === 1)) {
+          board.splice(r, 1);
+          board.unshift(Array(COLS).fill(0));
+          lines++;
+          r++;
+        }
+      }
+      if (lines > 0) {
+        // 简单得分规则：每行 100 分，阶梯加成
+        score += lines * 100;
+        linesCleared += lines;
+        // 下落间隔随分数变快
+        dropInterval = Math.max(100, dropInterval - lines * 20);
+      }
+    }
+
+    // 重置与生成新的方块
+    function newPiece() {
+      const idx = Math.floor(Math.random() * SHAPES.length);
+      current.shape = SHAPES[idx];
+      current.x = Math.floor((COLS - current.shape[0].length) / 2);
+      current.y = -1;
+      // 检查新方块是否已与棋盘重叠，如果重叠则游戏结束
+      if (collide(current.x, current.y, current.shape)) {
+        gameOver = true;
+      }
+    }
+
+    // 下落一次
+    function drop() {
+      current.y++;
+      if (collide(current.x, current.y, current.shape)) {
+        current.y--;
+        merge();
+        clearLines();
+        newPiece();
+      }
+    }
+
+    // 绘制棋盘和当前方块
+    function draw() {
+      // 清屏
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 绘制棋盘格背景
+      ctx.fillStyle = '#222';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          ctx.fillStyle = '#1e1e1e';
+          ctx.fillRect(c * BLOCK, r * BLOCK, BLOCK - 1, BLOCK - 1);
+        }
+      }
+
+      // 绘制已放置的方块
+      ctx.fillStyle = '#4CAF50';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (board[r][c]) {
+            ctx.fillStyle = '#4CAF50';
+            ctx.fillRect(c * BLOCK, r * BLOCK, BLOCK - 1, BLOCK - 1);
+          }
+        }
+      }
+
+      // 绘制当前活跃方块
+      ctx.fillStyle = '#FF4D4F';
+      for (let r = 0; r < current.shape.length; r++) {
+        for (let c = 0; c < current.shape[r].length; c++) {
+          if (current.shape[r][c]) {
+            const x = current.x + c;
+            const y = current.y + r;
+            if (y >= 0) {
+              ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK - 1, BLOCK - 1);
+            }
+          }
+        }
+      }
+
+      // 显示分数与等级信息
+      ctx.fillStyle = '#fff';
+      ctx.font = '14px Arial';
+      ctx.fillText('分数: ' + score, 8, 14);
+      ctx.fillText('已消行: ' + linesCleared, 8, 32);
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px Arial';
+        ctx.fillText('游戏结束！按回车重新开始', 20, canvas.height / 2);
+      }
+    }
+
+    // 更新循环
+    function update(time = 0) {
+      if (gameOver) {
+        draw();
+        return;
+      }
+      const delta = time - lastTime;
+      lastTime = time;
+      dropCounter += delta;
+      if (dropCounter > dropInterval) {
+        drop();
+        dropCounter = 0;
+      }
+      draw();
+      requestAnimationFrame(update);
+    }
+
+    // 输入处理
+    window.addEventListener('keydown', e => {
+      if (gameOver && e.key === 'Enter') {
+        restart();
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowLeft':
+          current.x--;
+          if (collide(current.x, current.y, current.shape)) current.x++;
+          break;
+        case 'ArrowRight':
+          current.x++;
+          if (collide(current.x, current.y, current.shape)) current.x--;
+          break;
+        case 'ArrowDown':
+          // 快速下落
+          drop();
+          dropCounter = 0;
+          break;
+        case 'ArrowUp':
+          // 旋转
+          const rotated = rotate(current.shape);
+          if (!collide(current.x, current.y, rotated)) {
+            current.shape = rotated;
+          } else {
+            // 尝试“偏移+旋转”补偿（可选）
+            // 向左偏移再旋转
+            if (!collide(current.x - 1, current.y, rotated)) {
+              current.x -= 1;
+              current.shape = rotated;
+            } else if (!collide(current.x + 1, current.y, rotated)) {
+              current.x += 1;
+              current.shape = rotated;
+            }
+          }
+          break;
+      }
+    });
+
+    // 重启游戏
+    function restart() {
+      board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+      score = 0;
+      linesCleared = 0;
+      dropInterval = 500;
+      gameOver = false;
+      current = {
+        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+        x: Math.floor((COLS - SHAPES[0][0].length) / 2),
+        y: -1
+      };
+      // 初始化一个新方块
+      newPiece();
+      lastTime = performance.now();
+      requestAnimationFrame(update);
+    }
+
+    // 初始化
+    (function init() {
+      // 初始化当前方块
+      // 先随机一个形状
+      const idx = Math.floor(Math.random() * SHAPES.length);
+      current.shape = SHAPES[idx];
+      current.x = Math.floor((COLS - current.shape[0].length) / 2);
+      current.y = -1;
+      newPiece();
+      lastTime = performance.now();
+      requestAnimationFrame(update);
+    })();
+  </script>
+</body>
+</html>
