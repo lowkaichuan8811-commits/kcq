@@ -73,6 +73,20 @@
       border-radius: 50%;
       cursor: pointer;
     }
+
+    /* 视频推荐区域样式 */
+   .video-recommendation {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+   .video-item-recommendation {
+      width: 300px;
+      height: 300px;
+      margin: 20px;
+      background-color: #ccc;
+    }
   </style>
 </head>
 
@@ -101,6 +115,11 @@
       <a href="#" onclick="showUserProfile()">我的</a>
     </div>
     <p>这里是发现页的一些示例内容</p>
+    <div class="video-recommendation">
+      <div class="video-item-recommendation"></div>
+      <div class="video-item-recommendation"></div>
+      <div class="video-item-recommendation"></div>
+    </div>
   </div>
 
   <!-- 用户主页 -->
