@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8" />
   <title>简易 Tetris（俄罗斯方块）</title>
@@ -11,7 +12,9 @@
       --piece: #ff4d4f;
       --board: #1e1e1e;
     }
-    html, body {
+
+    html,
+    body {
       height: 100%;
       margin: 0;
       display: flex;
@@ -21,28 +24,62 @@
       color: #fff;
       font-family: Arial, sans-serif;
     }
-    .wrapper {
+
+   .wrapper {
       text-align: center;
     }
+
     canvas {
       background: var(--bg);
       image-rendering: pixelated;
       border: 2px solid #888;
-      box-shadow: 0 0 20px rgba(0,0,0,.5);
+      box-shadow: 0 0 20px rgba(0, 0, 0,.5);
       display: block;
       margin: 0 auto;
     }
-    .hint {
+
+   .hint {
       margin-top: 8px;
       font-size: 14px;
       color: #ddd;
     }
+
+   .controls {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+    }
+
+   .control-btn {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #888;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
     <canvas id="game" width="240" height="480" aria-label="Tetris 游戏画布"></canvas>
-    <div class="hint">使用箭头键移动和旋转方块。向下加速请按向下箭头。</div>
+    <div class="hint">使用触摸按钮移动和旋转方块。向下长按加速下落。</div>
+  </div>
+  <div class="controls">
+    <div class="control-btn" id="left-btn">←</div>
+    <div class="control-btn" id="down-btn">↓</div>
+    <div class="control-btn" id="right-btn">→</div>
+    <div class="control-btn" id="up-btn">↑</div>
   </div>
 
   <script>
@@ -60,42 +97,42 @@
     const SHAPES = [
       // I
       [
-        [1,1,1,1]
+        [1, 1, 1, 1]
       ],
       // O
       [
-        [1,1],
-        [1,1]
+        [1, 1],
+        [1, 1]
       ],
       // T
       [
-        [0,1,0],
-        [1,1,1]
+        [0, 1, 0],
+        [1, 1, 1]
       ],
       // J
       [
-        [1,0,0],
-        [1,1,1]
+        [1, 0, 0],
+        [1, 1, 1]
       ],
       // L
       [
-        [0,0,1],
-        [1,1,1]
+        [0, 0, 1],
+        [1, 1, 1]
       ],
       // S
       [
-        [1,1,0],
-        [0,1,1]
+        [1, 1, 0],
+        [0, 1, 1]
       ],
       // Z
       [
-        [0,1,1],
-        [1,1,0]
+        [0, 1, 1],
+        [1, 1, 0]
       ]
     ];
 
     // 游戏状态
-    let board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+    let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 
     // 当前方块
     let current = {
@@ -115,7 +152,7 @@
     function rotate(shape) {
       const rows = shape.length;
       const cols = shape[0].length;
-      const result = Array.from({length: cols}, () => Array(rows).fill(0));
+      const result = Array.from({ length: cols }, () => Array(rows).fill(0));
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           result[c][rows - 1 - r] = shape[r][c];
@@ -244,7 +281,7 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#fff';
         ctx.font = '20px Arial';
-        ctx.fillText('游戏结束！按回车重新开始', 20, canvas.height / 2);
+        ctx.fillText('游戏结束！按屏幕重新开始', 20, canvas.height / 2);
       }
     }
 
@@ -266,48 +303,60 @@
     }
 
     // 输入处理
-    window.addEventListener('keydown', e => {
-      if (gameOver && e.key === 'Enter') {
-        restart();
-        return;
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
+    const upBtn = document.getElementById('up-btn');
+    const downBtn = document.getElementById('down-btn');
+
+    leftBtn.addEventListener('touchstart', () => {
+      current.x--;
+      if (collide(current.x, current.y, current.shape)) current.x++;
+    });
+
+    rightBtn.addEventListener('touchstart', () => {
+      current.x++;
+      if (collide(current.x, current.y, current.shape)) current.x--;
+    });
+
+    upBtn.addEventListener('touchstart', () => {
+      // 旋转
+      const rotated = rotate(current.shape);
+      if (!collide(current.x, current.y, rotated)) {
+        current.shape = rotated;
+      } else {
+        // 尝试“偏移+旋转”补偿（可选）
+        // 向左偏移再旋转
+        if (!collide(current.x - 1, current.y, rotated)) {
+          current.x -= 1;
+          current.shape = rotated;
+        } else if (!collide(current.x + 1, current.y, rotated)) {
+          current.x += 1;
+          current.shape = rotated;
+        }
       }
-      switch (e.key) {
-        case 'ArrowLeft':
-          current.x--;
-          if (collide(current.x, current.y, current.shape)) current.x++;
-          break;
-        case 'ArrowRight':
-          current.x++;
-          if (collide(current.x, current.y, current.shape)) current.x--;
-          break;
-        case 'ArrowDown':
-          // 快速下落
-          drop();
-          dropCounter = 0;
-          break;
-        case 'ArrowUp':
-          // 旋转
-          const rotated = rotate(current.shape);
-          if (!collide(current.x, current.y, rotated)) {
-            current.shape = rotated;
-          } else {
-            // 尝试“偏移+旋转”补偿（可选）
-            // 向左偏移再旋转
-            if (!collide(current.x - 1, current.y, rotated)) {
-              current.x -= 1;
-              current.shape = rotated;
-            } else if (!collide(current.x + 1, current.y, rotated)) {
-              current.x += 1;
-              current.shape = rotated;
-            }
-          }
-          break;
+    });
+
+    let isDownPressing = false;
+    downBtn.addEventListener('touchstart', () => {
+      isDownPressing = true;
+      const intervalId = setInterval(() => {
+        drop();
+      }, 50);
+      downBtn.addEventListener('touchend', () => {
+        isDownPressing = false;
+        clearInterval(intervalId);
+      });
+    });
+
+    canvas.addEventListener('touchstart', function (e) {
+      if (gameOver) {
+        restart();
       }
     });
 
     // 重启游戏
     function restart() {
-      board = Array.from({length: ROWS}, () => Array(COLS).fill(0));
+      board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
       score = 0;
       linesCleared = 0;
       dropInterval = 500;
@@ -337,4 +386,6 @@
     })();
   </script>
 </body>
+
 </html>
+ 
