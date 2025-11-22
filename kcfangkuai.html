@@ -322,9 +322,20 @@
         users.push(newUser);
         alert(`注册成功，你的编号是：${newUser.id}`);
         document.getElementById('register - page').style.display = 'none';
-        // 注册成功后填充账号主页信息并显示
-        document.getElementById('username - display').textContent = newUser.username;
-        document.getElementById('user - id - display').textContent = `用户编号：${newUser.id}`;
+        console.log("要填充的用户名: ", newUser.username);
+        console.log("要填充的用户编号: ", newUser.id);
+        const usernameDisplay = document.getElementById('username - display');
+        const userIdDisplay = document.getElementById('user - id - display');
+        if (usernameDisplay) {
+          usernameDisplay.textContent = newUser.username;
+        } else {
+          console.error("未找到id为username - display的元素");
+        }
+        if (userIdDisplay) {
+          userIdDisplay.textContent = `用户编号：${newUser.id}`;
+        } else {
+          console.error("未找到id为user - id - display的元素");
+        }
         document.getElementById('user - profile').style.display = 'block';
       } else {
         alert('请填写完整的注册信息');
