@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>简易视频网站</title>
+  <title>简易视频网站 - 注册功能</title>
   <style>
     /* 整体样式 */
     body {
@@ -36,11 +36,12 @@
 
     /* 表单样式 */
     form {
-      margin: 20px;
+      margin: 20px auto;
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
       background-color: white;
+      width: 300px;
     }
 
     label {
@@ -49,8 +50,7 @@
     }
 
     input[type="text"],
-    input[type="password"],
-    input[type="file"] {
+    input[type="password"] {
       width: 100%;
       padding: 8px;
       margin-bottom: 15px;
@@ -71,12 +71,19 @@
       background-color: #0056b3;
     }
 
+    /* 提示信息样式 */
+   .error-message {
+      color: red;
+      margin-top: 5px;
+    }
+
     /* 视频列表样式 */
     #video-list {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       padding: 20px;
+      justify-content: center;
     }
 
    .video-item {
@@ -115,7 +122,6 @@
   <nav>
     <a href="#" id="login-link">登录</a>
     <a href="#" id="register-link">注册</a>
-    <a href="#" id="upload-link" style="display: none;">发布视频</a>
   </nav>
 
   <!-- 登录表单 -->
@@ -125,29 +131,22 @@
     <input type="text" id="login-username" required>
     <label for="login-password">密码:</label>
     <input type="password" id="login-password" required>
+    <div class="error-message" id="login-error"></div>
     <button type="button" id="login-button">登录</button>
   </form>
 
   <!-- 注册表单 -->
-  <form id="register-form" style="display: none;">
+  <form id="register-form">
     <h2>注册</h2>
     <label for="register-username">用户名:</label>
     <input type="text" id="register-username" required>
+    <div class="error-message" id="register-username-error"></div>
     <label for="register-password">密码:</label>
     <input type="password" id="register-password" required>
+    <label for="confirm-password">确认密码:</label>
+    <input type="password" id="confirm-password" required>
+    <div class="error-message" id="register-password-error"></div>
     <button type="button" id="register-button">注册</button>
-  </form>
-
-  <!-- 发布视频表单 -->
-  <form id="upload-form" style="display: none;">
-    <h2>发布视频</h2>
-    <label for="upload-title">标题:</label>
-    <input type="text" id="upload-title" required>
-    <label for="upload-description">描述:</label>
-    <textarea id="upload-description" required></textarea>
-    <label for="upload-video">视频文件:</label>
-    <input type="file" id="upload-video" accept="video/*" required>
-    <button type="button" id="upload-button">发布</button>
   </form>
 
   <!-- 视频列表 -->
@@ -178,13 +177,18 @@
     // 获取页面元素
     const loginLink = document.getElementById('login-link');
     const registerLink = document.getElementById('register-link');
-    const uploadLink = document.getElementById('upload-link');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
-    const uploadForm = document.getElementById('upload-form');
     const loginButton = document.getElementById('login-button');
     const registerButton = document.getElementById('register-button');
-    const uploadButton = document.getElementById('upload-button');
+    const loginUsername = document.getElementById('login-username');
+    const loginPassword = document.getElementById('login-password');
+    const loginError = document.getElementById('login-error');
+    const registerUsername = document.getElementById('register-username');
+    const registerPassword = document.getElementById('register-password');
+    const confirmPassword = document.getElementById('confirm-password');
+    const registerUsernameError = document.getElementById('register-username-error');
+    const registerPasswordError = document.getElementById('register-password-error');
     const videoList = document.getElementById('video-list');
     const videoPlayerSection = document.getElementById('video-player-section');
     const videoPlayer = document.getElementById('video-player');
@@ -193,80 +197,54 @@
 
     // 模拟用户数据存储（实际应使用后端数据库）
     let users = [];
-    // 模拟视频数据存储（实际应使用后端数据库）
-    let videos = [];
 
     // 显示登录表单
     loginLink.addEventListener('click', () => {
       loginForm.style.display = 'block';
       registerForm.style.display = 'none';
-      uploadForm.style.display = 'none';
     });
 
     // 显示注册表单
     registerLink.addEventListener('click', () => {
       registerForm.style.display = 'block';
       loginForm.style.display = 'none';
-      uploadForm.style.display = 'none';
-    });
-
-    // 处理登录按钮点击事件
-    loginButton.addEventListener('click', () => {
-      const username = document.getElementById('login-username').value;
-      const password = document.getElementById('login-password').value;
-      const user = users.find(u => u.username === username && u.password === password);
-      if (user) {
-        alert('登录成功');
-        loginForm.style.display = 'none';
-        uploadLink.style.display = 'block';
-      } else {
-        alert('用户名或密码错误');
-      }
     });
 
     // 处理注册按钮点击事件
     registerButton.addEventListener('click', () => {
-      const username = document.getElementById('register-username').value;
-      const password = document.getElementById('register-password').value;
+      const username = registerUsername.value;
+      const password = registerPassword.value;
+      const confirm = confirmPassword.value;
+
+      // 验证用户名是否已存在
       const existingUser = users.find(u => u.username === username);
       if (existingUser) {
-        alert('用户名已存在');
-      } else {
-        users.push({ username, password });
-        alert('注册成功');
-        registerForm.style.display = 'none';
+        registerUsernameError.textContent = '用户名已存在';
+        return;
       }
-    });
 
-    // 显示发布视频表单
-    uploadLink.addEventListener('click', () => {
-      uploadForm.style.display = 'block';
-      loginForm.style.display = 'none';
+      // 验证密码和确认密码是否一致
+      if (password!== confirm) {
+        registerPasswordError.textContent = '两次输入的密码不一致';
+        return;
+      }
+
+      // 验证通过，添加用户
+      users.push({ username, password });
+      alert('注册成功');
       registerForm.style.display = 'none';
     });
 
-    // 处理发布视频按钮点击事件
-    uploadButton.addEventListener('click', () => {
-      const title = document.getElementById('upload-title').value;
-      const description = document.getElementById('upload-description').value;
-      const videoFile = document.getElementById('upload-video').files[0];
-
-      if (title && description && videoFile) {
-        // 这里只是简单模拟生成一个视频项添加到视频列表，实际应上传到服务器存储等操作
-        const newVideoItem = document.createElement('div');
-        newVideoItem.classList.add('video-item');
-        newVideoItem.innerHTML = `
-          <img src="https://picsum.photos/300/200" alt="视频缩略图">
-          <h3>${title}</h3>
-          <p>${description}</p>
-          <data value="模拟视频链接，实际应为上传后的真实链接"></data>
-        `;
-        videoList.appendChild(newVideoItem);
-
-        alert('视频发布成功');
-        uploadForm.style.display = 'none';
+    // 处理登录按钮点击事件
+    loginButton.addEventListener('click', () => {
+      const username = loginUsername.value;
+      const password = loginPassword.value;
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        alert('登录成功');
+        loginForm.style.display = 'none';
       } else {
-        alert('请填写完整信息并选择视频文件');
+        loginError.textContent = '用户名或密码错误';
       }
     });
 
