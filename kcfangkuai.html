@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>快抖</title>
+  <title>仿抖音快手网页版</title>
   <style>
     * {
       margin: 0;
@@ -38,6 +38,27 @@
       font-size: 20px;
     }
 
+    /* 搜索栏 */
+   .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 5px 10px;
+    }
+
+   .search-bar input {
+      border: none;
+      outline: none;
+      background: none;
+      margin-left: 5px;
+    }
+
+   .search-bar img {
+      width: 20px;
+      height: 20px;
+    }
+
     /* 视频容器 */
    .video-container {
       width: 100vw;
@@ -65,6 +86,19 @@
       border-radius: 10px;
     }
 
+    /* 视频描述和作者信息 */
+   .video-info {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      z-index: 5;
+    }
+
+   .video-info h3 {
+      margin-bottom: 5px;
+    }
+
     /* 视频操作按钮 */
    .action-buttons {
       position: absolute;
@@ -86,6 +120,27 @@
    .action-buttons button img {
       width: 40px;
       height: 40px;
+    }
+
+    /* 评论区样式 */
+   .comment-section {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      padding: 10px;
+      color: white;
+      z-index: 5;
+    }
+
+   .comment-section h4 {
+      margin-bottom: 10px;
+    }
+
+   .comment {
+      margin-bottom: 5px;
     }
 
     /* 注册页面 */
@@ -180,6 +235,76 @@
       object-fit: cover;
       border-radius: 10px;
     }
+
+    /* 关注和粉丝数量显示 */
+   .user-stats {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+   .user-stats div {
+      margin: 0 10px;
+    }
+
+    /* 上传视频按钮 */
+   .upload-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* 关注按钮样式 */
+   .follow-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #007bff;
+      margin-top: 5px;
+    }
+
+    /* 更换头像相关样式 */
+   .change-avatar-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 40;
+    }
+
+   .change-avatar-modal h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+   .avatar-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+   .avatar-item {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -187,6 +312,10 @@
   <!-- 顶部导航栏 -->
   <header class="header">
     <a href="#">仿抖快平台</a>
+    <div class="search-bar">
+      <img src="search-icon.svg" alt="搜索图标">
+      <input type="text" placeholder="搜索视频">
+    </div>
     <div>
       <a href="#" id="profile-link">我的</a>
       <a href="#" id="register-link">注册</a>
@@ -220,11 +349,43 @@
 
   <!-- 用户主页 -->
   <div class="user-profile" id="user-profile" style="display: none;">
-    <img src="default-avatar.jpg" alt="用户头像">
+    <img src="default-avatar.jpg" alt="用户头像" id="user-avatar">
     <h2 id="username-display"></h2>
+    <div class="user-stats">
+      <div>
+        <p>关注</p>
+        <span id="following-count">0</span>
+      </div>
+      <div>
+        <p>粉丝</p>
+        <span id="follower-count">0</span>
+      </div>
+    </div>
     <p id="user-id-display"></p>
     <div class="user-videos" id="user-videos">
       <!-- 动态添加用户视频 -->
+    </div>
+    <button class="upload-btn" onclick="showUploadForm()">上传视频</button>
+    <button onclick="showChangeAvatarModal()">更换头像</button>
+  </div>
+
+  <!-- 模拟上传视频表单 -->
+  <div id="upload-form" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 30;">
+    <h2>上传视频</h2>
+    <input type="text" placeholder="视频标题" id="video-title" required>
+    <input type="text" placeholder="视频描述" id="video-desc">
+    <input type="file" id="video-upload" accept="video/*">
+    <button type="button" onclick="uploadVideo()">提交</button>
+    <button type="button" onclick="hideUploadForm()">取消</button>
+  </div>
+
+  <!-- 更换头像模态框 -->
+  <div class="change-avatar-modal" id="change-avatar-modal">
+    <h3>选择新头像</h3>
+    <div class="avatar-list">
+      <img src="avatar1.jpg" alt="头像1" class="avatar-item" onclick="changeAvatar('avatar1.jpg')">
+      <img src="avatar2.jpg" alt="头像2" class="avatar-item" onclick="changeAvatar('avatar2.jpg')">
+      <img src="avatar3.jpg" alt="头像3" class="avatar-item" onclick="changeAvatar('avatar3.jpg')">
     </div>
   </div>
 
@@ -268,10 +429,18 @@
         }
         videoItem.innerHTML = `
           <video src="${video.src}" autoplay muted loop></video>
+          <div class="video-info">
+            <h3>${video.title}</h3>
+            <p>作者：${video.author}</p>
+          </div>
           <div class="action-buttons">
             <button onclick="likeVideo(${video.id})"><img src="like-icon.svg" alt="点赞"></button>
             <button onclick="commentVideo(${video.id})"><img src="comment-icon.svg" alt="评论"></button>
             <button onclick="saveVideo(${video.id})"><img src="save-icon.svg" alt="收藏"></button>
+          </div>
+          <div class="comment-section">
+            <h4>评论区</h4>
+            ${video.comments.map(comment => `<div class="comment">${comment}</div>`).join('')}
           </div>
         `;
         videoContainer.appendChild(videoItem);
@@ -302,6 +471,7 @@
         const video = videos.find(v => v.id === videoId);
         if (video) {
           video.comments.push(comment);
+          renderVideos(); // 更新评论区显示
           alert(`你的评论已发布：${comment}`);
         }
       }
@@ -323,13 +493,19 @@
           username: username,
           email: email,
           password: password,
-          videos: []
+          videos: [],
+          following: 0,
+          followers: 0,
+          avatar: "default-avatar.jpg"
         };
         users.push(newUser);
         alert(`注册成功，你的编号是：${newUser.id}`);
         document.getElementById('register-page').style.display = 'none';
         document.getElementById('username-display').textContent = newUser.username;
         document.getElementById('user-id-display').textContent = `用户编号：${newUser.id}`;
+        document.getElementById('following-count').textContent = newUser.following;
+        document.getElementById('follower-count').textContent = newUser.followers;
+        document.getElementById('user-avatar').src = newUser.avatar;
         document.getElementById('user-profile').style.display = 'block';
       } else {
         alert('请填写完整的注册信息');
@@ -339,60 +515,129 @@
     // 显示注册页
     document.getElementById('register-link').addEventListener('click', function () {
       document.getElementById('register-page').style.display = 'block';
-    });
-
+ 
     // 显示用户主页
     document.getElementById('profile-link').addEventListener('click', function () {
-      const username = prompt('请输入你的用户名');
-      const user = users.find(u => u.username === username);
-      if (user) {
-        document.getElementById('username-display').textContent = user.username;
-        document.getElementById('user-id-display').textContent = `用户编号：${user.id}`;
-        document.getElementById('user-profile').style.display = 'block';
-      } else {
-        alert('用户不存在');
-      }
+      document.getElementById('user-profile').style.display = 'block';
     });
 
-    // 初始化视频滑动切换
+    // 显示上传表单
+    function showUploadForm() {
+      document.getElementById('upload-form').style.display = 'block';
+    }
+
+    // 隐藏上传表单
+    function hideUploadForm() {
+      document.getElementById('upload-form').style.display = 'none';
+    }
+
+    // 模拟视频上传
+    function uploadVideo() {
+      const videoTitle = document.getElementById('video-title').value;
+      const videoDesc = document.getElementById('video-desc').value;
+      const videoFile = document.getElementById('video-upload').files[0];
+
+      if (videoTitle && videoFile) {
+        // 模拟新上传的视频数据
+        const newVideo = {
+          id: Date.now(), // 使用时间戳作为唯一标识
+          title: videoTitle,
+          author: document.getElementById('username-display').textContent,
+          src: URL.createObjectURL(videoFile), // 创建临时URL
+          likes: 0,
+          comments: [],
+          isLiked: false
+        };
+
+        // 将新视频添加到用户的视频列表中
+        const currentUser = users.find(u => u.username === document.getElementById('username-display').textContent);
+        if (currentUser) {
+          currentUser.videos.push(newVideo);
+          // 在用户主页更新视频列表显示
+          const userVideosContainer = document.getElementById('user-videos');
+          userVideosContainer.innerHTML = '';
+          currentUser.videos.forEach(video => {
+            const videoElement = document.createElement('video');
+            videoElement.src = video.src;
+            videoElement.controls = true;
+            userVideosContainer.appendChild(videoElement);
+          });
+        }
+
+        alert('视频上传成功！');
+        hideUploadForm();
+      } else {
+        alert('请填写视频标题并选择视频文件');
+      }
+    }
+
+    // 显示更换头像模态框
+    function showChangeAvatarModal() {
+      document.getElementById('change-avatar-modal').style.display = 'block';
+    }
+
+    // 隐藏更换头像模态框
+    function hideChangeAvatarModal() {
+      document.getElementById('change-avatar-modal').style.display = 'none';
+    }
+
+    // 更换头像
+    function changeAvatar(avatarSrc) {
+      const currentUser = users.find(u => u.username === document.getElementById('username-display').textContent);
+      if (currentUser) {
+        currentUser.avatar = avatarSrc;
+        document.getElementById('user-avatar').src = avatarSrc;
+        alert('头像更换成功！');
+      }
+      hideChangeAvatarModal();
+    }
+
+    // 初始化视频滑动切换功能（简单模拟，仅示例）
     function initVideoSwipe() {
       const videoItems = document.querySelectorAll('.video-item');
       let currentIndex = 0;
-      let startX, endX;
-      videoItems.forEach((videoItem) => {
-        videoItem.addEventListener('touchstart', (e) => {
-          startX = e.touches[0].clientX;
-        });
-        videoItem.addEventListener('touchend', (e) => {
-          endX = e.changedTouches[0].clientX;
-          if (endX - startX < -50) {
-            // 右滑切换下一个视频
+
+      function handleSwipe(event) {
+        if (event.type === 'touchstart') {
+          startX = event.touches[0].clientX;
+        } else if (event.type === 'touchend') {
+          const endX = event.changedTouches[0].clientX;
+          const direction = endX - startX;
+          if (direction < -50) { // 向右滑动
             currentIndex = (currentIndex + 1) % videoItems.length;
-            updateVideoVisibility();
-          } else if (endX - startX > 50) {
-            // 左滑切换上一个视频
+          } else if (direction > 50) { // 向左滑动
             currentIndex = (currentIndex - 1 + videoItems.length) % videoItems.length;
-            updateVideoVisibility();
           }
-        });
+          updateVideo(currentIndex);
+        }
+      }
+
+      let startX;
+      videoItems.forEach(item => {
+        item.addEventListener('touchstart', handleSwipe);
+        item.addEventListener('touchend', handleSwipe);
       });
 
-      function updateVideoVisibility() {
-        videoItems.forEach((videoItem, index) => {
-          if (index === currentIndex) {
-            videoItem.style.zIndex = 1;
-            videoItem.style.opacity = 1;
+      function updateVideo(index) {
+        videoItems.forEach((item, i) => {
+          if (i === index) {
+            item.style.zIndex = 1;
+            item.style.opacity = 1;
           } else {
-            videoItem.style.zIndex = 0;
-            videoItem.style.opacity = 0;
+            item.style.zIndex = 0;
+            item.style.opacity = 0;
           }
         });
       }
     }
 
-    // 初始化页面
-    renderVideos();
+    // 初始化页面加载时渲染视频列表
+    window.onload = function () {
+      renderVideos();
+    };
   </script>
 </body>
 
 </html>
+ 
+ 
