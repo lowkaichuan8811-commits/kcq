@@ -826,7 +826,7 @@
         function updateProfileInfo() {
             if (currentUser) {
                 profileName.textContent = currentUser.username;
-                profileId.textContent = `快手号: ${currentUser.kuaishouId}`;
+                profileId.textContent = `KC号: ${currentUser.kuaishouId}`;
                 profileAvatar.src = currentUser.avatar;
                 followCount.textContent = currentUser.followCount;
                 fansCount.textContent = currentUser.fansCount > 1000 ? 
