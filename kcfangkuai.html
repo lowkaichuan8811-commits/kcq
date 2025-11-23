@@ -550,18 +550,18 @@
             <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-avatar" id="profileAvatar">
             <div class="profile-info">
                 <div class="profile-name" id="profileName">用户名</div>
-                <div class="profile-id" id="profileId">快手号: 123456789</div>
+                <div class="profile-id" id="profileId">KC号: 123456789</div>
                 <div class="profile-stats">
                     <div class="stat-item">
                         <div class="stat-count" id="followCount">120</div>
                         <div class="stat-label">关注</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-count" id="fansCount">1.2万</div>
+                        <div class="stat-count" id="fansCount">82亿</div>
                         <div class="stat-label">粉丝</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-count" id="likeCount">5.6万</div>
+                        <div class="stat-count" id="likeCount">1000亿</div>
                         <div class="stat-label">获赞</div>
                     </div>
                 </div>
@@ -870,7 +870,7 @@
         function updateProfileInfo() {
             if (currentUser) {
                 profileName.textContent = currentUser.username;
-                profileId.textContent = `快手号: ${currentUser.kuaishouId}`;
+                profileId.textContent = `KC号: ${currentUser.kuaishouId}`;
                 profileAvatar.src = currentUser.avatar;
                 followCount.textContent = currentUser.followCount;
                 fansCount.textContent = currentUser.fansCount > 1000 ? 
