@@ -1,208 +1,650 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>仿抖音快手网页版</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      list-style: none;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    /* 顶部导航栏通用样式 */
-   .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
-
-   .header a {
-      color: white;
-      text-decoration: none;
-      font-size: 20px;
-    }
-
-    /* 搜索栏样式 */
-   .search-bar {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      border-radius: 20px;
-      padding: 5px 10px;
-    }
-
-   .search-bar input {
-      border: none;
-      outline: none;
-      background: none;
-      margin-left: 5px;
-    }
-
-   .search-bar img {
-      width: 20px;
-      height: 20px;
-    }
-
-    /* 简单添加一些页面背景样式区分 */
-   .page {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* 头像样式，可根据需要调整 */
-    #avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    /* 视频推荐区域样式 */
-   .video-recommendation {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-    }
-
-   .video-item-recommendation {
-      width: 300px;
-      height: 300px;
-      margin: 20px;
-      background-color: #ccc;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快手网页版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部导航栏 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            background-color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
+        
+        .logo {
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .search-icon, .camera-icon {
+            width: 24px;
+            height: 24px;
+            color: #fff;
+        }
+        
+        /* 底部导航栏 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background-color: #000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #333;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .nav-item.active {
+            color: #ff6600;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        
+        /* 视频流区域 */
+        .video-container {
+            margin-top: 44px;
+            margin-bottom: 50px;
+            height: calc(100vh - 94px);
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+        }
+        
+        .video-item {
+            position: relative;
+            height: 100vh;
+            scroll-snap-align: start;
+            overflow: hidden;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* 视频信息区域 */
+        .video-info {
+            position: absolute;
+            bottom: 80px;
+            left: 12px;
+            right: 12px;
+        }
+        
+        .username {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .video-desc {
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .music-info {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+        
+        .music-icon {
+            width: 12px;
+            height: 12px;
+            margin-right: 4px;
+        }
+        
+        /* 右侧操作栏 */
+        .action-bar {
+            position: absolute;
+            right: 12px;
+            bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 4px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-count {
+            font-size: 12px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-bottom: 4px;
+        }
+        
+        /* 评论区域 */
+        .comment-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            color: #333;
+            padding: 12px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 101;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        
+        .comment-section.active {
+            transform: translateY(0);
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .comment-title {
+            font-weight: bold;
+        }
+        
+        .comment-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+        
+        .comment-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .comment-user {
+            font-weight: bold;
+            margin-right: 6px;
+        }
+        
+        .comment-input {
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-input input {
+            flex: 1;
+            border: none;
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-right: 8px;
+        }
+        
+        .send-btn {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff6600;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 响应式调整 */
+        @media (min-width: 768px) {
+            .video-container {
+                width: 414px;
+                margin-left: auto;
+                margin-right: auto;
+                border-left: 1px solid #333;
+                border-right: 1px solid #333;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- 主页 -->
-  <div id="home-page" style="display: none; width: 100%; height: 100vh; background-color: #f0f0f0;" class="page">
+    <!-- 顶部导航栏 -->
     <div class="header">
-      <a href="#" onclick="showUserProfile()">我的</a>
-      <div class="search-bar">
-        <img src="search-icon.svg" alt="搜索图标">
-        <input type="text" placeholder="搜索视频">
-      </div>
-      <a href="#" onclick="showDiscoverPage()">发现</a>
+        <div class="logo">快手</div>
+        <div class="search-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </div>
+        <div class="camera-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+        </div>
     </div>
-    <p>这里是主页的一些示例内容</p>
-  </div>
-
-  <!-- 发现页 -->
-  <div id="discover-page" style="display: none; width: 100%; height: 100vh; background-color: #f0f0f0;" class="page">
-    <div class="header">
-      <a href="#" onclick="showHomePage()">主页</a>
-      <div class="search-bar">
-        <img src="search-icon.svg" alt="搜索图标">
-        <input type="text" placeholder="搜索视频">
-      </div>
-      <a href="#" onclick="showUserProfile()">我的</a>
+    
+    <!-- 视频流区域 -->
+    <div class="video-container" id="videoContainer">
+        <!-- 视频将通过JavaScript动态添加 -->
     </div>
-    <p>这里是发现页的一些示例内容</p>
-    <div class="video-recommendation">
-      <div class="video-item-recommendation"></div>
-      <div class="video-item-recommendation"></div>
-      <div class="video-item-recommendation"></div>
+    
+    <!-- 底部导航栏 -->
+    <div class="footer">
+        <div class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <div>首页</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <div>发现</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+                </svg>
+            </div>
+            <div>消息</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <div>我</div>
+        </div>
     </div>
-  </div>
-
-  <!-- 用户主页 -->
-  <div id="user-profile" style="display: none; width: 100%; height: 100vh; background-color: #e0e0e0;" class="page">
-    <div class="header">
-      <a href="#" onclick="showHomePage()">主页</a>
-      <div class="search-bar">
-        <img src="search-icon.svg" alt="搜索图标">
-        <input type="text" placeholder="搜索视频">
-      </div>
+    
+    <!-- 评论区域 -->
+    <div class="comment-section" id="commentSection">
+        <div class="comment-header">
+            <div class="comment-title">评论</div>
+            <div id="closeComment">关闭</div>
+        </div>
+        <div class="comment-list" id="commentList">
+            <!-- 评论将通过JavaScript动态添加 -->
+        </div>
+        <div class="comment-input">
+            <input type="text" placeholder="说点什么..." id="commentInput">
+            <button class="send-btn" id="sendComment">发送</button>
+        </div>
     </div>
-    <p>这里是用户主页的一些示例内容</p>
-    <img id="avatar" src="default-avatar.jpg" alt="头像">
-    <input type="file" id="fileInput" accept="image/*" style="display: none;">
-    <button onclick="switchAccount()">切换账号</button>
-  </div>
-
-  <!-- 模拟注册页面，实际应根据需求完善 -->
-  <div id="register-page" style="display: none; width: 100%; height: 100vh; background-color: #d0d0d0;" class="page">
-    <p>这里是注册页面的一些示例内容</p>
-  </div>
-
-  <script>
-    // 模拟用户数据数组
-    let users = [];
-    let nextUserId = 100000;
-
-    // 显示主页
-    function showHomePage() {
-      document.getElementById('home-page').style.display = 'block';
-      document.getElementById('discover-page').style.display = 'none';
-      document.getElementById('user-profile').style.display = 'none';
-      // 可以在这里添加主页初始化相关逻辑，比如加载视频列表等
-    }
-
-    // 显示发现页
-    function showDiscoverPage() {
-      document.getElementById('discover-page').style.display = 'block';
-      document.getElementById('home-page').style.display = 'none';
-      document.getElementById('user-profile').style.display = 'none';
-      // 可以在这里添加发现页初始化相关逻辑，比如加载推荐视频等
-    }
-
-    // 显示用户主页
-    function showUserProfile() {
-      document.getElementById('user-profile').style.display = 'block';
-      document.getElementById('home-page').style.display = 'none';
-      document.getElementById('discover-page').style.display = 'none';
-      // 可以在这里添加用户主页初始化相关逻辑，比如加载用户信息和视频等
-    }
-
-    // 切换账号功能，简单示例为清空当前用户信息并回到注册页
-    function switchAccount() {
-      // 清空当前用户相关数据，这里简单示例
-      users = [];
-      nextUserId = 100000;
-      document.getElementById('username-display').textContent = '';
-      document.getElementById('user-id-display').textContent = '';
-      document.getElementById('following-count').textContent = '0';
-      document.getElementById('follower-count').textContent = '0';
-      document.getElementById('user-avatar').src = "default-avatar.jpg";
-      document.getElementById('user-profile').style.display = 'none';
-      document.getElementById('register-page').style.display = 'block';
-    }
-
-    function selectAvatar() {
-      document.getElementById('fileInput').click();
-    }
-
-    function updateAvatar() {
-      var file = document.getElementById('fileInput').files[0];
-      if (file) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById('avatar').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    document.getElementById('avatar').onclick = selectAvatar;
-    document.getElementById('fileInput').onchange = updateAvatar;
-  </script>
+    
+    <script>
+        // 模拟视频数据
+        const videoData = [
+            {
+                id: 1,
+                username: "用户1",
+                avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+                videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+                description: "这是一个有趣的视频，欢迎大家点赞关注！",
+                music: "背景音乐 - 流行歌曲",
+                likes: 1234,
+                comments: 56,
+                shares: 12
+            },
+            {
+                id: 2,
+                username: "用户2",
+                avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+                videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+                description: "今天天气真好，出去走走~",
+                music: "轻音乐 - 自然之声",
+                likes: 567,
+                comments: 23,
+                shares: 5
+            },
+            {
+                id: 3,
+                username: "用户3",
+                avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+                videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+                description: "分享一个生活小技巧，超级实用！",
+                music: "原创音乐 - 我的创作",
+                likes: 890,
+                comments: 34,
+                shares: 8
+            }
+        ];
+        
+        // 模拟评论数据
+        const commentData = [
+            { id: 1, username: "网友A", content: "这个视频太棒了！" },
+            { id: 2, username: "网友B", content: "哈哈哈，笑死我了" },
+            { id: 3, username: "网友C", content: "学到了，感谢分享" },
+            { id: 4, username: "网友D", content: "背景音乐很好听" }
+        ];
+        
+        // 初始化视频流
+        const videoContainer = document.getElementById('videoContainer');
+        
+        videoData.forEach(video => {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.innerHTML = `
+                <video class="video-player" loop muted>
+                    <source src="${video.videoUrl}" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="username">@${video.username}</div>
+                    <div class="video-desc">${video.description}</div>
+                    <div class="music-info">
+                        <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                        </svg>
+                        ${video.music}
+                    </div>
+                </div>
+                <div class="action-bar">
+                    <div class="action-item">
+                        <img class="avatar" src="${video.avatar}" alt="${video.username}">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                        <div class="action-count">${video.likes}</div>
+                    </div>
+                    <div class="action-item" onclick="openComment(${video.id})">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h11c.55 0 1-.45 1-1z"/>
+                            </svg>
+                        </div>
+                        <div class="action-count">${video.comments}</div>
+                    </div>
+                    <div class="action-item">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                            </svg>
+                        </div>
+                        <div class="action-count">${video.shares}</div>
+                    </div>
+                </div>
+            `;
+            videoContainer.appendChild(videoItem);
+        });
+        
+        // 添加加载更多指示器
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading';
+        loadingIndicator.innerHTML = '<div class="spinner"></div>';
+        videoContainer.appendChild(loadingIndicator);
+        
+        // 视频播放控制
+        const videos = document.querySelectorAll('.video-player');
+        
+        // 当视频进入视口时播放
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.7 });
+        
+        videos.forEach(video => {
+            observer.observe(video);
+        });
+        
+        // 点赞功能
+        document.querySelectorAll('.action-item:first-child').forEach(item => {
+            item.addEventListener('click', function() {
+                const icon = this.querySelector('svg');
+                const countEl = this.querySelector('.action-count');
+                
+                if (icon.style.fill === 'rgb(255, 102, 0)') {
+                    icon.style.fill = 'currentColor';
+                    countEl.textContent = parseInt(countEl.textContent) - 1;
+                } else {
+                    icon.style.fill = '#ff6600';
+                    countEl.textContent = parseInt(countEl.textContent) + 1;
+                }
+            });
+        });
+        
+        // 评论功能
+        const commentSection = document.getElementById('commentSection');
+        const commentList = document.getElementById('commentList');
+        const commentInput = document.getElementById('commentInput');
+        const sendCommentBtn = document.getElementById('sendComment');
+        const closeCommentBtn = document.getElementById('closeComment');
+        
+        function openComment(videoId) {
+            // 清空评论列表
+            commentList.innerHTML = '';
+            
+            // 添加模拟评论
+            commentData.forEach(comment => {
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                commentItem.innerHTML = `
+                    <span class="comment-user">${comment.username}:</span>
+                    <span>${comment.content}</span>
+                `;
+                commentList.appendChild(commentItem);
+            });
+            
+            // 显示评论区域
+            commentSection.classList.add('active');
+        }
+        
+        closeCommentBtn.addEventListener('click', function() {
+            commentSection.classList.remove('active');
+        });
+        
+        sendCommentBtn.addEventListener('click', function() {
+            const content = commentInput.value.trim();
+            if (content) {
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                commentItem.innerHTML = `
+                    <span class="comment-user">我:</span>
+                    <span>${content}</span>
+                `;
+                commentList.appendChild(commentItem);
+                commentInput.value = '';
+                
+                // 滚动到最新评论
+                commentList.scrollTop = commentList.scrollHeight;
+            }
+        });
+        
+        commentInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendCommentBtn.click();
+            }
+        });
+        
+        // 模拟加载更多视频
+        let loading = false;
+        
+        videoContainer.addEventListener('scroll', function() {
+            if (loading) return;
+            
+            const scrollTop = videoContainer.scrollTop;
+            const scrollHeight = videoContainer.scrollHeight;
+            const clientHeight = videoContainer.clientHeight;
+            
+            if (scrollTop + clientHeight >= scrollHeight - 50) {
+                loading = true;
+                
+                // 模拟网络请求延迟
+                setTimeout(() => {
+                    // 添加新视频
+                    const newVideo = {
+                        id: videoData.length + 1,
+                        username: `用户${videoData.length + 1}`,
+                        avatar: `https://randomuser.me/api/portraits/${videoData.length % 2 === 0 ? 'women' : 'men'}/${videoData.length + 1}.jpg`,
+                        videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+                        description: `这是第${videoData.length + 1}个视频，欢迎观看！`,
+                        music: "随机音乐 - 未知艺术家",
+                        likes: Math.floor(Math.random() * 1000),
+                        comments: Math.floor(Math.random() * 100),
+                        shares: Math.floor(Math.random() * 20)
+                    };
+                    
+                    videoData.push(newVideo);
+                    
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.innerHTML = `
+                        <video class="video-player" loop muted>
+                            <source src="${newVideo.videoUrl}" type="video/mp4">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-info">
+                            <div class="username">@${newVideo.username}</div>
+                            <div class="video-desc">${newVideo.description}</div>
+                            <div class="music-info">
+                                <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                                </svg>
+                                ${newVideo.music}
+                            </div>
+                        </div>
+                        <div class="action-bar">
+                            <div class="action-item">
+                                <img class="avatar" src="${newVideo.avatar}" alt="${newVideo.username}">
+                                <div class="action-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                </div>
+                                <div class="action-count">${newVideo.likes}</div>
+                            </div>
+                            <div class="action-item" onclick="openComment(${newVideo.id})">
+                                <div class="action-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h11c.55 0 1-.45 1-1z"/>
+                                    </svg>
+                                </div>
+                                <div class="action-count">${newVideo.comments}</div>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                                    </svg>
+                                </div>
+                                <div class="action-count">${newVideo.shares}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 插入到加载指示器之前
+                    videoContainer.insertBefore(videoItem, loadingIndicator);
+                    
+                    // 观察新视频
+                    const newVideoElement = videoItem.querySelector('.video-player');
+                    observer.observe(newVideoElement);
+                    
+                    // 为新视频添加点赞功能
+                    const likeButton = videoItem.querySelector('.action-item:first-child');
+                    likeButton.addEventListener('click', function() {
+                        const icon = this.querySelector('svg');
+                        const countEl = this.querySelector('.action-count');
+                        
+                        if (icon.style.fill === 'rgb(255, 102, 0)') {
+                            icon.style.fill = 'currentColor';
+                            countEl.textContent = parseInt(countEl.textContent) - 1;
+                        } else {
+                            icon.style.fill = '#ff6600';
+                            countEl.textContent = parseInt(countEl.textContent) + 1;
+                        }
+                    });
+                    
+                    loading = false;
+                }, 1500);
+            }
+        });
+    </script>
 </body>
-
 </html>
+
+
+                 
