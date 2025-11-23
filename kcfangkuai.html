@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KC网页版</title>
+    <title>快手网页版 - 记录世界记录你</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -18,18 +19,127 @@
             overflow-x: hidden;
         }
         
+        /* 登录/注册模态框 */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-container {
+            background-color: #1a1a1a;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #999;
+        }
+        
+        .auth-tab.active {
+            color: #ff6600;
+            border-bottom: 2px solid #ff6600;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .auth-btn:hover {
+            background-color: #ff5500;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .auth-link {
+            color: #ff6600;
+            cursor: pointer;
+        }
+        
+        .close-auth {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #999;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
         /* 顶部导航栏 */
         .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 44px;
+            height: 50px;
             background-color: #000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 12px;
+            padding: 0 15px;
             z-index: 100;
             border-bottom: 1px solid #333;
         }
@@ -37,13 +147,39 @@
         .logo {
             color: #ff6600;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 22px;
         }
         
-        .search-icon, .camera-icon {
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-icon, .camera-icon, .user-icon {
             width: 24px;
             height: 24px;
             color: #fff;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        
+        .login-btn {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 15px;
         }
         
         /* 底部导航栏 */
@@ -52,12 +188,13 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 50px;
+            height: 55px;
             background-color: #000;
             display: flex;
             justify-content: space-around;
             align-items: center;
             border-top: 1px solid #333;
+            z-index: 100;
         }
         
         .nav-item {
@@ -66,6 +203,7 @@
             align-items: center;
             font-size: 10px;
             color: #999;
+            cursor: pointer;
         }
         
         .nav-item.active {
@@ -80,9 +218,9 @@
         
         /* 视频流区域 */
         .video-container {
-            margin-top: 44px;
-            margin-bottom: 50px;
-            height: calc(100vh - 94px);
+            margin-top: 50px;
+            margin-bottom: 55px;
+            height: calc(100vh - 105px);
             overflow-y: auto;
             scroll-snap-type: y mandatory;
         }
@@ -149,6 +287,7 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
+            cursor: pointer;
         }
         
         .action-icon {
@@ -174,73 +313,140 @@
             margin-bottom: 4px;
         }
         
-        /* 评论区域 */
-        .comment-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #fff;
-            color: #333;
-            padding: 12px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            z-index: 101;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-        
-        .comment-section.active {
-            transform: translateY(0);
-        }
-        
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-        
-        .comment-title {
-            font-weight: bold;
-        }
-        
-        .comment-list {
-            max-height: 300px;
+        /* 用户主页 */
+        .profile-page {
+            display: none;
+            margin-top: 50px;
+            margin-bottom: 55px;
+            padding: 15px;
             overflow-y: auto;
-            margin-bottom: 12px;
+            height: calc(100vh - 105px);
         }
         
-        .comment-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .comment-user {
-            font-weight: bold;
-            margin-right: 6px;
-        }
-        
-        .comment-input {
+        .profile-header {
             display: flex;
             align-items: center;
+            margin-bottom: 20px;
         }
         
-        .comment-input input {
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .profile-info {
             flex: 1;
-            border: none;
-            background-color: #f0f0f0;
-            padding: 8px 12px;
-            border-radius: 20px;
-            margin-right: 8px;
         }
         
-        .send-btn {
-            background-color: #ff6600;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
+        .profile-name {
+            font-size: 18px;
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-id {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            margin-right: 20px;
+            text-align: center;
+        }
+        
+        .stat-count {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .profile-actions {
+            display: flex;
+        }
+        
+        .profile-btn {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            background-color: #333;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .profile-btn.primary {
+            background-color: #ff6600;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+        
+        .profile-tab {
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #999;
+            cursor: pointer;
+        }
+        
+        .profile-tab.active {
+            color: #ff6600;
+            border-bottom: 2px solid #ff6600;
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+        
+        .profile-video {
+            aspect-ratio: 9/16;
+            background-color: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-video img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #fff;
+        }
+        
+        /* 响应式调整 */
+        @media (min-width: 768px) {
+            .video-container, .profile-page {
+                width: 414px;
+                margin-left: auto;
+                margin-right: auto;
+                border-left: 1px solid #333;
+                border-right: 1px solid #333;
+            }
         }
         
         /* 加载动画 */
@@ -263,32 +469,64 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        /* 响应式调整 */
-        @media (min-width: 768px) {
-            .video-container {
-                width: 414px;
-                margin-left: auto;
-                margin-right: auto;
-                border-left: 1px solid #333;
-                border-right: 1px solid #333;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- 登录/注册模态框 -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <div class="close-auth" id="closeAuth">&times;</div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">登录</div>
+                <div class="auth-tab" data-tab="register">注册</div>
+            </div>
+            
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="手机号/用户名/邮箱" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="密码" id="loginPassword" required>
+                </div>
+                <button type="submit" class="auth-btn">登录</button>
+                <div class="auth-footer">
+                    忘记密码？<span class="auth-link" id="toRegister">注册账号</span>
+                </div>
+            </form>
+            
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="用户名" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="手机号" id="registerPhone" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="密码" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="确认密码" id="registerConfirmPassword" required>
+                </div>
+                <button type="submit" class="auth-btn">注册</button>
+                <div class="auth-footer">
+                    已有账号？<span class="auth-link" id="toLogin">立即登录</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- 顶部导航栏 -->
     <div class="header">
-        <div class="logo">KC</div>
-        <div class="search-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-        </div>
-        <div class="camera-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
-            </svg>
+        <div class="logo">快手</div>
+        <div class="header-actions">
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="camera-icon">
+                <i class="fas fa-camera"></i>
+            </div>
+            <button class="login-btn" id="showAuth">登录</button>
+            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="user-avatar" id="userAvatar" style="display: none;">
         </div>
     </div>
     
@@ -297,58 +535,84 @@
         <!-- 视频将通过JavaScript动态添加 -->
     </div>
     
+    <!-- 用户主页 -->
+    <div class="profile-page" id="profilePage">
+        <div class="profile-header">
+            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-avatar" id="profileAvatar">
+            <div class="profile-info">
+                <div class="profile-name" id="profileName">用户名</div>
+                <div class="profile-id" id="profileId">快手号: 123456789</div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-count" id="followCount">120</div>
+                        <div class="stat-label">关注</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-count" id="fansCount">1.2万</div>
+                        <div class="stat-label">粉丝</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-count" id="likeCount">5.6万</div>
+                        <div class="stat-label">获赞</div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <div class="profile-btn primary">编辑资料</div>
+                    <div class="profile-btn">分享</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-tabs">
+            <div class="profile-tab active">作品</div>
+            <div class="profile-tab">动态</div>
+            <div class="profile-tab">喜欢</div>
+        </div>
+        
+        <div class="profile-content" id="profileContent">
+            <!-- 用户作品将通过JavaScript动态添加 -->
+        </div>
+    </div>
+    
     <!-- 底部导航栏 -->
     <div class="footer">
-        <div class="nav-item active">
+        <div class="nav-item active" data-page="home">
             <div class="nav-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
+                <i class="fas fa-home"></i>
             </div>
             <div>首页</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="discover">
             <div class="nav-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
+                <i class="fas fa-compass"></i>
             </div>
             <div>发现</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="publish">
             <div class="nav-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
-                </svg>
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div>发布</div>
+        </div>
+        <div class="nav-item" data-page="message">
+            <div class="nav-icon">
+                <i class="fas fa-comment"></i>
             </div>
             <div>消息</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" data-page="profile" id="profileNav">
             <div class="nav-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
+                <i class="fas fa-user"></i>
             </div>
             <div>我</div>
         </div>
     </div>
     
-    <!-- 评论区域 -->
-    <div class="comment-section" id="commentSection">
-        <div class="comment-header">
-            <div class="comment-title">评论</div>
-            <div id="closeComment">关闭</div>
-        </div>
-        <div class="comment-list" id="commentList">
-            <!-- 评论将通过JavaScript动态添加 -->
-        </div>
-        <div class="comment-input">
-            <input type="text" placeholder="说点什么..." id="commentInput">
-            <button class="send-btn" id="sendComment">发送</button>
-        </div>
-    </div>
-    
     <script>
+        // 模拟用户数据
+        let currentUser = null;
+        const users = JSON.parse(localStorage.getItem('kuaishou_users')) || [];
+        
         // 模拟视频数据
         const videoData = [
             {
@@ -386,265 +650,337 @@
             }
         ];
         
-        // 模拟评论数据
-        const commentData = [
-            { id: 1, username: "网友A", content: "这个视频太棒了！" },
-            { id: 2, username: "网友B", content: "哈哈哈，笑死我了" },
-            { id: 3, username: "网友C", content: "学到了，感谢分享" },
-            { id: 4, username: "网友D", content: "背景音乐很好听" }
+        // 模拟用户作品数据
+        const userVideos = [
+            { id: 1, thumbnail: "https://picsum.photos/300/500?random=1", likes: 123 },
+            { id: 2, thumbnail: "https://picsum.photos/300/500?random=2", likes: 456 },
+            { id: 3, thumbnail: "https://picsum.photos/300/500?random=3", likes: 789 },
+            { id: 4, thumbnail: "https://picsum.photos/300/500?random=4", likes: 234 },
+            { id: 5, thumbnail: "https://picsum.photos/300/500?random=5", likes: 567 },
+            { id: 6, thumbnail: "https://picsum.photos/300/500?random=6", likes: 890 }
         ];
         
-        // 初始化视频流
+        // DOM元素
+        const authModal = document.getElementById('authModal');
+        const closeAuth = document.getElementById('closeAuth');
+        const showAuth = document.getElementById('showAuth');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const toRegister = document.getElementById('toRegister');
+        const toLogin = document.getElementById('toLogin');
+        const userAvatar = document.getElementById('userAvatar');
+        const profileNav = document.getElementById('profileNav');
         const videoContainer = document.getElementById('videoContainer');
+        const profilePage = document.getElementById('profilePage');
+        const profileName = document.getElementById('profileName');
+        const profileId = document.getElementById('profileId');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const followCount = document.getElementById('followCount');
+        const fansCount = document.getElementById('fansCount');
+        const likeCount = document.getElementById('likeCount');
+        const profileContent = document.getElementById('profileContent');
+        const navItems = document.querySelectorAll('.nav-item');
         
-        videoData.forEach(video => {
-            const videoItem = document.createElement('div');
-            videoItem.className = 'video-item';
-            videoItem.innerHTML = `
-                <video class="video-player" loop muted>
-                    <source src="${video.videoUrl}" type="video/mp4">
-                    您的浏览器不支持视频播放
-                </video>
-                <div class="video-info">
-                    <div class="username">@${video.username}</div>
-                    <div class="video-desc">${video.description}</div>
-                    <div class="music-info">
-                        <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                        </svg>
-                        ${video.music}
-                    </div>
-                </div>
-                <div class="action-bar">
-                    <div class="action-item">
-                        <img class="avatar" src="${video.avatar}" alt="${video.username}">
-                        <div class="action-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                        </div>
-                        <div class="action-count">${video.likes}</div>
-                    </div>
-                    <div class="action-item" onclick="openComment(${video.id})">
-                        <div class="action-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h11c.55 0 1-.45 1-1z"/>
-                            </svg>
-                        </div>
-                        <div class="action-count">${video.comments}</div>
-                    </div>
-                    <div class="action-item">
-                        <div class="action-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                            </svg>
-                        </div>
-                        <div class="action-count">${video.shares}</div>
-                    </div>
-                </div>
-            `;
-            videoContainer.appendChild(videoItem);
+        // 显示/隐藏认证模态框
+        showAuth.addEventListener('click', () => {
+            authModal.style.display = 'flex';
         });
         
-        // 添加加载更多指示器
-        const loadingIndicator = document.createElement('div');
-        loadingIndicator.className = 'loading';
-        loadingIndicator.innerHTML = '<div class="spinner"></div>';
-        videoContainer.appendChild(loadingIndicator);
-        
-        // 视频播放控制
-        const videos = document.querySelectorAll('.video-player');
-        
-        // 当视频进入视口时播放
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const video = entry.target;
-                if (entry.isIntersecting) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            });
-        }, { threshold: 0.7 });
-        
-        videos.forEach(video => {
-            observer.observe(video);
+        closeAuth.addEventListener('click', () => {
+            authModal.style.display = 'none';
         });
         
-        // 点赞功能
-        document.querySelectorAll('.action-item:first-child').forEach(item => {
-            item.addEventListener('click', function() {
-                const icon = this.querySelector('svg');
-                const countEl = this.querySelector('.action-count');
+        // 切换登录/注册选项卡
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
                 
-                if (icon.style.fill === 'rgb(255, 102, 0)') {
-                    icon.style.fill = 'currentColor';
-                    countEl.textContent = parseInt(countEl.textContent) - 1;
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                loginForm.classList.remove('active');
+                registerForm.classList.remove('active');
+                
+                if (tabName === 'login') {
+                    loginForm.classList.add('active');
                 } else {
-                    icon.style.fill = '#ff6600';
-                    countEl.textContent = parseInt(countEl.textContent) + 1;
+                    registerForm.classList.add('active');
                 }
             });
         });
         
-        // 评论功能
-        const commentSection = document.getElementById('commentSection');
-        const commentList = document.getElementById('commentList');
-        const commentInput = document.getElementById('commentInput');
-        const sendCommentBtn = document.getElementById('sendComment');
-        const closeCommentBtn = document.getElementById('closeComment');
+        toRegister.addEventListener('click', () => {
+            authTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="register"]').classList.add('active');
+            
+            loginForm.classList.remove('active');
+            registerForm.classList.add('active');
+        });
         
-        function openComment(videoId) {
-            // 清空评论列表
-            commentList.innerHTML = '';
+        toLogin.addEventListener('click', () => {
+            authTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="login"]').classList.add('active');
             
-            // 添加模拟评论
-            commentData.forEach(comment => {
-                const commentItem = document.createElement('div');
-                commentItem.className = 'comment-item';
-                commentItem.innerHTML = `
-                    <span class="comment-user">${comment.username}:</span>
-                    <span>${comment.content}</span>
-                `;
-                commentList.appendChild(commentItem);
-            });
+            registerForm.classList.remove('active');
+            loginForm.classList.add('active');
+        });
+        
+        // 登录功能
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
             
-            // 显示评论区域
-            commentSection.classList.add('active');
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // 验证用户
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('kuaishou_current_user', JSON.stringify(user));
+                
+                // 更新UI
+                showAuth.style.display = 'none';
+                userAvatar.src = user.avatar;
+                userAvatar.style.display = 'block';
+                
+                // 关闭模态框
+                authModal.style.display = 'none';
+                
+                // 显示成功消息
+                alert('登录成功！');
+            } else {
+                alert('用户名或密码错误！');
+            }
+        });
+        
+        // 注册功能
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // 验证输入
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致！');
+                return;
+            }
+            
+            if (users.find(u => u.username === username)) {
+                alert('用户名已存在！');
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                id: Date.now(),
+                username,
+                phone,
+                password,
+                avatar: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 50) + 1}.jpg`,
+                followCount: Math.floor(Math.random() * 200),
+                fansCount: Math.floor(Math.random() * 10000),
+                likeCount: Math.floor(Math.random() * 50000),
+                kuaishouId: 'ks' + Date.now().toString().slice(-8)
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('kuaishou_users', JSON.stringify(users));
+            
+            // 自动登录
+            currentUser = newUser;
+            localStorage.setItem('kuaishou_current_user', JSON.stringify(newUser));
+            
+            // 更新UI
+            showAuth.style.display = 'none';
+            userAvatar.src = newUser.avatar;
+            userAvatar.style.display = 'block';
+            
+            // 关闭模态框
+            authModal.style.display = 'none';
+            
+            // 显示成功消息
+            alert('注册成功！已自动登录。');
+        });
+        
+        // 检查是否已登录
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('kuaishou_current_user');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showAuth.style.display = 'none';
+                userAvatar.src = currentUser.avatar;
+                userAvatar.style.display = 'block';
+                
+                // 更新个人主页信息
+                updateProfileInfo();
+            }
         }
         
-        closeCommentBtn.addEventListener('click', function() {
-            commentSection.classList.remove('active');
-        });
+        // 更新个人主页信息
+        function updateProfileInfo() {
+            if (currentUser) {
+                profileName.textContent = currentUser.username;
+                profileId.textContent = `快手号: ${currentUser.kuaishouId}`;
+                profileAvatar.src = currentUser.avatar;
+                followCount.textContent = currentUser.followCount;
+                fansCount.textContent = currentUser.fansCount > 1000 ? 
+                    (currentUser.fansCount / 1000).toFixed(1) + '万' : currentUser.fansCount;
+                likeCount.textContent = currentUser.likeCount > 10000 ? 
+                    (currentUser.likeCount / 10000).toFixed(1) + '万' : currentUser.likeCount;
+            }
+        }
         
-        sendCommentBtn.addEventListener('click', function() {
-            const content = commentInput.value.trim();
-            if (content) {
-                const commentItem = document.createElement('div');
-                commentItem.className = 'comment-item';
-                commentItem.innerHTML = `
-                    <span class="comment-user">我:</span>
-                    <span>${content}</span>
+        // 初始化视频流
+        function initVideoFeed() {
+            videoData.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <video class="video-player" loop muted>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div class="video-info">
+                        <div class="username">@${video.username}</div>
+                        <div class="video-desc">${video.description}</div>
+                        <div class="music-info">
+                            <i class="fas fa-music music-icon"></i>
+                            ${video.music}
+                        </div>
+                    </div>
+                    <div class="action-bar">
+                        <div class="action-item">
+                            <img class="avatar" src="${video.avatar}" alt="${video.username}">
+                            <div class="action-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                        <div class="action-item">
+                            <div class="action-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="action-count">${video.likes}</div>
+                        </div>
+                        <div class="action-item" onclick="openComment(${video.id})">
+                            <div class="action-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="action-count">${video.comments}</div>
+                        </div>
+                        <div class="action-item">
+                            <div class="action-icon">
+                                <i class="fas fa-share"></i>
+                            </div>
+                            <div class="action-count">${video.shares}</div>
+                        </div>
+                    </div>
                 `;
-                commentList.appendChild(commentItem);
-                commentInput.value = '';
-                
-                // 滚动到最新评论
-                commentList.scrollTop = commentList.scrollHeight;
-            }
-        });
-        
-        commentInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendCommentBtn.click();
-            }
-        });
-        
-        // 模拟加载更多视频
-        let loading = false;
-        
-        videoContainer.addEventListener('scroll', function() {
-            if (loading) return;
+                videoContainer.appendChild(videoItem);
+            });
             
-            const scrollTop = videoContainer.scrollTop;
-            const scrollHeight = videoContainer.scrollHeight;
-            const clientHeight = videoContainer.clientHeight;
+            // 添加加载更多指示器
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'loading';
+            loadingIndicator.innerHTML = '<div class="spinner"></div>';
+            videoContainer.appendChild(loadingIndicator);
             
-            if (scrollTop + clientHeight >= scrollHeight - 50) {
-                loading = true;
+            // 视频播放控制
+            const videos = document.querySelectorAll('.video-player');
+            
+            // 当视频进入视口时播放
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.7 });
+            
+            videos.forEach(video => {
+                observer.observe(video);
+            });
+        }
+        
+        // 初始化个人主页内容
+        function initProfileContent() {
+            userVideos.forEach(video => {
+                const videoElement = document.createElement('div');
+                videoElement.className = 'profile-video';
+                videoElement.innerHTML = `
+                    <img src="${video.thumbnail}" alt="视频封面">
+                    <div class="video-overlay">
+                        <i class="fas fa-heart" style="margin-right: 3px;"></i>
+                        <span>${video.likes}</span>
+                    </div>
+                `;
+                profileContent.appendChild(videoElement);
+            });
+        }
+        
+        // 导航切换
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const page = item.getAttribute('data-page');
                 
-                // 模拟网络请求延迟
-                setTimeout(() => {
-                    // 添加新视频
-                    const newVideo = {
-                        id: videoData.length + 1,
-                        username: `用户${videoData.length + 1}`,
-                        avatar: `https://randomuser.me/api/portraits/${videoData.length % 2 === 0 ? 'women' : 'men'}/${videoData.length + 1}.jpg`,
-                        videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
-                        description: `这是第${videoData.length + 1}个视频，欢迎观看！`,
-                        music: "随机音乐 - 未知艺术家",
-                        likes: Math.floor(Math.random() * 1000),
-                        comments: Math.floor(Math.random() * 100),
-                        shares: Math.floor(Math.random() * 20)
-                    };
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                if (page === 'profile') {
+                    if (!currentUser) {
+                        authModal.style.display = 'flex';
+                        // 重置导航状态
+                        navItems[0].classList.add('active');
+                        item.classList.remove('active');
+                        return;
+                    }
                     
-                    videoData.push(newVideo);
-                    
-                    const videoItem = document.createElement('div');
-                    videoItem.className = 'video-item';
-                    videoItem.innerHTML = `
-                        <video class="video-player" loop muted>
-                            <source src="${newVideo.videoUrl}" type="video/mp4">
-                            您的浏览器不支持视频播放
-                        </video>
-                        <div class="video-info">
-                            <div class="username">@${newVideo.username}</div>
-                            <div class="video-desc">${newVideo.description}</div>
-                            <div class="music-info">
-                                <svg class="music-icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                                </svg>
-                                ${newVideo.music}
-                            </div>
-                        </div>
-                        <div class="action-bar">
-                            <div class="action-item">
-                                <img class="avatar" src="${newVideo.avatar}" alt="${newVideo.username}">
-                                <div class="action-icon">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                    </svg>
-                                </div>
-                                <div class="action-count">${newVideo.likes}</div>
-                            </div>
-                            <div class="action-item" onclick="openComment(${newVideo.id})">
-                                <div class="action-icon">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h11c.55 0 1-.45 1-1z"/>
-                                    </svg>
-                                </div>
-                                <div class="action-count">${newVideo.comments}</div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-icon">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                                    </svg>
-                                </div>
-                                <div class="action-count">${newVideo.shares}</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // 插入到加载指示器之前
-                    videoContainer.insertBefore(videoItem, loadingIndicator);
-                    
-                    // 观察新视频
-                    const newVideoElement = videoItem.querySelector('.video-player');
-                    observer.observe(newVideoElement);
-                    
-                    // 为新视频添加点赞功能
-                    const likeButton = videoItem.querySelector('.action-item:first-child');
-                    likeButton.addEventListener('click', function() {
-                        const icon = this.querySelector('svg');
-                        const countEl = this.querySelector('.action-count');
-                        
-                        if (icon.style.fill === 'rgb(255, 102, 0)') {
-                            icon.style.fill = 'currentColor';
-                            countEl.textContent = parseInt(countEl.textContent) - 1;
-                        } else {
-                            icon.style.fill = '#ff6600';
-                            countEl.textContent = parseInt(countEl.textContent) + 1;
-                        }
-                    });
-                    
-                    loading = false;
-                }, 1500);
+                    videoContainer.style.display = 'none';
+                    profilePage.style.display = 'block';
+                } else {
+                    videoContainer.style.display = 'block';
+                    profilePage.style.display = 'none';
+                }
+            });
+        });
+        
+        // 用户头像点击事件
+        userAvatar.addEventListener('click', () => {
+            if (currentUser) {
+                videoContainer.style.display = 'none';
+                profilePage.style.display = 'block';
+                
+                navItems.forEach(nav => nav.classList.remove('active'));
+                profileNav.classList.add('active');
             }
         });
+        
+        // 初始化
+        function init() {
+            checkLoginStatus();
+            initVideoFeed();
+            initProfileContent();
+        }
+        
+        // 启动应用
+        init();
+        
+        // 模拟评论功能
+        function openComment(videoId) {
+            if (!currentUser) {
+                authModal.style.display = 'flex';
+                return;
+            }
+            alert('评论功能即将开放，敬请期待！');
+        }
     </script>
 </body>
 </html>
-
-
-                 
