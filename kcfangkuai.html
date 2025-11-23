@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KC网页版 - 记录世界记录你</title>
+    <title>快手网页版 - 记录世界记录你</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -19,8 +19,8 @@
             overflow-x: hidden;
         }
         
-        /* 登录/注册模态框 */
-        .auth-modal {
+        /* 模态框 */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -33,7 +33,7 @@
             align-items: center;
         }
         
-        .auth-container {
+        .modal-container {
             background-color: #1a1a1a;
             width: 90%;
             max-width: 400px;
@@ -42,13 +42,13 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
         
-        .auth-tabs {
+        .modal-tabs {
             display: flex;
             margin-bottom: 20px;
             border-bottom: 1px solid #333;
         }
         
-        .auth-tab {
+        .modal-tab {
             flex: 1;
             text-align: center;
             padding: 12px;
@@ -58,16 +58,16 @@
             color: #999;
         }
         
-        .auth-tab.active {
+        .modal-tab.active {
             color: #ff6600;
             border-bottom: 2px solid #ff6600;
         }
         
-        .auth-form {
+        .modal-form {
             display: none;
         }
         
-        .auth-form.active {
+        .modal-form.active {
             display: block;
         }
         
@@ -90,8 +90,7 @@
             border-color: #ff6600;
         }
         
-        .auth-btn {
-            width: 100%;
+        .btn {
             padding: 12px;
             background-color: #ff6600;
             color: #fff;
@@ -103,23 +102,23 @@
             margin-top: 10px;
         }
         
-        .auth-btn:hover {
-            background-color: #ff5500;
+        .btn-full {
+            width: 100%;
         }
         
-        .auth-footer {
+        .modal-footer {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
             color: #999;
         }
         
-        .auth-link {
+        .modal-link {
             color: #ff6600;
             cursor: pointer;
         }
         
-        .close-auth {
+        .close-modal {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -384,6 +383,7 @@
             border-radius: 4px;
             margin-right: 10px;
             font-size: 14px;
+            cursor: pointer;
         }
         
         .profile-btn.primary {
@@ -438,6 +438,44 @@
             color: #fff;
         }
         
+        /* 发布视频模态框 */
+        .upload-container {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #ff6600;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .preview-container {
+            display: none;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .video-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+        }
+        
         /* 响应式调整 */
         @media (min-width: 768px) {
             .video-container, .profile-page {
@@ -477,32 +515,49 @@
             margin-top: 5px;
             display: none;
         }
+        
+        /* 发布页面 */
+        .publish-page {
+            display: none;
+            margin-top: 50px;
+            margin-bottom: 55px;
+            padding: 15px;
+            overflow-y: auto;
+            height: calc(100vh - 105px);
+        }
+        
+        .publish-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <!-- 登录/注册模态框 -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <div class="close-auth" id="closeAuth">&times;</div>
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login">登录</div>
-                <div class="auth-tab" data-tab="register">注册</div>
+    <div class="modal" id="authModal">
+        <div class="modal-container">
+            <div class="close-modal" id="closeAuth">&times;</div>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="login">登录</div>
+                <div class="modal-tab" data-tab="register">注册</div>
             </div>
             
-            <form class="auth-form active" id="loginForm">
+            <form class="modal-form active" id="loginForm">
                 <div class="form-group">
                     <input type="text" class="form-input" placeholder="邮箱/用户名" id="loginUsername" required>
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-input" placeholder="密码" id="loginPassword" required>
                 </div>
-                <button type="submit" class="auth-btn">登录</button>
-                <div class="auth-footer">
-                    忘记密码？<span class="auth-link" id="toRegister">注册账号</span>
+                <button type="submit" class="btn btn-full">登录</button>
+                <div class="modal-footer">
+                    忘记密码？<span class="modal-link" id="toRegister">注册账号</span>
                 </div>
             </form>
             
-            <form class="auth-form" id="registerForm">
+            <form class="modal-form" id="registerForm">
                 <div class="form-group">
                     <input type="text" class="form-input" placeholder="用户名" id="registerUsername" required>
                 </div>
@@ -516,22 +571,55 @@
                 <div class="form-group">
                     <input type="password" class="form-input" placeholder="确认密码" id="registerConfirmPassword" required>
                 </div>
-                <button type="submit" class="auth-btn">注册</button>
-                <div class="auth-footer">
-                    已有账号？<span class="auth-link" id="toLogin">立即登录</span>
+                <button type="submit" class="btn btn-full">注册</button>
+                <div class="modal-footer">
+                    已有账号？<span class="modal-link" id="toLogin">立即登录</span>
                 </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 发布视频模态框 -->
+    <div class="modal" id="publishModal">
+        <div class="modal-container">
+            <div class="close-modal" id="closePublish">&times;</div>
+            <div class="modal-header">
+                <h2>发布视频</h2>
+            </div>
+            
+            <div class="upload-container" id="uploadContainer">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">点击或拖拽视频文件到此处</div>
+                <div class="upload-hint">支持MP4、MOV等格式，最大100MB</div>
+                <input type="file" id="videoUpload" accept="video/*" style="display: none;">
+            </div>
+            
+            <div class="preview-container" id="previewContainer">
+                <video class="video-preview" id="videoPreview" controls></video>
+            </div>
+            
+            <form id="publishForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="视频描述" id="videoDesc">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="添加背景音乐" id="videoMusic">
+                </div>
+                <button type="submit" class="btn btn-full" id="publishBtn">发布</button>
             </form>
         </div>
     </div>
     
     <!-- 顶部导航栏 -->
     <div class="header">
-        <div class="logo">KC</div>
+        <div class="logo">快手</div>
         <div class="header-actions">
             <div class="search-icon">
                 <i class="fas fa-search"></i>
             </div>
-            <div class="camera-icon">
+            <div class="camera-icon" id="openPublish">
                 <i class="fas fa-camera"></i>
             </div>
             <button class="login-btn" id="showAuth">登录</button>
@@ -550,18 +638,18 @@
             <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-avatar" id="profileAvatar">
             <div class="profile-info">
                 <div class="profile-name" id="profileName">用户名</div>
-                <div class="profile-id" id="profileId">KC号: 123456789</div>
+                <div class="profile-id" id="profileId">快手号: 123456789</div>
                 <div class="profile-stats">
                     <div class="stat-item">
                         <div class="stat-count" id="followCount">120</div>
                         <div class="stat-label">关注</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-count" id="fansCount">82亿</div>
+                        <div class="stat-count" id="fansCount">1.2万</div>
                         <div class="stat-label">粉丝</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-count" id="likeCount">1000亿</div>
+                        <div class="stat-count" id="likeCount">5.6万</div>
                         <div class="stat-label">获赞</div>
                     </div>
                 </div>
@@ -583,6 +671,33 @@
         </div>
     </div>
     
+    <!-- 发布页面 -->
+    <div class="publish-page" id="publishPage">
+        <div class="publish-header">发布视频</div>
+        <div class="upload-container" id="uploadPageContainer">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="upload-text">点击或拖拽视频文件到此处</div>
+            <div class="upload-hint">支持MP4、MOV等格式，最大100MB</div>
+            <input type="file" id="videoUploadPage" accept="video/*" style="display: none;">
+        </div>
+        
+        <div class="preview-container" id="previewPageContainer">
+            <video class="video-preview" id="videoPagePreview" controls></video>
+        </div>
+        
+        <form id="publishPageForm">
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="视频描述" id="videoPageDesc">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="添加背景音乐" id="videoPageMusic">
+            </div>
+            <button type="submit" class="btn btn-full" id="publishPageBtn">发布</button>
+        </form>
+    </div>
+    
     <!-- 底部导航栏 -->
     <div class="footer">
         <div class="nav-item active" data-page="home">
@@ -591,13 +706,13 @@
             </div>
             <div>首页</div>
         </div>
-        <div class="nav-item" data-page="discover">
+           <div class="nav-item" data-page="discover">
             <div class="nav-icon">
                 <i class="fas fa-compass"></i>
             </div>
             <div>发现</div>
         </div>
-        <div class="nav-item" data-page="publish">
+        <div class="nav-item" data-page="publish" id="publishNav">
             <div class="nav-icon">
                 <i class="fas fa-plus-circle"></i>
             </div>
@@ -623,7 +738,7 @@
         const users = JSON.parse(localStorage.getItem('kuaishou_users')) || [];
         
         // 模拟视频数据
-        const videoData = [
+        let videoData = JSON.parse(localStorage.getItem('kuaishou_videos')) || [
             {
                 id: 1,
                 username: "用户1",
@@ -633,7 +748,8 @@
                 music: "背景音乐 - 流行歌曲",
                 likes: 1234,
                 comments: 56,
-                shares: 12
+                shares: 12,
+                userId: 1
             },
             {
                 id: 2,
@@ -644,7 +760,8 @@
                 music: "轻音乐 - 自然之声",
                 likes: 567,
                 comments: 23,
-                shares: 5
+                shares: 5,
+                userId: 2
             },
             {
                 id: 3,
@@ -655,7 +772,8 @@
                 music: "原创音乐 - 我的创作",
                 likes: 890,
                 comments: 34,
-                shares: 8
+                shares: 8,
+                userId: 3
             }
         ];
         
@@ -673,7 +791,7 @@
         const authModal = document.getElementById('authModal');
         const closeAuth = document.getElementById('closeAuth');
         const showAuth = document.getElementById('showAuth');
-        const authTabs = document.querySelectorAll('.auth-tab');
+        const authTabs = document.querySelectorAll('.modal-tab');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const toRegister = document.getElementById('toRegister');
@@ -692,6 +810,30 @@
         const navItems = document.querySelectorAll('.nav-item');
         const registerEmail = document.getElementById('registerEmail');
         const emailHint = document.getElementById('emailHint');
+        
+        // 发布相关元素
+        const publishModal = document.getElementById('publishModal');
+        const closePublish = document.getElementById('closePublish');
+        const openPublish = document.getElementById('openPublish');
+        const uploadContainer = document.getElementById('uploadContainer');
+        const videoUpload = document.getElementById('videoUpload');
+        const previewContainer = document.getElementById('previewContainer');
+        const videoPreview = document.getElementById('videoPreview');
+        const publishForm = document.getElementById('publishForm');
+        const publishBtn = document.getElementById('publishBtn');
+        
+        // 发布页面相关元素
+        const publishPage = document.getElementById('publishPage');
+        const publishNav = document.getElementById('publishNav');
+        const uploadPageContainer = document.getElementById('uploadPageContainer');
+        const videoUploadPage = document.getElementById('videoUploadPage');
+        const previewPageContainer = document.getElementById('previewPageContainer');
+        const videoPagePreview = document.getElementById('videoPagePreview');
+        const publishPageForm = document.getElementById('publishPageForm');
+        const publishPageBtn = document.getElementById('publishPageBtn');
+        
+        let selectedVideoFile = null;
+        let selectedVideoUrl = null;
         
         // 邮箱验证函数
         function validateEmail(email) {
@@ -781,6 +923,9 @@
                 
                 // 显示成功消息
                 alert('登录成功！');
+                
+                // 更新个人主页信息
+                updateProfileInfo();
             } else {
                 alert('用户名/邮箱或密码错误！');
             }
@@ -849,6 +994,9 @@
             
             // 显示成功消息
             alert('注册成功！已自动登录。');
+            
+            // 更新个人主页信息
+            updateProfileInfo();
         });
         
         // 检查是否已登录
@@ -870,7 +1018,7 @@
         function updateProfileInfo() {
             if (currentUser) {
                 profileName.textContent = currentUser.username;
-                profileId.textContent = `KC号: ${currentUser.kuaishouId}`;
+                profileId.textContent = `快手号: ${currentUser.kuaishouId}`;
                 profileAvatar.src = currentUser.avatar;
                 followCount.textContent = currentUser.followCount;
                 fansCount.textContent = currentUser.fansCount > 1000 ? 
@@ -882,6 +1030,8 @@
         
         // 初始化视频流
         function initVideoFeed() {
+            videoContainer.innerHTML = '';
+            
             videoData.forEach(video => {
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item';
@@ -956,18 +1106,40 @@
         
         // 初始化个人主页内容
         function initProfileContent() {
-            userVideos.forEach(video => {
-                const videoElement = document.createElement('div');
-                videoElement.className = 'profile-video';
-                videoElement.innerHTML = `
-                    <img src="${video.thumbnail}" alt="视频封面">
-                    <div class="video-overlay">
-                        <i class="fas fa-heart" style="margin-right: 3px;"></i>
-                        <span>${video.likes}</span>
-                    </div>
+            profileContent.innerHTML = '';
+            
+            // 显示当前用户的视频
+            const userVideos = videoData.filter(video => video.userId === currentUser?.id);
+            
+            if (userVideos.length > 0) {
+                userVideos.forEach(video => {
+                    const videoElement = document.createElement('div');
+                    videoElement.className = 'profile-video';
+                    videoElement.innerHTML = `
+                        <video class="video-player" loop muted>
+                            <source src="${video.videoUrl}" type="video/mp4">
+                        </video>
+                        <div class="video-overlay">
+                            <i class="fas fa-heart" style="margin-right: 3px;"></i>
+                            <span>${video.likes}</span>
+                        </div>
+                    `;
+                    profileContent.appendChild(videoElement);
+                });
+            } else {
+                // 如果没有视频，显示提示
+                const noVideos = document.createElement('div');
+                noVideos.style.gridColumn = '1 / 4';
+                noVideos.style.textAlign = 'center';
+                noVideos.style.padding = '40px 0';
+                noVideos.style.color = '#999';
+                noVideos.innerHTML = `
+                    <i class="fas fa-video" style="font-size: 48px; margin-bottom: 15px;"></i>
+                    <div>暂无作品</div>
+                    <div style="font-size: 12px; margin-top: 10px;">快去发布你的第一个视频吧！</div>
                 `;
-                profileContent.appendChild(videoElement);
-            });
+                profileContent.appendChild(noVideos);
+            }
         }
         
         // 导航切换
@@ -978,6 +1150,11 @@
                 navItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
                 
+                // 隐藏所有页面
+                videoContainer.style.display = 'none';
+                profilePage.style.display = 'none';
+                publishPage.style.display = 'none';
+                
                 if (page === 'profile') {
                     if (!currentUser) {
                         authModal.style.display = 'flex';
@@ -987,11 +1164,20 @@
                         return;
                     }
                     
-                    videoContainer.style.display = 'none';
                     profilePage.style.display = 'block';
+                    initProfileContent();
+                } else if (page === 'publish') {
+                    if (!currentUser) {
+                        authModal.style.display = 'flex';
+                        // 重置导航状态
+                        navItems[0].classList.add('active');
+                        item.classList.remove('active');
+                        return;
+                    }
+                    
+                    publishPage.style.display = 'block';
                 } else {
                     videoContainer.style.display = 'block';
-                    profilePage.style.display = 'none';
                 }
             });
         });
@@ -1001,17 +1187,192 @@
             if (currentUser) {
                 videoContainer.style.display = 'none';
                 profilePage.style.display = 'block';
+                publishPage.style.display = 'none';
                 
                 navItems.forEach(nav => nav.classList.remove('active'));
                 profileNav.classList.add('active');
+                
+                initProfileContent();
             }
         });
+        
+        // 发布视频功能
+        function initPublishFunctionality() {
+            // 打开发布模态框
+            openPublish.addEventListener('click', () => {
+                if (!currentUser) {
+                    authModal.style.display = 'flex';
+                    return;
+                }
+                
+                publishModal.style.display = 'flex';
+            });
+            
+            // 关闭发布模态框
+            closePublish.addEventListener('click', () => {
+                publishModal.style.display = 'none';
+                resetPublishForm();
+            });
+            
+            // 上传区域点击事件
+            uploadContainer.addEventListener('click', () => {
+                videoUpload.click();
+            });
+            
+            uploadPageContainer.addEventListener('click', () => {
+                videoUploadPage.click();
+            });
+            
+            // 文件选择事件
+            videoUpload.addEventListener('change', handleVideoSelect);
+            videoUploadPage.addEventListener('change', handleVideoSelectPage);
+            
+            // 发布表单提交
+            publishForm.addEventListener('submit', handlePublishSubmit);
+            publishPageForm.addEventListener('submit', handlePublishPageSubmit);
+        }
+        
+        // 处理视频选择
+        function handleVideoSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedVideoFile = file;
+                selectedVideoUrl = URL.createObjectURL(file);
+                
+                videoPreview.src = selectedVideoUrl;
+                previewContainer.style.display = 'block';
+                uploadContainer.style.display = 'none';
+            }
+        }
+        
+        function handleVideoSelectPage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedVideoFile = file;
+                selectedVideoUrl = URL.createObjectURL(file);
+                
+                videoPagePreview.src = selectedVideoUrl;
+                previewPageContainer.style.display = 'block';
+                uploadPageContainer.style.display = 'none';
+            }
+        }
+        
+        // 处理发布提交
+        function handlePublishSubmit(e) {
+            e.preventDefault();
+            
+            if (!selectedVideoFile) {
+                alert('请先选择视频文件！');
+                return;
+            }
+            
+            const description = document.getElementById('videoDesc').value || '分享我的视频';
+            const music = document.getElementById('videoMusic').value || '热门音乐';
+            
+            // 创建新视频对象
+            const newVideo = {
+                id: Date.now(),
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                videoUrl: selectedVideoUrl,
+                description: description,
+                music: music,
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                userId: currentUser.id
+            };
+            
+            // 添加到视频数据
+            videoData.unshift(newVideo);
+            localStorage.setItem('kuaishou_videos', JSON.stringify(videoData));
+            
+            // 重置表单
+            resetPublishForm();
+            
+            // 关闭模态框
+            publishModal.style.display = 'none';
+            
+            // 更新视频流
+            initVideoFeed();
+            
+            // 显示成功消息
+            alert('视频发布成功！');
+        }
+        
+        function handlePublishPageSubmit(e) {
+            e.preventDefault();
+            
+            if (!selectedVideoFile) {
+                alert('请先选择视频文件！');
+                return;
+            }
+            
+            const description = document.getElementById('videoPageDesc').value || '分享我的视频';
+            const music = document.getElementById('videoPageMusic').value || '热门音乐';
+            
+            // 创建新视频对象
+            const newVideo = {
+                id: Date.now(),
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                videoUrl: selectedVideoUrl,
+                description: description,
+                music: music,
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                userId: currentUser.id
+            };
+            
+            // 添加到视频数据
+            videoData.unshift(newVideo);
+            localStorage.setItem('kuaishou_videos', JSON.stringify(videoData));
+            
+            // 重置表单
+            resetPublishForm();
+            
+            // 切换到首页
+            videoContainer.style.display = 'block';
+            publishPage.style.display = 'none';
+            navItems.forEach(nav => nav.classList.remove('active'));
+            navItems[0].classList.add('active');
+            
+            // 更新视频流
+            initVideoFeed();
+            
+            // 显示成功消息
+            alert('视频发布成功！');
+        }
+        
+        // 重置发布表单
+        function resetPublishForm() {
+            selectedVideoFile = null;
+            selectedVideoUrl = null;
+            
+            // 重置模态框表单
+            document.getElementById('videoDesc').value = '';
+            document.getElementById('videoMusic').value = '';
+            previewContainer.style.display = 'none';
+            uploadContainer.style.display = 'block';
+            
+            // 重置页面表单
+            document.getElementById('videoPageDesc').value = '';
+            document.getElementById('videoPageMusic').value = '';
+            previewPageContainer.style.display = 'none';
+            uploadPageContainer.style.display = 'block';
+            
+            // 重置文件输入
+            videoUpload.value = '';
+            videoUploadPage.value = '';
+        }
         
         // 初始化
         function init() {
             checkLoginStatus();
             initVideoFeed();
             initProfileContent();
+            initPublishFunctionality();
         }
         
         // 启动应用
