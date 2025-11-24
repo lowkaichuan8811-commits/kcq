@@ -36,10 +36,12 @@
         .modal-container {
             background-color: #1a1a1a;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-tabs {
@@ -90,6 +92,41 @@
             border-color: #ff6600;
         }
         
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ddd;
+        }
+        
+        .audio-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .audio-btn {
+            padding: 8px 15px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .audio-btn.active {
+            background-color: #ff6600;
+        }
+        
+        .audio-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #2a2a2a;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
         .btn {
             padding: 12px;
             background-color: #ff6600;
@@ -104,6 +141,10 @@
         
         .btn-full {
             width: 100%;
+        }
+        
+        .btn-secondary {
+            background-color: #333;
         }
         
         .modal-footer {
@@ -532,6 +573,27 @@
             font-size: 18px;
             font-weight: bold;
         }
+        
+        /* 声音控制 */
+        .sound-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .sound-icon {
+            color: white;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -604,9 +666,28 @@
                 <div class="form-group">
                     <input type="text" class="form-input" placeholder="视频描述" id="videoDesc">
                 </div>
+                
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder="添加背景音乐" id="videoMusic">
+                    <label class="form-label">声音设置</label>
+                    <div class="audio-controls">
+                        <button type="button" class="audio-btn active" id="originalAudio">使用原声</button>
+                        <button type="button" class="audio-btn" id="addMusic">添加背景音乐</button>
+                    </div>
+                    <div class="audio-preview" id="audioPreview">
+                        当前设置：使用视频原声
+                    </div>
                 </div>
+                
+                <div class="form-group" id="musicSelection" style="display: none;">
+                    <label class="form-label">选择背景音乐</label>
+                    <select class="form-input" id="musicSelect">
+                        <option value="music1">热门音乐 - 流行歌曲</option>
+                        <option value="music2">轻音乐 - 自然之声</option>
+                        <option value="music3">原创音乐 - 我的创作</option>
+                        <option value="music4">电子音乐 - 动感节拍</option>
+                    </select>
+                </div>
+                
                 <button type="submit" class="btn btn-full" id="publishBtn">发布</button>
             </form>
         </div>
@@ -642,7 +723,7 @@
                 <div class="profile-stats">
                     <div class="stat-item">
                         <div class="stat-count" id="followCount">120</div>
-                        <div class="stat-label">关注</div>
+                                <div class="stat-label">关注</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-count" id="fansCount">1.2万</div>
@@ -691,9 +772,28 @@
             <div class="form-group">
                 <input type="text" class="form-input" placeholder="视频描述" id="videoPageDesc">
             </div>
+            
             <div class="form-group">
-                <input type="text" class="form-input" placeholder="添加背景音乐" id="videoPageMusic">
+                <label class="form-label">声音设置</label>
+                <div class="audio-controls">
+                    <button type="button" class="audio-btn active" id="originalAudioPage">使用原声</button>
+                    <button type="button" class="audio-btn" id="addMusicPage">添加背景音乐</button>
+                </div>
+                <div class="audio-preview" id="audioPreviewPage">
+                    当前设置：使用视频原声
+                </div>
             </div>
+            
+            <div class="form-group" id="musicSelectionPage" style="display: none;">
+                <label class="form-label">选择背景音乐</label>
+                <select class="form-input" id="musicSelectPage">
+                    <option value="music1">热门音乐 - 流行歌曲</option>
+                    <option value="music2">轻音乐 - 自然之声</option>
+                    <option value="music3">原创音乐 - 我的创作</option>
+                    <option value="music4">电子音乐 - 动感节拍</option>
+                </select>
+            </div>
+            
             <button type="submit" class="btn btn-full" id="publishPageBtn">发布</button>
         </form>
     </div>
@@ -706,7 +806,7 @@
             </div>
             <div>首页</div>
         </div>
-           <div class="nav-item" data-page="discover">
+        <div class="nav-item" data-page="discover">
             <div class="nav-icon">
                 <i class="fas fa-compass"></i>
             </div>
@@ -749,7 +849,8 @@
                 likes: 1234,
                 comments: 56,
                 shares: 12,
-                userId: 1
+                userId: 1,
+                hasAudio: true
             },
             {
                 id: 2,
@@ -761,7 +862,8 @@
                 likes: 567,
                 comments: 23,
                 shares: 5,
-                userId: 2
+                userId: 2,
+                hasAudio: true
             },
             {
                 id: 3,
@@ -773,18 +875,9 @@
                 likes: 890,
                 comments: 34,
                 shares: 8,
-                userId: 3
+                userId: 3,
+                hasAudio: true
             }
-        ];
-        
-        // 模拟用户作品数据
-        const userVideos = [
-            { id: 1, thumbnail: "https://picsum.photos/300/500?random=1", likes: 123 },
-            { id: 2, thumbnail: "https://picsum.photos/300/500?random=2", likes: 456 },
-            { id: 3, thumbnail: "https://picsum.photos/300/500?random=3", likes: 789 },
-            { id: 4, thumbnail: "https://picsum.photos/300/500?random=4", likes: 234 },
-            { id: 5, thumbnail: "https://picsum.photos/300/500?random=5", likes: 567 },
-            { id: 6, thumbnail: "https://picsum.photos/300/500?random=6", likes: 890 }
         ];
         
         // DOM元素
@@ -822,6 +915,13 @@
         const publishForm = document.getElementById('publishForm');
         const publishBtn = document.getElementById('publishBtn');
         
+        // 声音控制元素
+        const originalAudioBtn = document.getElementById('originalAudio');
+        const addMusicBtn = document.getElementById('addMusic');
+        const audioPreview = document.getElementById('audioPreview');
+        const musicSelection = document.getElementById('musicSelection');
+        const musicSelect = document.getElementById('musicSelect');
+        
         // 发布页面相关元素
         const publishPage = document.getElementById('publishPage');
         const publishNav = document.getElementById('publishNav');
@@ -832,8 +932,17 @@
         const publishPageForm = document.getElementById('publishPageForm');
         const publishPageBtn = document.getElementById('publishPageBtn');
         
+        // 页面声音控制元素
+        const originalAudioPageBtn = document.getElementById('originalAudioPage');
+        const addMusicPageBtn = document.getElementById('addMusicPage');
+        const audioPreviewPage = document.getElementById('audioPreviewPage');
+        const musicSelectionPage = document.getElementById('musicSelectionPage');
+        const musicSelectPage = document.getElementById('musicSelectPage');
+        
         let selectedVideoFile = null;
         let selectedVideoUrl = null;
+        let useOriginalAudio = true;
+        let selectedMusic = "music1";
         
         // 邮箱验证函数
         function validateEmail(email) {
@@ -1036,6 +1145,9 @@
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item';
                 videoItem.innerHTML = `
+                    <div class="sound-control" onclick="toggleMute(this)">
+                        <i class="fas fa-volume-mute sound-icon"></i>
+                    </div>
                     <video class="video-player" loop muted>
                         <source src="${video.videoUrl}" type="video/mp4">
                         您的浏览器不支持视频播放
@@ -1094,7 +1206,7 @@
                     if (entry.isIntersecting) {
                         video.play();
                     } else {
-                        video.pause();
+                    video.pause();
                     }
                 });
             }, { threshold: 0.7 });
@@ -1102,6 +1214,21 @@
             videos.forEach(video => {
                 observer.observe(video);
             });
+        }
+        
+        // 切换静音/取消静音
+        function toggleMute(soundControl) {
+            const videoItem = soundControl.closest('.video-item');
+            const videoPlayer = videoItem.querySelector('.video-player');
+            const soundIcon = soundControl.querySelector('.sound-icon');
+            
+            if (videoPlayer.muted) {
+                videoPlayer.muted = false;
+                soundIcon.className = 'fas fa-volume-up sound-icon';
+            } else {
+                videoPlayer.muted = true;
+                soundIcon.className = 'fas fa-volume-mute sound-icon';
+            }
         }
         
         // 初始化个人主页内容
@@ -1227,6 +1354,49 @@
             videoUpload.addEventListener('change', handleVideoSelect);
             videoUploadPage.addEventListener('change', handleVideoSelectPage);
             
+            // 声音控制按钮事件
+            originalAudioBtn.addEventListener('click', () => {
+                useOriginalAudio = true;
+                originalAudioBtn.classList.add('active');
+                addMusicBtn.classList.remove('active');
+                musicSelection.style.display = 'none';
+                audioPreview.textContent = '当前设置：使用视频原声';
+            });
+            
+            addMusicBtn.addEventListener('click', () => {
+                useOriginalAudio = false;
+                originalAudioBtn.classList.remove('active');
+                addMusicBtn.classList.add('active');
+                musicSelection.style.display = 'block';
+                audioPreview.textContent = '当前设置：添加背景音乐';
+            });
+            
+            // 页面声音控制按钮事件
+            originalAudioPageBtn.addEventListener('click', () => {
+                useOriginalAudio = true;
+                originalAudioPageBtn.classList.add('active');
+                addMusicPageBtn.classList.remove('active');
+                musicSelectionPage.style.display = 'none';
+                audioPreviewPage.textContent = '当前设置：使用视频原声';
+            });
+            
+            addMusicPageBtn.addEventListener('click', () => {
+                useOriginalAudio = false;
+                originalAudioPageBtn.classList.remove('active');
+                addMusicPageBtn.classList.add('active');
+                musicSelectionPage.style.display = 'block';
+                audioPreviewPage.textContent = '当前设置：添加背景音乐';
+            });
+            
+            // 音乐选择事件
+            musicSelect.addEventListener('change', (e) => {
+                selectedMusic = e.target.value;
+            });
+            
+            musicSelectPage.addEventListener('change', (e) => {
+                selectedMusic = e.target.value;
+            });
+            
             // 发布表单提交
             publishForm.addEventListener('submit', handlePublishSubmit);
             publishPageForm.addEventListener('submit', handlePublishPageSubmit);
@@ -1242,6 +1412,9 @@
                 videoPreview.src = selectedVideoUrl;
                 previewContainer.style.display = 'block';
                 uploadContainer.style.display = 'none';
+                
+                // 检查视频是否有音频轨道
+                checkVideoAudioTrack(videoPreview);
             }
         }
         
@@ -1254,6 +1427,37 @@
                 videoPagePreview.src = selectedVideoUrl;
                 previewPageContainer.style.display = 'block';
                 uploadPageContainer.style.display = 'none';
+                
+                // 检查视频是否有音频轨道
+                checkVideoAudioTrack(videoPagePreview);
+            }
+        }
+        
+        // 检查视频是否有音频轨道
+        function checkVideoAudioTrack(videoElement) {
+            // 创建一个临时的音频上下文来检测音频轨道
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioContext.createMediaElementSource(videoElement);
+            
+            // 尝试连接音频节点，如果失败则说明没有音频轨道
+            try {
+                source.connect(audioContext.destination);
+                console.log("视频包含音频轨道");
+                return true;
+            } catch (error) {
+                console.log("视频不包含音频轨道");
+                // 如果没有音频轨道，自动切换到添加背景音乐模式
+                useOriginalAudio = false;
+                originalAudioBtn.classList.remove('active');
+                addMusicBtn.classList.add('active');
+                musicSelection.style.display = 'block';
+                audioPreview.textContent = '检测到视频无声音，已自动切换到背景音乐模式';
+                
+                originalAudioPageBtn.classList.remove('active');
+                addMusicPageBtn.classList.add('active');
+                musicSelectionPage.style.display = 'block';
+                audioPreviewPage.textContent = '检测到视频无声音，已自动切换到背景音乐模式';
+                return false;
             }
         }
         
@@ -1267,7 +1471,14 @@
             }
             
             const description = document.getElementById('videoDesc').value || '分享我的视频';
-            const music = document.getElementById('videoMusic').value || '热门音乐';
+            const musicOptions = {
+                'music1': '热门音乐 - 流行歌曲',
+                'music2': '轻音乐 - 自然之声',
+                'music3': '原创音乐 - 我的创作',
+                'music4': '电子音乐 - 动感节拍'
+            };
+            
+            const music = useOriginalAudio ? '使用原声' : musicOptions[selectedMusic];
             
             // 创建新视频对象
             const newVideo = {
@@ -1280,7 +1491,8 @@
                 likes: 0,
                 comments: 0,
                 shares: 0,
-                userId: currentUser.id
+                userId: currentUser.id,
+                hasAudio: useOriginalAudio
             };
             
             // 添加到视频数据
@@ -1309,7 +1521,14 @@
             }
             
             const description = document.getElementById('videoPageDesc').value || '分享我的视频';
-            const music = document.getElementById('videoPageMusic').value || '热门音乐';
+            const musicOptions = {
+                'music1': '热门音乐 - 流行歌曲',
+                'music2': '轻音乐 - 自然之声',
+                'music3': '原创音乐 - 我的创作',
+                'music4': '电子音乐 - 动感节拍'
+            };
+            
+            const music = useOriginalAudio ? '使用原声' : musicOptions[selectedMusic];
             
             // 创建新视频对象
             const newVideo = {
@@ -1322,7 +1541,8 @@
                 likes: 0,
                 comments: 0,
                 shares: 0,
-                userId: currentUser.id
+                userId: currentUser.id,
+                hasAudio: useOriginalAudio
             };
             
             // 添加到视频数据
@@ -1349,16 +1569,26 @@
         function resetPublishForm() {
             selectedVideoFile = null;
             selectedVideoUrl = null;
+            useOriginalAudio = true;
+            selectedMusic = "music1";
             
             // 重置模态框表单
             document.getElementById('videoDesc').value = '';
-            document.getElementById('videoMusic').value = '';
+            originalAudioBtn.classList.add('active');
+            addMusicBtn.classList.remove('active');
+            musicSelection.style.display = 'none';
+            audioPreview.textContent = '当前设置：使用视频原声';
+            musicSelect.value = 'music1';
             previewContainer.style.display = 'none';
             uploadContainer.style.display = 'block';
             
             // 重置页面表单
             document.getElementById('videoPageDesc').value = '';
-            document.getElementById('videoPageMusic').value = '';
+            originalAudioPageBtn.classList.add('active');
+            addMusicPageBtn.classList.remove('active');
+            musicSelectionPage.style.display = 'none';
+            audioPreviewPage.textContent = '当前设置：使用视频原声';
+            musicSelectPage.value = 'music1';
             previewPageContainer.style.display = 'none';
             uploadPageContainer.style.display = 'block';
             
@@ -1388,4 +1618,4 @@
         }
     </script>
 </body>
-</html>
+</html>    
