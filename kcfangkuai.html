@@ -36,12 +36,10 @@
         .modal-container {
             background-color: #1a1a1a;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            max-height: 90vh;
-            overflow-y: auto;
         }
         
         .modal-tabs {
@@ -92,41 +90,6 @@
             border-color: #ff6600;
         }
         
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #ddd;
-        }
-        
-        .audio-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .audio-btn {
-            padding: 8px 15px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .audio-btn.active {
-            background-color: #ff6600;
-        }
-        
-        .audio-preview {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #2a2a2a;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
         .btn {
             padding: 12px;
             background-color: #ff6600;
@@ -141,10 +104,6 @@
         
         .btn-full {
             width: 100%;
-        }
-        
-        .btn-secondary {
-            background-color: #333;
         }
         
         .modal-footer {
@@ -353,6 +312,28 @@
             margin-bottom: 4px;
         }
         
+        /* 点赞动画 */
+        .like-animation {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            animation: like-animation 1s ease-out forwards;
+        }
+        
+        @keyframes like-animation {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1) translateY(-50px);
+                opacity: 0;
+            }
+        }
+        
         /* 用户主页 */
         .profile-page {
             display: none;
@@ -479,44 +460,6 @@
             color: #fff;
         }
         
-        /* 发布视频模态框 */
-        .upload-container {
-            text-align: center;
-            padding: 30px;
-            border: 2px dashed #444;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-        
-        .upload-icon {
-            font-size: 48px;
-            color: #ff6600;
-            margin-bottom: 10px;
-        }
-        
-        .upload-text {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        .upload-hint {
-            font-size: 12px;
-            color: #999;
-        }
-        
-        .preview-container {
-            display: none;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .video-preview {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 8px;
-        }
-        
         /* 响应式调整 */
         @media (min-width: 768px) {
             .video-container, .profile-page {
@@ -555,23 +498,6 @@
             color: #ff6600;
             margin-top: 5px;
             display: none;
-        }
-        
-        /* 发布页面 */
-        .publish-page {
-            display: none;
-            margin-top: 50px;
-            margin-bottom: 55px;
-            padding: 15px;
-            overflow-y: auto;
-            height: calc(100vh - 105px);
-        }
-        
-        .publish-header {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: bold;
         }
         
         /* 声音控制 */
@@ -641,58 +567,6 @@
         </div>
     </div>
     
-    <!-- 发布视频模态框 -->
-    <div class="modal" id="publishModal">
-        <div class="modal-container">
-            <div class="close-modal" id="closePublish">&times;</div>
-            <div class="modal-header">
-                <h2>发布视频</h2>
-            </div>
-            
-            <div class="upload-container" id="uploadContainer">
-                <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <div class="upload-text">点击或拖拽视频文件到此处</div>
-                <div class="upload-hint">支持MP4、MOV等格式，最大100MB</div>
-                <input type="file" id="videoUpload" accept="video/*" style="display: none;">
-            </div>
-            
-            <div class="preview-container" id="previewContainer">
-                <video class="video-preview" id="videoPreview" controls></video>
-            </div>
-            
-            <form id="publishForm">
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder="视频描述" id="videoDesc">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">声音设置</label>
-                    <div class="audio-controls">
-                        <button type="button" class="audio-btn active" id="originalAudio">使用原声</button>
-                        <button type="button" class="audio-btn" id="addMusic">添加背景音乐</button>
-                    </div>
-                    <div class="audio-preview" id="audioPreview">
-                        当前设置：使用视频原声
-                    </div>
-                </div>
-                
-                <div class="form-group" id="musicSelection" style="display: none;">
-                    <label class="form-label">选择背景音乐</label>
-                    <select class="form-input" id="musicSelect">
-                        <option value="music1">热门音乐 - 流行歌曲</option>
-                        <option value="music2">轻音乐 - 自然之声</option>
-                        <option value="music3">原创音乐 - 我的创作</option>
-                        <option value="music4">电子音乐 - 动感节拍</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn btn-full" id="publishBtn">发布</button>
-            </form>
-        </div>
-    </div>
-    
     <!-- 顶部导航栏 -->
     <div class="header">
         <div class="logo">快手</div>
@@ -723,7 +597,7 @@
                 <div class="profile-stats">
                     <div class="stat-item">
                         <div class="stat-count" id="followCount">120</div>
-                                <div class="stat-label">关注</div>
+                        <div class="stat-label">关注</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-count" id="fansCount">1.2万</div>
@@ -750,52 +624,6 @@
         <div class="profile-content" id="profileContent">
             <!-- 用户作品将通过JavaScript动态添加 -->
         </div>
-    </div>
-    
-    <!-- 发布页面 -->
-    <div class="publish-page" id="publishPage">
-        <div class="publish-header">发布视频</div>
-        <div class="upload-container" id="uploadPageContainer">
-            <div class="upload-icon">
-                <i class="fas fa-cloud-upload-alt"></i>
-            </div>
-            <div class="upload-text">点击或拖拽视频文件到此处</div>
-            <div class="upload-hint">支持MP4、MOV等格式，最大100MB</div>
-            <input type="file" id="videoUploadPage" accept="video/*" style="display: none;">
-        </div>
-        
-        <div class="preview-container" id="previewPageContainer">
-            <video class="video-preview" id="videoPagePreview" controls></video>
-        </div>
-        
-        <form id="publishPageForm">
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="视频描述" id="videoPageDesc">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">声音设置</label>
-                <div class="audio-controls">
-                    <button type="button" class="audio-btn active" id="originalAudioPage">使用原声</button>
-                    <button type="button" class="audio-btn" id="addMusicPage">添加背景音乐</button>
-                </div>
-                <div class="audio-preview" id="audioPreviewPage">
-                    当前设置：使用视频原声
-                </div>
-            </div>
-            
-            <div class="form-group" id="musicSelectionPage" style="display: none;">
-                <label class="form-label">选择背景音乐</label>
-                <select class="form-input" id="musicSelectPage">
-                    <option value="music1">热门音乐 - 流行歌曲</option>
-                    <option value="music2">轻音乐 - 自然之声</option>
-                    <option value="music3">原创音乐 - 我的创作</option>
-                    <option value="music4">电子音乐 - 动感节拍</option>
-                </select>
-            </div>
-            
-            <button type="submit" class="btn btn-full" id="publishPageBtn">发布</button>
-        </form>
     </div>
     
     <!-- 底部导航栏 -->
@@ -850,7 +678,7 @@
                 comments: 56,
                 shares: 12,
                 userId: 1,
-                hasAudio: true
+                likedBy: [] // 存储点赞用户的ID
             },
             {
                 id: 2,
@@ -863,7 +691,7 @@
                 comments: 23,
                 shares: 5,
                 userId: 2,
-                hasAudio: true
+                likedBy: []
             },
             {
                 id: 3,
@@ -876,8 +704,18 @@
                 comments: 34,
                 shares: 8,
                 userId: 3,
-                hasAudio: true
+                likedBy: []
             }
+        ];
+        
+        // 模拟用户作品数据
+        const userVideos = [
+            { id: 1, thumbnail: "https://picsum.photos/300/500?random=1", likes: 123 },
+                 { id: 2, thumbnail: "https://picsum.photos/300/500?random=2", likes: 456 },
+            { id: 3, thumbnail: "https://picsum.photos/300/500?random=3", likes: 789 },
+            { id: 4, thumbnail: "https://picsum.photos/300/500?random=4", likes: 234 },
+            { id: 5, thumbnail: "https://picsum.photos/300/500?random=5", likes: 567 },
+            { id: 6, thumbnail: "https://picsum.photos/300/500?random=6", likes: 890 }
         ];
         
         // DOM元素
@@ -903,46 +741,6 @@
         const navItems = document.querySelectorAll('.nav-item');
         const registerEmail = document.getElementById('registerEmail');
         const emailHint = document.getElementById('emailHint');
-        
-        // 发布相关元素
-        const publishModal = document.getElementById('publishModal');
-        const closePublish = document.getElementById('closePublish');
-        const openPublish = document.getElementById('openPublish');
-        const uploadContainer = document.getElementById('uploadContainer');
-        const videoUpload = document.getElementById('videoUpload');
-        const previewContainer = document.getElementById('previewContainer');
-        const videoPreview = document.getElementById('videoPreview');
-        const publishForm = document.getElementById('publishForm');
-        const publishBtn = document.getElementById('publishBtn');
-        
-        // 声音控制元素
-        const originalAudioBtn = document.getElementById('originalAudio');
-        const addMusicBtn = document.getElementById('addMusic');
-        const audioPreview = document.getElementById('audioPreview');
-        const musicSelection = document.getElementById('musicSelection');
-        const musicSelect = document.getElementById('musicSelect');
-        
-        // 发布页面相关元素
-        const publishPage = document.getElementById('publishPage');
-        const publishNav = document.getElementById('publishNav');
-        const uploadPageContainer = document.getElementById('uploadPageContainer');
-        const videoUploadPage = document.getElementById('videoUploadPage');
-        const previewPageContainer = document.getElementById('previewPageContainer');
-        const videoPagePreview = document.getElementById('videoPagePreview');
-        const publishPageForm = document.getElementById('publishPageForm');
-        const publishPageBtn = document.getElementById('publishPageBtn');
-        
-        // 页面声音控制元素
-        const originalAudioPageBtn = document.getElementById('originalAudioPage');
-        const addMusicPageBtn = document.getElementById('addMusicPage');
-        const audioPreviewPage = document.getElementById('audioPreviewPage');
-        const musicSelectionPage = document.getElementById('musicSelectionPage');
-        const musicSelectPage = document.getElementById('musicSelectPage');
-        
-        let selectedVideoFile = null;
-        let selectedVideoUrl = null;
-        let useOriginalAudio = true;
-        let selectedMusic = "music1";
         
         // 邮箱验证函数
         function validateEmail(email) {
@@ -1035,6 +833,9 @@
                 
                 // 更新个人主页信息
                 updateProfileInfo();
+                
+                // 重新初始化视频流，更新点赞状态
+                initVideoFeed();
             } else {
                 alert('用户名/邮箱或密码错误！');
             }
@@ -1106,6 +907,9 @@
             
             // 更新个人主页信息
             updateProfileInfo();
+            
+            // 重新初始化视频流，更新点赞状态
+            initVideoFeed();
         });
         
         // 检查是否已登录
@@ -1137,6 +941,111 @@
             }
         }
         
+        // 点赞功能
+        function likeVideo(videoId) {
+            if (!currentUser) {
+                authModal.style.display = 'flex';
+                return;
+            }
+            
+            const video = videoData.find(v => v.id === videoId);
+            if (!video) return;
+            
+            const userId = currentUser.id;
+            const isLiked = video.likedBy.includes(userId);
+            
+            if (isLiked) {
+                // 取消点赞
+                video.likedBy = video.likedBy.filter(id => id !== userId);
+                video.likes--;
+                
+                // 更新用户获赞数
+                const videoOwner = users.find(u => u.id === video.userId);
+                if (videoOwner) {
+                    videoOwner.likeCount--;
+                    localStorage.setItem('kuaishou_users', JSON.stringify(users));
+                }
+            } else {
+                // 点赞
+                video.likedBy.push(userId);
+                video.likes++;
+                
+                // 更新用户获赞数
+                const videoOwner = users.find(u => u.id === video.userId);
+                if (videoOwner) {
+                    videoOwner.likeCount++;
+                    localStorage.setItem('kuaishou_users', JSON.stringify(users));
+                }
+                
+                // 创建点赞动画
+                createLikeAnimation(videoId);
+            }
+            
+            // 保存更新后的视频数据
+            localStorage.setItem('kuaishou_videos', JSON.stringify(videoData));
+            
+            // 更新UI
+            updateLikeUI(videoId);
+            
+            // 更新个人主页信息
+            updateProfileInfo();
+        }
+        
+        // 创建点赞动画
+        function createLikeAnimation(videoId) {
+            const videoItem = document.querySelector(`[data-video-id="${videoId}"]`);
+            if (!videoItem) return;
+            
+            const likeBtn = videoItem.querySelector('.action-item:nth-child(2)');
+            const rect = likeBtn.getBoundingClientRect();
+            
+            const heart = document.createElement('div');
+            heart.className = 'like-animation';
+            heart.innerHTML = '<i class="fas fa-heart" style="color: #ff6600; font-size: 24px;"></i>';
+            heart.style.left = `${rect.left + rect.width / 2}px`;
+            heart.style.top = `${rect.top}px`;
+            
+            document.body.appendChild(heart);
+            
+            // 动画结束后移除元素
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+        }
+        
+        // 更新点赞UI
+        function updateLikeUI(videoId) {
+            const video = videoData.find(v => v.id === videoId);
+            if (!video) return;
+            
+            const videoItem = document.querySelector(`[data-video-id="${videoId}"]`);
+            if (!videoItem) return;
+            
+            const likeBtn = videoItem.querySelector('.action-item:nth-child(2)');
+            const likeIcon = likeBtn.querySelector('.action-icon i');
+            const likeCountEl = likeBtn.querySelector('.action-count');
+            
+            const isLiked = currentUser && video.likedBy.includes(currentUser.id);
+            
+            // 更新图标和颜色
+            if (isLiked) {
+                likeIcon.style.color = '#ff6600';
+            } else {
+                likeIcon.style.color = '#fff';
+            }
+            
+            // 更新点赞数
+            likeCountEl.textContent = formatLikeCount(video.likes);
+        }
+        
+        // 格式化点赞数显示
+        function formatLikeCount(count) {
+            if (count >= 10000) {
+                return (count / 10000).toFixed(1) + '万';
+            }
+            return count.toString();
+        }
+        
         // 初始化视频流
         function initVideoFeed() {
             videoContainer.innerHTML = '';
@@ -1144,6 +1053,10 @@
             videoData.forEach(video => {
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item';
+                videoItem.setAttribute('data-video-id', video.id);
+                
+                const isLiked = currentUser && video.likedBy.includes(currentUser.id);
+                
                 videoItem.innerHTML = `
                     <div class="sound-control" onclick="toggleMute(this)">
                         <i class="fas fa-volume-mute sound-icon"></i>
@@ -1167,11 +1080,11 @@
                                 <i class="fas fa-plus"></i>
                             </div>
                         </div>
-                        <div class="action-item">
+                        <div class="action-item" onclick="likeVideo(${video.id})">
                             <div class="action-icon">
-                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-heart" style="color: ${isLiked ? '#ff6600' : '#fff'}"></i>
                             </div>
-                            <div class="action-count">${video.likes}</div>
+                            <div class="action-count">${formatLikeCount(video.likes)}</div>
                         </div>
                         <div class="action-item" onclick="openComment(${video.id})">
                             <div class="action-icon">
@@ -1206,7 +1119,7 @@
                     if (entry.isIntersecting) {
                         video.play();
                     } else {
-                    video.pause();
+                        video.pause();
                     }
                 });
             }, { threshold: 0.7 });
@@ -1248,7 +1161,7 @@
                         </video>
                         <div class="video-overlay">
                             <i class="fas fa-heart" style="margin-right: 3px;"></i>
-                            <span>${video.likes}</span>
+                            <span>${formatLikeCount(video.likes)}</span>
                         </div>
                     `;
                     profileContent.appendChild(videoElement);
@@ -1280,7 +1193,6 @@
                 // 隐藏所有页面
                 videoContainer.style.display = 'none';
                 profilePage.style.display = 'none';
-                publishPage.style.display = 'none';
                 
                 if (page === 'profile') {
                     if (!currentUser) {
@@ -1293,16 +1205,6 @@
                     
                     profilePage.style.display = 'block';
                     initProfileContent();
-                } else if (page === 'publish') {
-                    if (!currentUser) {
-                        authModal.style.display = 'flex';
-                        // 重置导航状态
-                        navItems[0].classList.add('active');
-                        item.classList.remove('active');
-                        return;
-                    }
-                    
-                    publishPage.style.display = 'block';
                 } else {
                     videoContainer.style.display = 'block';
                 }
@@ -1314,7 +1216,6 @@
             if (currentUser) {
                 videoContainer.style.display = 'none';
                 profilePage.style.display = 'block';
-                publishPage.style.display = 'none';
                 
                 navItems.forEach(nav => nav.classList.remove('active'));
                 profileNav.classList.add('active');
@@ -1323,286 +1224,11 @@
             }
         });
         
-        // 发布视频功能
-        function initPublishFunctionality() {
-            // 打开发布模态框
-            openPublish.addEventListener('click', () => {
-                if (!currentUser) {
-                    authModal.style.display = 'flex';
-                    return;
-                }
-                
-                publishModal.style.display = 'flex';
-            });
-            
-            // 关闭发布模态框
-            closePublish.addEventListener('click', () => {
-                publishModal.style.display = 'none';
-                resetPublishForm();
-            });
-            
-            // 上传区域点击事件
-            uploadContainer.addEventListener('click', () => {
-                videoUpload.click();
-            });
-            
-            uploadPageContainer.addEventListener('click', () => {
-                videoUploadPage.click();
-            });
-            
-            // 文件选择事件
-            videoUpload.addEventListener('change', handleVideoSelect);
-            videoUploadPage.addEventListener('change', handleVideoSelectPage);
-            
-            // 声音控制按钮事件
-            originalAudioBtn.addEventListener('click', () => {
-                useOriginalAudio = true;
-                originalAudioBtn.classList.add('active');
-                addMusicBtn.classList.remove('active');
-                musicSelection.style.display = 'none';
-                audioPreview.textContent = '当前设置：使用视频原声';
-            });
-            
-            addMusicBtn.addEventListener('click', () => {
-                useOriginalAudio = false;
-                originalAudioBtn.classList.remove('active');
-                addMusicBtn.classList.add('active');
-                musicSelection.style.display = 'block';
-                audioPreview.textContent = '当前设置：添加背景音乐';
-            });
-            
-            // 页面声音控制按钮事件
-            originalAudioPageBtn.addEventListener('click', () => {
-                useOriginalAudio = true;
-                originalAudioPageBtn.classList.add('active');
-                addMusicPageBtn.classList.remove('active');
-                musicSelectionPage.style.display = 'none';
-                audioPreviewPage.textContent = '当前设置：使用视频原声';
-            });
-            
-            addMusicPageBtn.addEventListener('click', () => {
-                useOriginalAudio = false;
-                originalAudioPageBtn.classList.remove('active');
-                addMusicPageBtn.classList.add('active');
-                musicSelectionPage.style.display = 'block';
-                audioPreviewPage.textContent = '当前设置：添加背景音乐';
-            });
-            
-            // 音乐选择事件
-            musicSelect.addEventListener('change', (e) => {
-                selectedMusic = e.target.value;
-            });
-            
-            musicSelectPage.addEventListener('change', (e) => {
-                selectedMusic = e.target.value;
-            });
-            
-            // 发布表单提交
-            publishForm.addEventListener('submit', handlePublishSubmit);
-            publishPageForm.addEventListener('submit', handlePublishPageSubmit);
-        }
-        
-        // 处理视频选择
-        function handleVideoSelect(e) {
-            const file = e.target.files[0];
-            if (file) {
-                selectedVideoFile = file;
-                selectedVideoUrl = URL.createObjectURL(file);
-                
-                videoPreview.src = selectedVideoUrl;
-                previewContainer.style.display = 'block';
-                uploadContainer.style.display = 'none';
-                
-                // 检查视频是否有音频轨道
-                checkVideoAudioTrack(videoPreview);
-            }
-        }
-        
-        function handleVideoSelectPage(e) {
-            const file = e.target.files[0];
-            if (file) {
-                selectedVideoFile = file;
-                selectedVideoUrl = URL.createObjectURL(file);
-                
-                videoPagePreview.src = selectedVideoUrl;
-                previewPageContainer.style.display = 'block';
-                uploadPageContainer.style.display = 'none';
-                
-                // 检查视频是否有音频轨道
-                checkVideoAudioTrack(videoPagePreview);
-            }
-        }
-        
-        // 检查视频是否有音频轨道
-        function checkVideoAudioTrack(videoElement) {
-            // 创建一个临时的音频上下文来检测音频轨道
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const source = audioContext.createMediaElementSource(videoElement);
-            
-            // 尝试连接音频节点，如果失败则说明没有音频轨道
-            try {
-                source.connect(audioContext.destination);
-                console.log("视频包含音频轨道");
-                return true;
-            } catch (error) {
-                console.log("视频不包含音频轨道");
-                // 如果没有音频轨道，自动切换到添加背景音乐模式
-                useOriginalAudio = false;
-                originalAudioBtn.classList.remove('active');
-                addMusicBtn.classList.add('active');
-                musicSelection.style.display = 'block';
-                audioPreview.textContent = '检测到视频无声音，已自动切换到背景音乐模式';
-                
-                originalAudioPageBtn.classList.remove('active');
-                addMusicPageBtn.classList.add('active');
-                musicSelectionPage.style.display = 'block';
-                audioPreviewPage.textContent = '检测到视频无声音，已自动切换到背景音乐模式';
-                return false;
-            }
-        }
-        
-        // 处理发布提交
-        function handlePublishSubmit(e) {
-            e.preventDefault();
-            
-            if (!selectedVideoFile) {
-                alert('请先选择视频文件！');
-                return;
-            }
-            
-            const description = document.getElementById('videoDesc').value || '分享我的视频';
-            const musicOptions = {
-                'music1': '热门音乐 - 流行歌曲',
-                'music2': '轻音乐 - 自然之声',
-                'music3': '原创音乐 - 我的创作',
-                'music4': '电子音乐 - 动感节拍'
-            };
-            
-            const music = useOriginalAudio ? '使用原声' : musicOptions[selectedMusic];
-            
-            // 创建新视频对象
-            const newVideo = {
-                id: Date.now(),
-                username: currentUser.username,
-                avatar: currentUser.avatar,
-                videoUrl: selectedVideoUrl,
-                description: description,
-                music: music,
-                likes: 0,
-                comments: 0,
-                shares: 0,
-                userId: currentUser.id,
-                hasAudio: useOriginalAudio
-            };
-            
-            // 添加到视频数据
-            videoData.unshift(newVideo);
-            localStorage.setItem('kuaishou_videos', JSON.stringify(videoData));
-            
-            // 重置表单
-            resetPublishForm();
-            
-            // 关闭模态框
-            publishModal.style.display = 'none';
-            
-            // 更新视频流
-            initVideoFeed();
-            
-            // 显示成功消息
-            alert('视频发布成功！');
-        }
-        
-        function handlePublishPageSubmit(e) {
-            e.preventDefault();
-            
-            if (!selectedVideoFile) {
-                alert('请先选择视频文件！');
-                return;
-            }
-            
-            const description = document.getElementById('videoPageDesc').value || '分享我的视频';
-            const musicOptions = {
-                'music1': '热门音乐 - 流行歌曲',
-                'music2': '轻音乐 - 自然之声',
-                'music3': '原创音乐 - 我的创作',
-                'music4': '电子音乐 - 动感节拍'
-            };
-            
-            const music = useOriginalAudio ? '使用原声' : musicOptions[selectedMusic];
-            
-            // 创建新视频对象
-            const newVideo = {
-                id: Date.now(),
-                username: currentUser.username,
-                avatar: currentUser.avatar,
-                videoUrl: selectedVideoUrl,
-                description: description,
-                music: music,
-                likes: 0,
-                comments: 0,
-                shares: 0,
-                userId: currentUser.id,
-                hasAudio: useOriginalAudio
-            };
-            
-            // 添加到视频数据
-            videoData.unshift(newVideo);
-            localStorage.setItem('kuaishou_videos', JSON.stringify(videoData));
-            
-            // 重置表单
-            resetPublishForm();
-            
-            // 切换到首页
-            videoContainer.style.display = 'block';
-            publishPage.style.display = 'none';
-            navItems.forEach(nav => nav.classList.remove('active'));
-            navItems[0].classList.add('active');
-            
-            // 更新视频流
-            initVideoFeed();
-            
-            // 显示成功消息
-            alert('视频发布成功！');
-        }
-        
-        // 重置发布表单
-        function resetPublishForm() {
-            selectedVideoFile = null;
-            selectedVideoUrl = null;
-            useOriginalAudio = true;
-            selectedMusic = "music1";
-            
-            // 重置模态框表单
-            document.getElementById('videoDesc').value = '';
-            originalAudioBtn.classList.add('active');
-            addMusicBtn.classList.remove('active');
-            musicSelection.style.display = 'none';
-            audioPreview.textContent = '当前设置：使用视频原声';
-            musicSelect.value = 'music1';
-            previewContainer.style.display = 'none';
-            uploadContainer.style.display = 'block';
-            
-            // 重置页面表单
-            document.getElementById('videoPageDesc').value = '';
-            originalAudioPageBtn.classList.add('active');
-            addMusicPageBtn.classList.remove('active');
-            musicSelectionPage.style.display = 'none';
-            audioPreviewPage.textContent = '当前设置：使用视频原声';
-            musicSelectPage.value = 'music1';
-            previewPageContainer.style.display = 'none';
-            uploadPageContainer.style.display = 'block';
-            
-            // 重置文件输入
-            videoUpload.value = '';
-            videoUploadPage.value = '';
-        }
-        
         // 初始化
         function init() {
             checkLoginStatus();
             initVideoFeed();
             initProfileContent();
-            initPublishFunctionality();
         }
         
         // 启动应用
@@ -1618,4 +1244,4 @@
         }
     </script>
 </body>
-</html>    
+</html>
