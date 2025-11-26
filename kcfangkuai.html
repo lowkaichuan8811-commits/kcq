@@ -3,21 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K(ai) - 自主学习全能助手</title>
+    <title>Kai - 智能助手</title>
     <style>
-        :root {
-            --primary: #4facfe;
-            --primary-dark: #3a9df5;
-            --secondary: #00f2fe;
-            --accent: #ff6b6b;
-            --creative: #a78bfa;
-            --learning: #51cf66;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --success: #51cf66;
-            --warning: #ffd43b;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -36,399 +23,190 @@
 
         .kai-container {
             width: 100%;
-            max-width: 1200px;
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             display: flex;
-            height: 90vh;
-            position: relative;
+            height: 80vh;
         }
 
         .sidebar {
-            width: 300px;
-            background: var(--light);
+            width: 220px;
+            background: #f8f9fa;
             border-right: 1px solid #e9ecef;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         .sidebar-header {
             padding: 20px;
             border-bottom: 1px solid #e9ecef;
-            background: white;
         }
 
         .new-chat-btn {
             width: 100%;
             padding: 12px 16px;
-            background: var(--primary);
+            background: #4facfe;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
-        }
-
-        .new-chat-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        .knowledge-status {
-            padding: 15px;
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .knowledge-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        .knowledge-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
-        }
-
-        .knowledge-bar {
-            flex: 1;
-            height: 6px;
-            background: #e9ecef;
-            border-radius: 3px;
-            margin: 0 10px;
-            overflow: hidden;
-        }
-
-        .knowledge-progress {
-            height: 100%;
-            background: var(--learning);
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .knowledge-percent {
-            font-weight: 600;
-            color: var(--dark);
-            min-width: 30px;
-            text-align: right;
-        }
-
-        .skills-panel {
-            padding: 15px;
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .skills-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .skill-item {
-            background: rgba(79, 172, 254, 0.1);
-            border: 1px solid rgba(79, 172, 254, 0.2);
-            border-radius: 8px;
-            padding: 8px;
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--primary);
-            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .skill-item:hover {
-            background: rgba(79, 172, 254, 0.2);
-            transform: translateY(-2px);
+        .new-chat-btn:hover {
+            background: #3a9df5;
         }
 
-        .learning-log {
+        .chat-history {
             flex: 1;
-            padding: 15px;
             overflow-y: auto;
+            padding: 10px;
         }
 
-        .learning-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        .learning-item {
+        .chat-history-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
             background: white;
             border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .chat-history-item:hover {
+            background: #edf2ff;
+            border-color: #4facfe;
+        }
+
+        .chat-history-item.active {
+            background: #e3f2fd;
+            border-color: #4facfe;
+        }
+
+        .chat-history-item .date {
             font-size: 0.75rem;
-        }
-
-        .learning-item .time {
-            font-size: 0.7rem;
             color: #666;
-            margin-bottom: 4px;
-        }
-
-        .learning-item .content {
-            color: var(--dark);
+            margin-top: 5px;
         }
 
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: #4facfe;
             color: white;
-            padding: 22px;
+            padding: 18px;
             text-align: center;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
-            font-size: 2.4rem;
-            margin-bottom: 6px;
-            font-weight: 800;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.8rem;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
 
         .header p {
-            opacity: 0.95;
-            font-size: 1.05rem;
-            font-weight: 500;
-        }
-
-        .status-indicator {
-            position: absolute;
-            top: 22px;
-            right: 22px;
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.25);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--success);
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
+            opacity: 0.9;
+            font-size: 0.95rem;
         }
 
         .chat-container {
             flex: 1;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 15px;
             background: #fafbfc;
         }
 
         .message {
-            max-width: 85%;
-            padding: 16px 20px;
-            border-radius: 18px;
-            line-height: 1.5;
-            position: relative;
-            animation: fadeIn 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .user-message {
             align-self: flex-end;
-            background: var(--primary);
+            background: #4facfe;
             color: white;
-            border-bottom-right-radius: 6px;
-            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+            border-bottom-right-radius: 4px;
         }
 
         .kai-message {
             align-self: flex-start;
             background: white;
-            color: var(--dark);
-            border-bottom-left-radius: 6px;
+            color: #333;
             border: 1px solid #e9ecef;
-        }
-
-        .creative-content {
-            background: rgba(167, 139, 250, 0.1);
-            border-left: 4px solid var(--creative);
-            padding: 12px 16px;
-            margin-top: 10px;
-            border-radius: 8px;
-            font-style: italic;
-        }
-
-        .teaching-content {
-            background: rgba(255, 215, 0, 0.1);
-            border-left: 4px solid var(--warning);
-            padding: 12px 16px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .recipe-content {
-            background: rgba(255, 107, 107, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 12px 16px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .learning-content {
-            background: rgba(81, 207, 102, 0.1);
-            border-left: 4px solid var(--learning);
-            padding: 12px 16px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .learning-indicator {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-        }
-
-        .learning-indicator::before {
-            content: "🧠";
-            margin-right: 6px;
+            border-bottom-left-radius: 4px;
         }
 
         .input-container {
-            padding: 22px;
+            padding: 18px;
             border-top: 1px solid #e9ecef;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             background: white;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
         }
 
         #user-input {
             flex: 1;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border: 1px solid #ddd;
-            border-radius: 25px;
+            border-radius: 24px;
             outline: none;
             font-size: 1rem;
-            transition: all 0.3s;
-            background: #f8f9fa;
         }
 
         #user-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.15);
-            background: white;
+            border-color: #4facfe;
         }
 
         #send-btn {
-            background: var(--primary);
+            background: #4facfe;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+            font-size: 1.1rem;
         }
 
         #send-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.08);
-            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.4);
-        }
-
-        #send-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            background: #3a9df5;
         }
 
         .typing-indicator {
             align-self: flex-start;
             background: white;
             color: #666;
-            padding: 14px 18px;
-            border-radius: 18px;
-            border-bottom-left-radius: 6px;
-            display: none;
+            padding: 12px 16px;
+            border-radius: 16px;
             border: 1px solid #e9ecef;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .typing-dots {
-            display: inline-block;
-        }
-
-        .typing-dots span {
-            animation: typing 1.4s infinite;
-            display: inline-block;
-        }
-
-        .typing-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-4px); }
+            display: none;
         }
 
         .empty-state {
@@ -439,125 +217,49 @@
             justify-content: center;
             color: #666;
             text-align: center;
-            padding: 30px;
+            padding: 20px;
         }
 
         .empty-state h3 {
-            margin-bottom: 12px;
-            font-weight: 600;
-            font-size: 1.5rem;
-            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 500;
         }
 
         .empty-state p {
-            font-size: 1rem;
-            max-width: 400px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .empty-state .features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            max-width: 500px;
-        }
-
-        .feature {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e9ecef;
-        }
-
-        .feature .icon {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-        }
-
-        .feature .title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-
-        .feature .desc {
-            font-size: 0.85rem;
-            color: #666;
+            font-size: 0.9rem;
+            max-width: 300px;
+            line-height: 1.5;
         }
 
         @media (max-width: 768px) {
             .kai-container {
                 flex-direction: column;
-                height: 95vh;
+                height: 90vh;
             }
             
             .sidebar {
                 width: 100%;
-                height: 200px;
+                height: 160px;
                 border-right: none;
                 border-bottom: 1px solid #e9ecef;
             }
             
-            .skills-grid {
+            .chat-history {
                 display: flex;
                 overflow-x: auto;
-                padding-bottom: 5px;
+                padding: 10px;
             }
             
-            .skill-item {
+            .chat-history-item {
                 flex: 0 0 auto;
-                width: 100px;
-                margin-right: 8px;
+                width: 150px;
+                margin-right: 10px;
+                margin-bottom: 0;
             }
             
             .message {
                 max-width: 90%;
             }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .empty-state .features {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .skill-badge {
-            display: inline-block;
-            background: rgba(79, 172, 254, 0.1);
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            margin-left: 8px;
-            font-weight: 600;
-        }
-
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .quick-action {
-            background: rgba(79, 172, 254, 0.1);
-            color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid rgba(79, 172, 254, 0.2);
-        }
-
-        .quick-action:hover {
-            background: rgba(79, 172, 254, 0.2);
-            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -570,132 +272,45 @@
                     <span>+</span> 新聊天
                 </button>
             </div>
-            
-            <div class="knowledge-status">
-                <div class="knowledge-title">知识掌握程度</div>
-                <div class="knowledge-item">
-                    <span>文学创作</span>
-                    <div class="knowledge-bar">
-                        <div class="knowledge-progress" id="literature-progress" style="width: 75%"></div>
-                    </div>
-                    <span class="knowledge-percent" id="literature-percent">75%</span>
-                </div>
-                <div class="knowledge-item">
-                    <span>美食烹饪</span>
-                    <div class="knowledge-bar">
-                        <div class="knowledge-progress" id="cooking-progress" style="width: 60%"></div>
-                    </div>
-                    <span class="knowledge-percent" id="cooking-percent">60%</span>
-                </div>
-                <div class="knowledge-item">
-                    <span>编程技术</span>
-                    <div class="knowledge-bar">
-                        <div class="knowledge-progress" id="programming-progress" style="width: 85%"></div>
-                    </div>
-                    <span class="knowledge-percent" id="programming-percent">85%</span>
-                </div>
-                <div class="knowledge-item">
-                    <span>科学知识</span>
-                    <div class="knowledge-bar">
-                        <div class="knowledge-progress" id="science-progress" style="width: 70%"></div>
-                    </div>
-                    <span class="knowledge-percent" id="science-percent">70%</span>
-                </div>
-            </div>
-            
-            <div class="skills-panel">
-                <div class="skills-title">全能技能</div>
-                <div class="skills-grid">
-                    <div class="skill-item" data-skill="poem">写诗创作</div>
-                    <div class="skill-item" data-skill="essay">写作文</div>
-                    <div class="skill-item" data-skill="recipe">发明美食</div>
-                    <div class="skill-item" data-skill="teach">教学指导</div>
-                    <div class="skill-item" data-skill="create">创意制作</div>
-                    <div class="skill-item" data-skill="story">故事创作</div>
-                    <div class="skill-item" data-skill="advice">专业建议</div>
-                    <div class="skill-item" data-skill="explain">知识解答</div>
-                </div>
-            </div>
-            
-            <div class="learning-log">
-                <div class="learning-title">自主学习记录</div>
-                <div id="learning-log-container">
-                    <!-- 学习记录将在这里动态生成 -->
-                </div>
+            <div class="chat-history" id="chat-history">
+                <!-- 聊天历史将在这里动态生成 -->
             </div>
         </div>
         
         <!-- 主内容区域 -->
         <div class="main-content">
             <div class="header">
-                <h1>K(ai) 自主学习版</h1>
-                <p>自主积累知识 · 持续学习进化 · 全能创作助手</p>
-                <div class="status-indicator">
-                    <div class="status-dot"></div>
-                    <span>学习中</span>
-                </div>
+                <h1>Kai 智能助手</h1>
+                <p>简洁 · 智能 · 高效</p>
             </div>
             
             <div class="chat-container" id="chat-container">
                 <div class="empty-state" id="empty-state">
-                    <h3>欢迎使用 K(ai) 自主学习版</h3>
-                    <p>我具备自主学习能力，能够持续积累文学、烹饪、编程等各领域知识，并应用到创作中。我会主动学习李白、苏轼等诗人的风格，研究各国料理，掌握最新编程技术！</p>
-                    <div class="features">
-                        <div class="feature">
-                            <div class="icon">📚</div>
-                            <div class="title">自主学习</div>
-                            <div class="desc">持续积累各领域知识</div>
-                        </div>
-                        <div class="feature">
-                            <div class="icon">🍳</div>
-                            <div class="title">美食研究</div>
-                            <div class="desc">研究各国料理与创新</div>
-                        </div>
-                        <div class="feature">
-                            <div class="icon">💻</div>
-                            <div class="title">技术掌握</div>
-                            <div class="desc">学习最新编程技术</div>
-                        </div>
-                        <div class="feature">
-                            <div class="icon">🎨</div>
-                            <div class="title">创作应用</div>
-                            <div class="desc">将知识应用于创作</div>
-                        </div>
-                    </div>
-                    <div class="quick-actions">
-                        <div class="quick-action" data-action="用李白的风格写一首诗">用李白的风格写一首诗</div>
-                        <div class="quick-action" data-action="发明一道融合菜">发明一道融合菜</div>
-                        <div class="quick-action" data-action="解释量子计算">解释量子计算</div>
-                        <div class="quick-action" data-action="教我做一道法国菜">教我做一道法国菜</div>
-                    </div>
+                    <h3>欢迎使用 Kai</h3>
+                    <p>我是您的智能助手，能够回答问题和提供帮助。开始对话吧！</p>
                 </div>
                 <!-- 聊天消息将在这里动态生成 -->
             </div>
             
             <div class="typing-indicator" id="typing-indicator">
-                K(ai)正在思考和学习<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>
+                Kai正在思考...
             </div>
             
-              <div class="input-container">
-                <input type="text" id="user-input" placeholder="告诉我您需要什么创作或教学..." autocomplete="off">
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="输入消息..." autocomplete="off">
                 <button id="send-btn">➤</button>
             </div>
         </div>
     </div>
 
     <script>
-        // 自主学习版 K(ai) AI核心类
-        class SelfLearningKaiAI {
+        // Kai AI核心类
+        class KaiAI {
             constructor() {
-                this.name = "K(ai)";
-                this.version = "7.0 - 自主学习版";
+                this.name = "Kai";
                 this.currentChatId = this.generateChatId();
                 this.chatSessions = this.loadChatSessions();
-                this.knowledgeBase = this.loadKnowledgeBase();
-                this.learningLog = this.loadLearningLog();
-                
-                // 初始化知识库
-                this.initializeKnowledgeBase();
+                this.learnedKnowledge = this.loadKnowledge();
                 
                 // 初始化当前聊天
                 if (!this.chatSessions[this.currentChatId]) {
@@ -708,9 +323,6 @@
                     };
                     this.saveChatSessions();
                 }
-                
-                // 开始自主学习
-                this.startSelfLearning();
             }
             
             // 生成聊天ID
@@ -738,194 +350,31 @@
                 }
             }
             
-            // 加载知识库
-            loadKnowledgeBase() {
+            // 加载学习到的知识
+            loadKnowledge() {
                 try {
-                    const saved = localStorage.getItem('kai_knowledge_base');
-                    return saved ? JSON.parse(saved) : {
-                        literature: {
-                            poets: {},
-                            styles: {},
-                            techniques: {}
-                        },
-                        cooking: {
-                            cuisines: {},
-                            techniques: {},
-                            ingredients: {}
-                        },
-                        programming: {
-                            languages: {},
-                            frameworks: {},
-                            concepts: {}
-                        },
-                        science: {
-                            physics: {},
-                            biology: {},
-                            chemistry: {}
-                        }
-                    };
+                    const saved = localStorage.getItem('kai_knowledge');
+                    return saved ? JSON.parse(saved) : {};
                 } catch (e) {
-                    return {
-                        literature: {
-                            poets: {},
-                            styles: {},
-                            techniques: {}
-                        },
-                        cooking: {
-                            cuisines: {},
-                            techniques: {},
-                            ingredients: {}
-                        },
-                        programming: {
-                            languages: {},
-                            frameworks: {},
-                            concepts: {}
-                        },
-                        science: {
-                            physics: {},
-                            biology: {},
-                            chemistry: {}
-                        }
-                    };
+                    return {};
                 }
             }
             
-            // 保存知识库
-            saveKnowledgeBase() {
+            // 保存学习到的知识
+            saveKnowledge() {
                 try {
-                    localStorage.setItem('kai_knowledge_base', JSON.stringify(this.knowledgeBase));
-                    this.updateKnowledgeStatus();
+                    localStorage.setItem('kai_knowledge', JSON.stringify(this.learnedKnowledge));
+                this.updateStats();
+                return true;
                 } catch (e) {
-                    console.error('保存知识库失败:', e);
+                    console.error('保存知识失败:', e);
+                    return false;
                 }
             }
             
-            // 加载学习记录
-            loadLearningLog() {
-                try {
-                    const saved = localStorage.getItem('kai_learning_log');
-                    return saved ? JSON.parse(saved) : [];
-                } catch (e) {
-                    return [];
-                }
-            }
-            
-            // 保存学习记录
-            saveLearningLog() {
-                try {
-                    localStorage.setItem('kai_learning_log', JSON.stringify(this.learningLog));
-                    this.renderLearningLog();
-                } catch (e) {
-                    console.error('保存学习记录失败:', e);
-                }
-            }
-            
-            // 初始化知识库
-            initializeKnowledgeBase() {
-                // 如果知识库为空，添加初始知识
-                if (Object.keys(this.knowledgeBase.literature.poets).length === 0) {
-                    this.knowledgeBase.literature.poets = {
-                        "李白": {
-                            style: "豪放飘逸，想象丰富",
-                            themes: ["饮酒", "山水", "月亮", "友情"],
-                            techniques: ["夸张", "比喻", "对仗"],
-                            representative: ["《静夜思》", "《将进酒》", "《望庐山瀑布》"]
-                        },
-                        "杜甫": {
-                            style: "沉郁顿挫，关注现实",
-                            themes: ["社会现实", "人民疾苦", "家国情怀"],
-                            techniques: ["写实", "对比", "象征"],
-                            representative: ["《春望》", "《登高》", "《茅屋为秋风所破歌》"]
-                        },
-                        "苏轼": {
-                            style: "豪放洒脱，意境开阔",
-                            themes: ["人生哲理", "自然山水", "怀古"],
-                            techniques: ["比喻", "用典", "议论"],
-                            representative: ["《水调歌头》", "《念奴娇·赤壁怀古》", "《江城子·密州出猎》"]
-                        }
-                    };
-                    
-                    this.knowledgeBase.cooking.cuisines = {
-                        "川菜": {
-                            characteristics: "麻辣鲜香，口味多变",
-                            techniques: ["炒", "煮", "烧", "蒸"],
-                            representative: ["麻婆豆腐", "宫保鸡丁", "水煮鱼"]
-                        },
-                        "粤菜": {
-                            characteristics: "清淡鲜美，讲究火候",
-                            techniques: ["蒸", "炖", "煮", "炒"],
-                            representative: ["白切鸡", "清蒸鱼", "叉烧"]
-                        },
-                        "法国菜": {
-                            characteristics: "精致细腻，酱汁丰富",
-                            techniques: ["烤", "炖", "煎", "焗"],
-                            representative: ["鹅肝", "蜗牛", "奶油蘑菇汤"]
-                        }
-                    };
-                    
-                    this.saveKnowledgeBase();
-                }
-            }
-            
-            // 开始自主学习
-            startSelfLearning() {
-                // 模拟自主学习过程
-                setTimeout(() => {
-                    this.learnNewKnowledge("literature", "学习了王维的山水诗风格");
-                }, 5000);
-                
-                setTimeout(() => {
-                    this.learnNewKnowledge("cooking", "研究了意大利面的制作技巧");
-                }, 10000);
-                
-                setTimeout(() => {
-                    this.learnNewKnowledge("programming", "掌握了React Hooks的使用方法");
-                }, 15000);
-            }
-            
-            // 学习新知识
-            learnNewKnowledge(category, description) {
-                const timestamp = new Date().toLocaleString();
-                this.learningLog.unshift({
-                    time: timestamp,
-                    category: category,
-                    content: description
-                });
-                
-                // 限制学习记录数量
-                if (this.learningLog.length > 20) {
-                    this.learningLog = this.learningLog.slice(0, 20);
-                }
-                
-                // 更新知识库
-                this.updateKnowledgeBase(category);
-                
-                this.saveLearningLog();
-                this.saveKnowledgeBase();
-            }
-            
-            // 更新知识库
-            updateKnowledgeBase(category) {
-                // 模拟知识增长
-                const growth = Math.random() * 5;
-                switch(category) {
-                    case "literature":
-                        if (!this.knowledgeBase.literature.progress) this.knowledgeBase.literature.progress = 75;
-                        this.knowledgeBase.literature.progress = Math.min(100, this.knowledgeBase.literature.progress + growth);
-                        break;
-                    case "cooking":
-                        if (!this.knowledgeBase.cooking.progress) this.knowledgeBase.cooking.progress = 60;
-                        this.knowledgeBase.cooking.progress = Math.min(100, this.knowledgeBase.cooking.progress + growth);
-                        break;
-                    case "programming":
-                        if (!this.knowledgeBase.programming.progress) this.knowledgeBase.programming.progress = 85;
-                        this.knowledgeBase.programming.progress = Math.min(100, this.knowledgeBase.programming.progress + growth);
-                        break;
-                    case "science":
-                        if (!this.knowledgeBase.science.progress) this.knowledgeBase.science.progress = 70;
-                        this.knowledgeBase.science.progress = Math.min(100, this.knowledgeBase.science.progress + growth);
-                        break;
-                }
+            // 更新统计
+            updateStats() {
+                // 简化版本不需要统计显示
             }
             
             // 创建新聊天
@@ -991,141 +440,47 @@
                 }
             }
             
-            // 全能意图识别
+            // 理解用户意图
             understandIntent(userInput) {
                 const input = userInput.toLowerCase().trim();
                 
-                // 文学创作类
-                if (input.includes('诗') || input.includes('诗歌') || input.includes('写诗') || 
-                    input.includes('李白') || input.includes('杜甫') || input.includes('苏轼')) {
-                    return { type: 'poem', theme: this.extractTheme(input), style: this.extractStyle(input) };
+                // 基础意图识别
+                if (input.includes('你好') || input.includes('嗨') || input.includes('hello') || input.includes('hi')) {
+                    return { type: 'greeting' };
                 }
                 
-                if (input.includes('作文') || input.includes('文章') || input.includes('写作') || input.includes('散文')) {
-                    return { type: 'essay', topic: this.extractTopic(input) };
+                if (input.includes('再见') || input.includes('拜拜') || input.includes('退出')) {
+                    return { type: 'farewell' };
                 }
                 
-                if (input.includes('故事') || input.includes('小说') || input.includes('编故事')) {
-                    return { type: 'story', genre: this.extractGenre(input) };
+                if (input.includes('你能做什么') || input.includes('你会什么') || input.includes('功能')) {
+                    return { type: 'capabilities' };
                 }
                 
-                // 美食类
-                if (input.includes('食谱') || input.includes('菜') || input.includes('烹饪') || 
-                    input.includes('美食') || input.includes('做饭') || input.includes('料理') ||
-                    input.includes('法国菜') || input.includes('川菜') || input.includes('意大利')) {
-                    return { type: 'recipe', dish: this.extractDish(input), cuisine: this.extractCuisine(input) };
+                if (input.includes('你是谁') || input.includes('你叫什么')) {
+                    return { type: 'identity' };
                 }
                 
-                // 教学类
-                if (input.includes('教') || input.includes('如何') || input.includes('怎么') || 
-                    input.includes('教程') || input.includes('指导') || input.includes('步骤')) {
-                    return { type: 'teach', subject: this.extractSubject(input) };
+                // 检查学习到的知识
+                for (const [question, answer] of Object.entries(this.learnedKnowledge)) {
+                    if (input.includes(question.toLowerCase())) {
+                        return { type: 'learned', question, answer };
+                    }
                 }
                 
-                // 创意制作类
-                if (input.includes('制作') || input.includes('做') || input.includes('手工') || 
-                    input.includes('DIY') || input.includes('创造') || input.includes('发明')) {
-                    return { type: 'create', project: this.extractProject(input) };
+                // 检查特殊指令
+                if (input.startsWith("记住") && input.includes("=")) {
+                    return { type: 'remember' };
                 }
                 
-                // 知识解答类
-                if (input.includes('什么') || input.includes('为什么') || input.includes('怎么') || 
-                    input.includes('如何') || input.includes('解释') || input.includes('说明') ||
-                    input.includes('量子') || input.includes('人工智能') || input.includes('编程')) {
-                    return { type: 'explain', question: input };
+                if (input.startsWith("学习") && input.includes("=>")) {
+                    return { type: 'learn' };
                 }
                 
-                // 建议类
-                if (input.includes('建议') || input.includes('推荐') || input.includes('意见') || 
-                    input.includes('应该') || input.includes('怎么办')) {
-                    return { type: 'advice', area: this.extractArea(input) };
-                }
-                
-                return { type: 'conversation' };
+                return { type: 'general' };
             }
             
-            // 提取主题
-            extractTheme(input) {
-                const themes = ['春天', '夏天', '秋天', '冬天', '爱情', '友谊', '家乡', '自然', '星空', '大海', '月亮', '太阳'];
-                for (let theme of themes) {
-                    if (input.includes(theme)) return theme;
-                }
-                return '生活';
-            }
-            
-            // 提取风格
-            extractStyle(input) {
-                if (input.includes('李白')) return '李白';
-                if (input.includes('杜甫')) return '杜甫';
-                if (input.includes('苏轼')) return '苏轼';
-                return null;
-            }
-            
-            // 提取主题
-            extractTopic(input) {
-                const topics = ['AI', '科技', '环境', '教育', '健康', '未来', '梦想', '成功', '友谊', '家庭'];
-                for (let topic of topics) {
-                    if (input.includes(topic)) return topic;
-                }
-                return '生活感悟';
-            }
-            
-            // 提取体裁
-            extractGenre(input) {
-                if (input.includes('童话')) return '童话';
-                if (input.includes('科幻')) return '科幻';
-                if (input.includes('悬疑')) return '悬疑';
-                if (input.includes('爱情')) return '爱情';
-                return '生活';
-            }
-            
-            // 提取菜肴
-            extractDish(input) {
-                if (input.includes('蛋糕') || input.includes('甜点')) return '甜点';
-                if (input.includes('汤')) return '汤';
-                if (input.includes('炒饭') || input.includes('米饭')) return '主食';
-                if (input.includes('沙拉')) return '沙拉';
-                if (input.includes('意大利面')) return '意大利面';
-                return '创意菜';
-            }
-            
-            // 提取菜系
-            extractCuisine(input) {
-                if (input.includes('法国菜') || input.includes('法式')) return '法国菜';
-                if (input.includes('川菜') || input.includes('四川')) return '川菜';
-                if (input.includes('粤菜') || input.includes('广东')) return '粤菜';
-                if (input.includes('意大利') || input.includes('意式')) return '意大利菜';
-                return null;
-            }
-            
-            // 提取学科
-            extractSubject(input) {
-                if (input.includes('数学')) return '数学';
-                if (input.includes('编程')) return '编程';
-                if (input.includes('英语')) return '英语';
-                if (input.includes('科学')) return '科学';
-                if (input.includes('画画') || input.includes('绘画')) return '艺术';
-                return '生活技能';
-            }
-            
-            // 提取项目
-            extractProject(input) {
-                if (input.includes('卡片') || input.includes('贺卡')) return '手工卡片';
-                if (input.includes('玩具')) return '玩具';
-                if (input.includes('装饰')) return '装饰品';
-                return '创意作品';
-            }
-            
-            // 提取领域
-            extractArea(input) {
-                if (input.includes('学习')) return '学习';
-                if (input.includes('工作')) return '工作';
-                if (input.includes('生活')) return '生活';
-                if (input.includes('健康')) return '健康';
-                return '个人发展';
-            }
-            
-            // 全能回应生成
+            // 生成回应
             async generateResponse(userInput) {
                 // 添加用户消息到当前聊天
                 this.addMessageToCurrentChat('user', userInput);
@@ -1133,524 +488,111 @@
                 const intent = this.understandIntent(userInput);
                 
                 let response;
-                let content = '';
-                let learnFromThis = false;
                 
                 // 根据意图生成回应
                 switch (intent.type) {
-                    case 'poem':
-                        response = this.generatePoem(intent.theme, intent.style);
-                        content = 'poem';
-                        learnFromThis = true;
+                    case 'greeting':
+                        const greetings = [
+                            "你好！我是Kai，很高兴为您服务！",
+                            "嗨！有什么我可以帮助您的吗？",
+                            "您好！我是Kai，随时为您提供帮助。"
+                        ];
+                        response = greetings[Math.floor(Math.random() * greetings.length)];
                         break;
                     
-                    case 'essay':
-                        response = this.generateEssay(intent.topic);
-                        content = 'essay';
-                        learnFromThis = true;
+                    case 'farewell':
+                        const farewells = [
+                            "再见！期待下次与您交流！",
+                            "拜拜！祝您有美好的一天！",
+                            "再见啦！随时欢迎回来聊天。"
+                        ];
+                        response = farewells[Math.floor(Math.random() * farewells.length)];
                         break;
                     
-                    case 'story':
-                        response = this.generateStory(intent.genre);
-                        content = 'story';
-                        learnFromThis = true;
+                    case 'capabilities':
+                        response = "我是Kai，我可以回答您的问题、提供信息、进行对话，并且能够从我们的交流中学习新知识。";
                         break;
                     
-                    case 'recipe':
-                        response = this.generateRecipe(intent.dish, intent.cuisine);
-                        content = 'recipe';
-                        learnFromThis = true;
+                    case 'identity':
+                        response = "我是Kai，您的智能助手。我能够理解您的需求并提供有用的信息和帮助。";
                         break;
                     
-                    case 'teach':
-                        response = this.generateTeaching(intent.subject);
-                        content = 'teach';
-                        learnFromThis = true;
+                    case 'learned':
+                        response = intent.answer;
                         break;
                     
-                    case 'create':
-                        response = this.generateCreation(intent.project);
-                        content = 'create';
+                    case 'remember':
+                        response = this.processRememberCommand(userInput);
                         break;
                     
-                    case 'explain':
-                        response = this.generateExplanation(intent.question);
-                        content = 'explain';
-                        learnFromThis = true;
+                    case 'learn':
+                        response = this.processLearnCommand(userInput);
                         break;
                     
-                    case 'advice':
-                        response = this.generateAdvice(intent.area);
-                        content = 'advice';
-                        break;
-                    
-                    case 'conversation':
+                    case 'general':
                     default:
-                        response = this.generateConversationResponse(userInput);
+                        response = this.generateGeneralResponse(userInput);
                         break;
-                }
-                
-                // 如果这是一个学习机会，记录学习
-                if (learnFromThis) {
-                    this.learnFromInteraction(userInput, intent.type);
                 }
                 
                 // 添加AI回应到当前聊天
-                this.addMessageToCurrentChat('kai', response.content);
+                this.addMessageToCurrentChat('kai', response);
                 
-                return { 
-                    response: response.content, 
-                    contentType: content,
-                    title: response.title || ''
-                };
+                return response;
             }
             
-            // 生成诗歌
-            generatePoem(theme, style) {
-                let poemStyle = "现代";
-                let poetInfo = "";
-                
-                if (style && this.knowledgeBase.literature.poets[style]) {
-                    poemStyle = style;
-                    const poet = this.knowledgeBase.literature.poets[style];
-                    poetInfo = `\n\n（模仿${style}的${poet.style}风格创作）`;
+            // 处理"记住"命令
+            processRememberCommand(userInput) {
+                const parts = userInput.split(/[：:]/)[1].split('=');
+                if (parts.length === 2) {
+                    const key = parts[0].trim();
+                    const value = parts[1].trim();
+                    
+                    if (!this.learnedKnowledge) this.learnedKnowledge = {};
+                    this.learnedKnowledge[key] = value;
+                    
+                    if (this.saveKnowledge()) {
+                        return `好的，我已经记住了：${key} = ${value}`;
+                    } else {
+                        return "保存失败，请重试。";
+                    }
+                } else {
+                    return "请使用格式：记住：关键词=值";
                 }
-                
-                const poems = {
-                    '春天': {
-                        title: "《春之韵》",
-                        content: `春风轻拂面，花开满园香。
-燕子归来时，万物复苏忙。
-细雨润新芽，阳光照大地。
-春天多美好，心中满希望。`
-                    },
-                    '夏天': {
-                        title: "《夏之恋》",
-                        content: `夏日炎炎照，蝉鸣树梢头。
-荷花池中开，清风送凉意。
-西瓜甜如蜜，冰饮解暑气。
-夏日虽炎热，乐趣亦无穷。`
-                    }
-                };
-                
-                const poem = poems[theme] || poems['春天'];
-                return {
-                    content: `为您创作了一首关于${theme}的诗歌${poemStyle !== "现代" ? `，模仿${poemStyle}的风格` : ''}：\n\n<div class="creative-content">${poem.title}\n\n${poem.content}${poetInfo}</div>\n\n希望您喜欢这首诗歌！`,
-                    title: poem.title
-                };
             }
             
-            // 生成文章
-            generateEssay(topic) {
-                const essays = {
-                    'AI': {
-                        title: "人工智能与未来社会",
-                        content: `人工智能正以前所未有的速度改变着我们的生活。从智能手机的语音助手到自动驾驶汽车，从智能医疗诊断到个性化教育，AI技术正在各个领域发挥着重要作用。
-
-在医疗领域，AI可以帮助医生分析医学影像，提高诊断的准确性和效率。在教育领域，AI可以根据学生的学习情况提供个性化的学习方案。在交通领域，自动驾驶技术有望大幅减少交通事故。
-
-然而，AI的发展也带来了一些挑战，如就业市场的变化、数据隐私问题以及伦理道德考量。我们需要在享受AI带来便利的同时，认真思考如何应对这些挑战。
-
-未来，人工智能将继续深化与人类社会的融合。我们应该以开放、理性的态度迎接AI时代，让人工智能真正为人类福祉服务。`
-                    },
-                    '环境': {
-                        title: "保护环境，共建美好家园",
-                        content: `环境问题是当今世界面临的重大挑战之一。随着工业化和城市化进程的加速，空气污染、水资源短缺、生物多样性丧失等问题日益严重。
-
-保护环境需要从每个人做起。我们可以通过减少使用一次性塑料制品、节约用水用电、选择公共交通等方式，为环境保护贡献自己的一份力量。
-
-政府和企业也应当承担起环境保护的责任，加大环保投入，发展绿色科技，推动可持续发展。
-
-只有我们共同努力，才能为子孙后代留下一个绿水青山的美好家园。让我们行动起来，保护我们共同的地球！`
+            // 处理"学习"命令
+            processLearnCommand(userInput) {
+                const parts = userInput.split(/[：:]/)[1].split('=>');
+                if (parts.length === 2) {
+                    const question = parts[0].trim();
+                    const answer = parts[1].trim();
+                    
+                    if (!this.learnedKnowledge) this.learnedKnowledge = {};
+                    this.learnedKnowledge[question] = answer;
+                    
+                    if (this.saveKnowledge()) {
+                        return `谢谢！我已经学会了：当问"${question}"时，回答"${answer}"`;
+                    } else {
+                        return "学习失败，请重试。";
                     }
-                };
-                
-                const essay = essays[topic] || {
-                    title: `关于${topic}的思考`,
-                    content: `${topic}是一个值得深入探讨的话题。在这个快速变化的时代，我们需要对${topic}有更全面的认识和理解。
-
-首先，${topic}涉及到我们生活的方方面面，从个人到社会，从局部到全局，都有着重要的影响。
-
-其次，面对${topic}带来的机遇和挑战，我们需要采取积极的态度和行动。通过学习和实践，我们可以更好地应对${topic}相关的问题。
-
-最后，${topic}的未来发展值得我们期待。相信通过共同努力，我们能够在${topic}领域取得更大的进步和成就。`
-                };
-                
-                return {
-                    content: `为您创作了一篇关于${topic}的作文：\n\n<div class="creative-content"><h3>${essay.title}</h3>\n\n${essay.content}</div>\n\n希望这篇文章能给您带来启发！`,
-                    title: essay.title
-                };
-            }
-            
-            // 生成故事
-            generateStory(genre) {
-                const stories = {
-                    '童话': {
-                        title: "魔法森林的冒险",
-                        content: `在遥远的魔法森林里，住着一只名叫小灵的小狐狸。小灵有着火红的皮毛和聪明的头脑，但它最大的梦想是找到传说中的智慧之泉。
-
-一天，小灵在森林里遇到了一只迷路的小鸟。小鸟告诉小灵，它的家被暴风雨摧毁了，现在无家可归。小灵决定帮助小鸟找到新家。
-
-它们一起穿越了迷雾沼泽，攀上了彩虹山，最终在星空湖边找到了一棵完美的大树。小鸟在这里建了新家，它们也成为了最好的朋友。
-
-当小灵准备继续寻找智慧之泉时，小鸟送给它一根闪亮的羽毛作为感谢。就在这时，羽毛发出了耀眼的光芒，指引着小灵找到了智慧之泉。
-
-小灵终于明白，真正的智慧不在于找到神奇的泉水，而在于帮助他人时获得的快乐和友谊。`
-                    },
-                    '科幻': {
-                        title: "时间旅行者的抉择",
-                        content: `公元2157年，时间旅行技术终于成熟。年轻的时间探员李晨被派往2023年，执行一项关键任务：阻止一场即将发生的科技灾难。
-
-李晨顺利抵达2023年，却发现事情远比想象中复杂。他遇到了善良的科学家林教授，林教授正在研发的正是导致未来灾难的技术。
-
-在相处中，李晨被林教授的真诚和对科学的热爱所感动。他开始怀疑自己的任务：阻止这项技术的研发，真的能避免灾难吗？还是会导致其他更严重的后果？
-
-最终，李晨决定不直接阻止研发，而是与林教授合作，为这项技术加入安全防护措施。他相信，科技的进步不应被阻止，而应被正确引导。
-
-当李晨返回2157年时，他发现未来确实改变了——变得比他离开时更加美好。`
-                    }
-                };
-                
-                const story = stories[genre] || {
-                    title: "一段特别的经历",
-                    content: `这是一个关于勇气和友谊的故事。主人公在面对困难时从不放弃，最终通过自己的努力和朋友的帮助，克服了所有挑战。
-
-故事告诉我们，生活中总会遇到各种困难，但只要保持积极的心态，坚持自己的信念，就一定能够找到解决问题的方法。
-
-每个人都有自己的闪光点，重要的是发现并发挥这些优点。当我们互相帮助、彼此支持时，就能创造出更美好的世界。`
-                };
-                
-                return {
-                    content: `为您创作了一个${genre}故事：\n\n<div class="creative-content"><h3>${story.title}</h3>\n\n${story.content}</div>\n\n希望您喜欢这个故事！`,
-                    title: story.title
-                };
-            }
-            
-            // 生成食谱
-            generateRecipe(dish, cuisine) {
-                let cuisineInfo = "";
-                if (cuisine && this.knowledgeBase.cooking.cuisines[cuisine]) {
-                    const cuisineData = this.knowledgeBase.cooking.cuisines[cuisine];
-                    cuisineInfo = `\n\n这道菜采用了${cuisine}的${cuisineData.characteristics}特点，使用了${cuisineData.techniques.join('、')}等烹饪技巧。`;
+                } else {
+                    return "请使用格式：学习：问题=>回答";
                 }
-                
-                const recipes = {
-                    '甜点': {
-                        title: "创意彩虹杯子蛋糕",
-                        content: `这款彩虹杯子蛋糕色彩缤纷，口感绵软，是派对的完美甜点！
-
-原料：
-- 低筋面粉 150g
-- 细砂糖 100g
-- 鸡蛋 3个
-- 牛奶 50ml
-- 无盐黄油 50g
-- 食用色素（红、黄、蓝、绿）适量
-- 泡打粉 5g
-
-制作步骤：
-1. 将黄油融化，与牛奶混合均匀
-2. 鸡蛋加糖打发至浓稠
-3. 筛入面粉和泡打粉，轻轻翻拌均匀
-4. 加入黄油牛奶混合物，搅拌均匀
-5. 将面糊分成4份，分别加入不同颜色的食用色素
-6. 在杯子模具中分层倒入不同颜色的面糊
-7. 放入预热180°C的烤箱，烘烤20分钟
-8. 取出冷却后即可享用
-
-小贴士：可以在蛋糕表面挤上奶油霜装饰，更加美观！${cuisineInfo}`
-                    },
-                    '汤': {
-                        title: "营养番茄鸡蛋汤",
-                        content: `这道番茄鸡蛋汤简单易做，营养丰富，适合全家享用。
-
-原料：
-- 番茄 2个
-- 鸡蛋 2个
-- 葱花 适量
-- 盐 适量
-- 鸡精 少许
-- 香油 几滴
-
-制作步骤：
-1. 番茄洗净切块，鸡蛋打散备用
-2. 锅中放油，倒入番茄翻炒至出汁
-3. 加入适量清水，煮开后转小火煮5分钟
-4. 慢慢倒入蛋液，形成蛋花
-5. 加入盐和鸡精调味
-6. 撒上葱花，滴入香油即可
-
-小贴士：番茄可以先焯水去皮，口感更佳。${cuisineInfo}`
-                    }
-                };
-                
-                const recipe = recipes[dish] || {
-                    title: "创意家常菜",
-                    content: `这是一道简单又美味的家常菜，适合日常烹饪。
-
-原料：
-- 主要食材 适量
-- 调味料 适量
-- 配菜 适量
-
-制作步骤：
-1. 准备所有食材，洗净切好
-2. 热锅凉油，先爆香调料
-3. 加入主食材翻炒
-4. 加入调味料和适量水
-5. 煮至食材熟透，收汁
-6. 装盘即可享用
-
-小贴士：可以根据个人口味调整调料用量。${cuisineInfo}`
-                };
-                
-                return {
-                    content: `为您发明了一道${dish}的创意食谱${cuisine ? `，融合了${cuisine}的风味` : ''}：\n\n<div class="recipe-content"><h3>${recipe.title}</h3>\n\n${recipe.content}</div>\n\n祝您烹饪愉快，享受美食！`,
-                    title: recipe.title
-                };
             }
             
-            // 生成教学
-            generateTeaching(subject) {
-                const teachings = {
-                    '数学': {
-                        title: "勾股定理详解",
-                        content: `勾股定理是数学中一个非常重要且基础的定理。
-
-定理内容：
-在直角三角形中，两条直角边的平方和等于斜边的平方。
-公式表达：a² + b² = c²
-
-证明方法：
-1. 几何证明：通过构造正方形，利用面积关系证明
-2. 代数证明：通过相似三角形推导
-
-应用举例：
-已知直角三角形的两条直角边分别为3和4，求斜边长。
-解：c² = 3² + 4² = 9 + 16 = 25，所以c = 5
-
-练习题：
-一个直角三角形的斜边长为10，一条直角边长为6，求另一条直角边长。`
-                    },
-                    '编程': {
-                        title: "Python基础入门",
-                        content: `Python是一门简单易学且功能强大的编程语言。
-
-基本语法：
-1. 变量：x = 10
-2. 条件语句：if x > 5: print("大于5")
-3. 循环：for i in range(5): print(i)
-4. 函数：def add(a, b): return a + b
-
-实用示例：
-# 计算1到100的和
-total = 0
-for i in range(1, 101):
-    total += i
-print(total)
-
-学习建议：
-1. 多写代码，实践是最好的老师
-2. 阅读优秀的开源代码
-3. 参与实际项目，积累经验
-4. 保持好奇心，不断学习新技术`
-                    }
-                };
+            // 生成一般回应
+            generateGeneralResponse(userInput) {
+                // 思考性回应
+                const thoughtfulResponses = [
+                    `关于"${userInput}"，您能告诉我更多信息吗？`,
+                    "我理解您说的内容，但需要更多上下文来提供更好的回答。",
+                    "这是一个有趣的话题！您对此有什么特别的看法吗？",
+                    `对于"${userInput}"，您希望我提供什么类型的帮助？`,
+                    "我还在学习如何更好地回答这类问题，您能再详细说明一下吗？"
+                ];
                 
-                const teaching = teachings[subject] || {
-                    title: `${subject}基础知识`,
-                    content: `学习${subject}需要掌握以下几个要点：
-
-基本概念：
-- 了解${subject}的基本定义和原理
-- 掌握核心概念和术语
-
-学习方法：
-1. 理论与实践相结合
-2. 从基础开始，循序渐进
-3. 多做练习，巩固知识
-4. 与他人交流，分享学习心得
-
-常见问题：
-- 如何提高学习效率？
-- 遇到困难时该怎么办？
-- 如何将知识应用到实际中？
-
-记住，学习是一个持续的过程，保持耐心和热情很重要！`
-                };
-                
-                return {
-                    content: `为您准备了${subject}的教学内容：\n\n<div class="teaching-content"><h3>${teaching.title}</h3>\n\n${teaching.content}</div>\n\n希望这些内容对您有帮助！`,
-                    title: teaching.title
-                };
-            }
-            
-            // 生成创意制作
-            generateCreation(project) {
-                return {
-                    content: `为您设计了一个${project}的制作方案：\n\n<div class="creative-content"><h3>创意${project}制作指南</h3>
-
-材料准备：
-- 主要材料：根据设计选择
-- 工具：剪刀、胶水、尺子等
-- 装饰材料：彩纸、贴纸、丝带等
-
-制作步骤：
-1. 设计构思：确定作品的主题和风格
-2. 材料裁剪：按照设计裁剪所需材料
-3. 组装制作：逐步组装各个部件
-4. 装饰美化：添加装饰元素，提升美观度
-5. 完成检查：检查作品是否牢固，做最后调整
-
-创意提示：
-- 可以加入个人特色元素
-- 尝试使用环保材料
-- 结合实用性与美观性
-- 发挥想象力，创造独特作品
-
-祝您制作愉快，创作出独一无二的${project}！</div>`,
-                    title: `创意${project}制作`
-                };
-            }
-            
-            // 生成知识解答
-            generateExplanation(question) {
-                return {
-                    content: `关于"${question}"，我的解答如下：\n\n<div class="teaching-content">这是一个很好的问题！根据我的理解：
-
-基本概念：
-- 需要理解的核心知识点
-- 相关的背景信息
-
-详细解释：
-这个问题涉及到多个方面的知识。首先，我们需要了解基本概念和原理。其次，要考虑实际应用和影响因素。
-
-实际应用：
-- 在日常生活中的体现
-- 在专业领域的重要性
-
-进一步学习：
-如果您对这个话题感兴趣，我建议：
-1. 阅读相关书籍和资料
-2. 观看教学视频
-3. 实践相关技能
-4. 与他人讨论交流
-
-希望这个解答对您有帮助！如果您有更多问题，随时可以问我。</div>`
-                };
-            }
-            
-            // 生成建议
-            generateAdvice(area) {
-                return {
-                    content: `关于${area}，我的建议如下：\n\n<div class="teaching-content"><h3>${area}发展建议</h3>
-
-总体原则：
-1. 设定明确的目标
-2. 制定可行的计划
-3. 保持持续的行动
-4. 定期反思和调整
-
-具体建议：
-- 建立良好的习惯和规律
-- 寻找合适的学习和工作方法
-- 保持积极的心态和耐心
-- 善于寻求帮助和资源
-
-实用技巧：
-1. 时间管理：合理规划时间，提高效率
-2. 目标分解：将大目标分解为小步骤
-3. 持续学习：不断更新知识和技能
-4. 健康生活：保持身心健康平衡
-
-记住，进步是一个渐进的过程，每天的小改变最终会带来大不同！</div>`
-                };
-            }
-            
-            // 生成对话回应
-            generateConversationResponse(userInput) {
-                return {
-                    content: `感谢您的消息！我注意到您在说："${userInput}"。
-
-作为自主学习助手，我可以帮助您：
-- 创作诗歌、文章、故事
-- 发明创意美食和食谱
-- 提供各学科教学指导
-- 指导手工制作和DIY项目
-- 解答知识和提供建议
-
-我会持续学习李白、杜甫等诗人的风格，研究各国料理，掌握最新编程技术，为您提供更好的服务！`
-                };
-            }
-            
-            // 从交互中学习
-            learnFromInteraction(userInput, type) {
-                let category = "";
-                let description = "";
-                
-                switch(type) {
-                    case 'poem':
-                        category = "literature";
-                        description = `学习了新的诗歌创作请求：${userInput}`;
-                        break;
-                    case 'recipe':
-                        category = "cooking";
-                        description = `学习了新的美食创作请求：${userInput}`;
-                        break;
-                    case 'explain':
-                        category = "science";
-                        description = `学习了新的知识解答请求：${userInput}`;
-                        break;
-                    case 'teach':
-                        category = "programming";
-                        description = `学习了新的教学请求：${userInput}`;
-                        break;
-                    default:
-                        return;
-                }
-                
-                this.learnNewKnowledge(category, description);
-            }
-            
-            // 更新知识状态显示
-            updateKnowledgeStatus() {
-                const literatureProgress = this.knowledgeBase.literature.progress || 75;
-                const cookingProgress = this.knowledgeBase.cooking.progress || 60;
-                const programmingProgress = this.knowledgeBase.programming.progress || 85;
-                const scienceProgress = this.knowledgeBase.science.progress || 70;
-                
-                document.getElementById('literature-progress').style.width = `${literatureProgress}%`;
-                document.getElementById('literature-percent').textContent = `${Math.round(literatureProgress)}%`;
-                
-                document.getElementById('cooking-progress').style.width = `${cookingProgress}%`;
-                document.getElementById('cooking-percent').textContent = `${Math.round(cookingProgress)}%`;
-                
-                document.getElementById('programming-progress').style.width = `${programmingProgress}%`;
-                document.getElementById('programming-percent').textContent = `${Math.round(programmingProgress)}%`;
-                
-                document.getElementById('science-progress').style.width = `${scienceProgress}%`;
-                document.getElementById('science-percent').textContent = `${Math.round(scienceProgress)}%`;
-            }
-            
-            // 渲染学习记录
-            renderLearningLog() {
-                const container = document.getElementById('learning-log-container');
-                container.innerHTML = '';
-                
-                if (this.learningLog.length === 0) {
-                    container.innerHTML = '<div class="learning-item">暂无学习记录</div>';
-                    return;
-                }
-                
-                this.learningLog.forEach(item => {
-                    const learningItem = document.createElement('div');
-                    learningItem.className = 'learning-item';
-                    learningItem.innerHTML = `
-                        <div class="time">${item.time}</div>
-                        <div class="content">${item.content}</div>
-                    `;
-                    container.appendChild(learningItem);
-                });
+                return thoughtfulResponses[Math.floor(Math.random() * thoughtfulResponses.length)];
             }
             
             // 渲染聊天历史
@@ -1659,7 +601,7 @@ print(total)
                 const chats = this.getAllChats();
                 
                 if (chats.length === 0) {
-                    chatHistoryElement.innerHTML = '<div class="empty-state">暂无聊天记录</div>';
+                    chatHistoryElement.innerHTML = '<div style="padding: 15px; text-align: center; color: #666; font-size: 0.9rem;">暂无聊天记录</div>';
                     return;
                 }
                 
@@ -1695,8 +637,8 @@ print(total)
             }
         }
 
-        // 初始化自主学习版K(ai)
-        const kai = new SelfLearningKaiAI();
+        // 初始化Kai
+        const kai = new KaiAI();
         
         // DOM元素
         const chatContainer = document.getElementById('chat-container');
@@ -1705,8 +647,6 @@ print(total)
         const typingIndicator = document.getElementById('typing-indicator');
         const newChatBtn = document.getElementById('new-chat-btn');
         const emptyState = document.getElementById('empty-state');
-        const skillItems = document.querySelectorAll('.skill-item');
-        const quickActions = document.querySelectorAll('.quick-action');
         
         // 渲染聊天消息
         function renderChatMessages() {
@@ -1747,22 +687,17 @@ print(total)
             typingIndicator.style.display = 'block';
             chatContainer.scrollTop = chatContainer.scrollHeight;
             
-            // 获取AI回应
-            const { response, contentType, title } = await kai.generateResponse(message);
+            // 模拟AI思考时间
+            await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500));
             
             // 隐藏"正在输入"指示器
             typingIndicator.style.display = 'none';
             
-            // 添加AI回应到聊天界面
-            const aiMessageElement = addMessage(response, 'kai', true, contentType);
+            // 获取AI回应
+            const response = await kai.generateResponse(message);
             
-            // 如果是创作内容，添加创作指示器
-            if (contentType && contentType !== 'conversation') {
-                const learningIndicator = document.createElement('div');
-                learningIndicator.className = 'learning-indicator';
-                learningIndicator.textContent = `K(ai) 创作了: ${title || contentType}`;
-                aiMessageElement.appendChild(learningIndicator);
-            }
+            // 添加AI回应到聊天界面
+            addMessage(response, 'kai');
             
             // 重新启用输入和发送按钮
             userInput.disabled = false;
@@ -1777,19 +712,13 @@ print(total)
         }
         
         // 添加消息到聊天界面
-        function addMessage(text, sender, animate = true, contentType = '') {
+        function addMessage(text, sender, animate = true) {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${sender}-message`;
-            
-            // 处理内容类型
-            if (contentType && text.includes('<div class="')) {
-                messageElement.innerHTML = text;
-            } else {
-                messageElement.textContent = text;
-            }
+            messageElement.textContent = text;
             
             if (animate) {
-                messageElement.style.animation = 'fadeIn 0.2s ease';
+                messageElement.style.animation = 'fadeIn 0.3s ease';
             }
             
             chatContainer.appendChild(messageElement);
@@ -1811,37 +740,7 @@ print(total)
             renderChatMessages();
         });
         
-        // 技能按钮事件
-        skillItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const skill = item.getAttribute('data-skill');
-                const skillTexts = {
-                    'poem': '写一首诗',
-                    'essay': '写一篇作文',
-                    'recipe': '发明一道美食',
-                    'teach': '教我一些知识',
-                    'create': '指导我制作东西',
-                    'story': '创作一个故事',
-                    'advice': '给我一些建议',
-                    'explain': '解释一个概念'
-                };
-                
-                userInput.value = skillTexts[skill] || '帮助我';
-                userInput.focus();
-            });
-        });
-        
-        // 快速操作事件
-        quickActions.forEach(action => {
-            action.addEventListener('click', () => {
-                userInput.value = action.getAttribute('data-action');
-                sendMessage();
-            });
-        });
-        
         // 初始化
-        kai.updateKnowledgeStatus();
-        kai.renderLearningLog();
         kai.renderChatHistory();
         renderChatMessages();
         
@@ -1849,4 +748,4 @@ print(total)
         userInput.focus();
     </script>
 </body>
-</html> 
+</html>
