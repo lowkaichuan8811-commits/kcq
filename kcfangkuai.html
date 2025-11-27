@@ -3,557 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI视频修复工具 - 画质增强与补帧</title>
+    <title>毕业快乐 | 前程似锦</title>
     <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ffd166;
+            --light-color: #f8f9fa;
+            --dark-color: #333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #fff;
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            line-height: 1.6;
         }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            padding: 0 20px;
         }
-
+        
+        /* 导航栏样式 */
         header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
         }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
-
-        .main-content {
+        
+        nav {
             display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .upload-section {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-        }
-
-        .preview-section {
-            flex: 2;
-            min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-        }
-
-        .section-title {
+        
+        .logo {
             font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #ff8a00;
+            font-weight: bold;
         }
-
-        .upload-area {
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 40px 20px;
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* 英雄区域样式 */
+        .hero {
+            background: linear-gradient(rgba(74, 111, 165, 0.8), rgba(74, 111, 165, 0.9)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 20px;
+            padding: 8rem 0;
+            margin-bottom: 3rem;
         }
-
-        .upload-area:hover {
-            border-color: #ff8a00;
-            background: rgba(255, 138, 0, 0.1);
-        }
-
-        .upload-icon {
+        
+        .hero h1 {
             font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ff8a00;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-
-        .video-preview {
-            width: 100%;
-            background: #000;
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #ffc145;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 祝福语区域样式 */
+        .wishes {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+        
+        .wishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .wish-card {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .wish-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .wish-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* 照片墙样式 */
+        .gallery {
+            padding: 5rem 0;
+            background-color: #f0f4f8;
+        }
+        
+        .photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .photo-item {
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 20px;
+            height: 250px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
         }
-
-        video {
+        
+        .photo-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .photo-item img {
             width: 100%;
-            max-height: 300px;
-            display: block;
+            height: 100%;
+            object-fit: cover;
         }
-
-        .controls {
+        
+        /* 留言祝福区域样式 */
+        .message-form {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        /* 倒计时样式 */
+        .countdown {
+            padding: 5rem 0;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+        }
+        
+        .countdown-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 2rem;
+            margin-top: 2rem;
         }
-
-        button {
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            border: none;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(229, 46, 113, 0.4);
-        }
-
-        button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .processing-section {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.3);
+        
+        .countdown-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
             border-radius: 10px;
-            padding: 20px;
+            min-width: 100px;
         }
-
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #00c9ff, #92fe9d);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .algorithm-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .algorithm-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .algorithm-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .algorithm-card.active {
-            border-color: #ff8a00;
-            background: rgba(255, 138, 0, 0.2);
-        }
-
-        .algorithm-icon {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #00c9ff;
-        }
-
-        .algorithm-name {
+        
+        .countdown-number {
+            font-size: 2.5rem;
             font-weight: bold;
-            margin-bottom: 5px;
         }
-
-        .algorithm-desc {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .parameter-controls {
-            margin-top: 20px;
-        }
-
-        .parameter {
-            margin-bottom: 15px;
-        }
-
-        .parameter label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .slider {
-            flex: 1;
-            height: 8px;
-            -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ff8a00;
-            cursor: pointer;
-        }
-
-        .value-display {
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .comparison-section {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .comparison-box {
-            flex: 1;
-            text-align: center;
-        }
-
-        .comparison-title {
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #ff8a00;
-        }
-
+        
+        /* 页脚样式 */
         footer {
+            background-color: var(--dark-color);
+            color: white;
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.9rem;
-            opacity: 0.7;
+            padding: 2rem 0;
         }
-
+        
+        /* 响应式设计 */
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+            .nav-links {
+                display: none;
             }
             
-            .comparison-section {
-                flex-direction: column;
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .countdown-container {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AI视频修复与增强工具</h1>
-            <p class="subtitle">使用先进AI技术修复视频画质、补帧、去模糊，让模糊视频变清晰</p>
-        </header>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">毕业快乐</div>
+                <ul class="nav-links">
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#wishes">祝福语</a></li>
+                    <li><a href="#gallery">照片墙</a></li>
+                    <li><a href="#message">留言祝福</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-        <div class="main-content">
-            <div class="upload-section">
-                <h2 class="section-title">上传视频</h2>
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📁</div>
-                    <p>点击或拖拽视频文件到这里</p>
-                    <p class="algorithm-desc">支持MP4, AVI, MOV等格式，最大500MB</p>
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>祝贺2023届毕业生</h1>
+            <p>愿你们前程似锦，未来可期，在新的征程中继续闪耀！</p>
+            <a href="#message" class="btn">送上祝福</a>
+        </div>
+    </section>
+
+    <!-- 祝福语区域 -->
+    <section class="wishes" id="wishes">
+        <div class="container">
+            <h2 class="section-title">来自师长的祝福</h2>
+            <div class="wishes-grid">
+                <div class="wish-card">
+                    <h3>校长寄语</h3>
+                    <p>亲爱的同学们，毕业不是终点，而是新生活的起点。愿你们带着母校的期望，勇敢追逐梦想，创造属于自己的精彩人生！</p>
                 </div>
-                <input type="file" id="fileInput" accept="video/*" style="display: none;">
-
-                <div class="algorithm-options">
-                    <div class="algorithm-card active">
-                        <div class="algorithm-icon">🔍</div>
-                        <div class="algorithm-name">超分辨率增强</div>
-                        <div class="algorithm-desc">将低分辨率视频提升至高分辨率</div>
-                    </div>
-                    <div class="algorithm-card">
-                        <div class="algorithm-icon">⚡</div>
-                        <div class="algorithm-name">智能补帧</div>
-                        <div class="algorithm-desc">将低帧率视频提升至60fps</div>
-                    </div>
-                    <div class="algorithm-card">
-                        <div class="algorithm-icon">✨</div>
-                        <div class="algorithm-name">去模糊增强</div>
-                        <div class="algorithm-desc">修复运动模糊和失焦问题</div>
-                    </div>
-                    <div class="algorithm-card">
-                        <div class="algorithm-icon">🎨</div>
-                        <div class="algorithm-name">色彩修复</div>
-                        <div class="algorithm-desc">修复褪色和色彩失真</div>
-                    </div>
+                <div class="wish-card">
+                    <h3>班主任的话</h3>
+                    <p>看着你们从青涩少年成长为有志青年，我由衷感到骄傲。愿你们在未来的道路上不忘初心，砥砺前行！</p>
                 </div>
-
-                <div class="parameter-controls">
-                    <h2 class="section-title">增强参数</h2>
-                    <div class="parameter">
-                        <label for="resolution">分辨率增强</label>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="4" value="2" class="slider" id="resolution">
-                            <div class="value-display" id="resolutionValue">2x</div>
-                        </div>
-                    </div>
-                    <div class="parameter">
-                        <label for="framerate">帧率提升</label>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="4" value="2" class="slider" id="framerate">
-                            <div class="value-display" id="framerateValue">2x</div>
-                        </div>
-                    </div>
-                    <div class="parameter">
-                        <label for="denoise">降噪强度</label>
-                        <div class="slider-container">
-                            <input type="range" min="0" max="100" value="50" class="slider" id="denoise">
-                            <div class="value-display" id="denoiseValue">50%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <button id="processBtn" disabled>
-                        <span>开始处理</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="preview-section">
-                <h2 class="section-title">预览与结果</h2>
-                <div class="video-preview">
-                    <video id="originalVideo" controls></video>
-                </div>
-
-                <div class="processing-section" id="processingSection" style="display: none;">
-                    <h2 class="section-title">处理中...</h2>
-                    <p>正在使用AI算法修复您的视频，这可能需要几分钟时间</p>
-                    <div class="progress-bar">
-                        <div class="progress" id="progressBar"></div>
-                    </div>
-                    <p id="progressText">初始化中...</p>
-                </div>
-
-                <div class="video-preview" id="resultPreview" style="display: none;">
-                    <video id="processedVideo" controls></video>
-                </div>
-
-                <div class="comparison-section" id="comparisonSection" style="display: none;">
-                    <div class="comparison-box">
-                        <div class="comparison-title">原始视频</div>
-                        <div class="video-preview">
-                            <video id="originalComparison" controls></video>
-                        </div>
-                    </div>
-                    <div class="comparison-box">
-                        <div class="comparison-title">修复后视频</div>
-                        <div class="video-preview">
-                            <video id="processedComparison" controls></video>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="controls" id="resultControls" style="display: none;">
-                    <button id="downloadBtn">
-                        <span>下载修复视频</span>
-                    </button>
-                    <button id="compareBtn">
-                        <span>对比效果</span>
-                    </button>
+                <div class="wish-card">
+                    <h3>导师寄语</h3>
+                    <p>知识是你们最宝贵的财富，愿你们在人生的新阶段继续学习，不断成长，成为社会的栋梁之才！</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <footer>
-            <p>AI视频修复工具 &copy; 2023 | 使用先进的深度学习算法实现视频画质增强</p>
-        </footer>
-    </div>
+    <!-- 照片墙 -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">青春纪念册</h2>
+            <div class="photos">
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="毕业合影">
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="校园生活">
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1549799856-53d1c6c46c4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="毕业典礼">
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="抛帽瞬间">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 倒计时 -->
+    <section class="countdown">
+        <div class="container">
+            <h2 class="section-title">毕业纪念日</h2>
+            <div class="countdown-container">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">0</div>
+                    <div>天</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">0</div>
+                    <div>小时</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">0</div>
+                    <div>分钟</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">0</div>
+                    <div>秒</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 留言祝福 -->
+    <section class="message-form" id="message">
+        <div class="container">
+            <h2 class="section-title">送上你的祝福</h2>
+            <div class="form-container">
+                <form id="blessing-form">
+                    <div class="form-group">
+                        <label for="name">你的姓名</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">祝福语</label>
+                        <textarea id="message-text" required placeholder="写下你对毕业生的祝福..."></textarea>
+                    </div>
+                    <button type="submit" class="btn">送出祝福</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2023 毕业快乐祝福网站 | 设计制作：毕业生祝福团队</p>
+        </div>
+    </footer>
 
     <script>
-        // DOM元素
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const originalVideo = document.getElementById('originalVideo');
-        const processBtn = document.getElementById('processBtn');
-        const processingSection = document.getElementById('processingSection');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const resultPreview = document.getElementById('resultPreview');
-        const processedVideo = document.getElementById('processedVideo');
-        const resultControls = document.getElementById('resultControls');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const compareBtn = document.getElementById('compareBtn');
-        const comparisonSection = document.getElementById('comparisonSection');
-        const originalComparison = document.getElementById('originalComparison');
-        const processedComparison = document.getElementById('processedComparison');
-
-        // 算法卡片
-        const algorithmCards = document.querySelectorAll('.algorithm-card');
-        
-        // 参数滑块
-        const resolutionSlider = document.getElementById('resolution');
-        const framerateSlider = document.getElementById('framerate');
-        const denoiseSlider = document.getElementById('denoise');
-        
-        // 参数值显示
-        const resolutionValue = document.getElementById('resolutionValue');
-        const framerateValue = document.getElementById('framerateValue');
-        const denoiseValue = document.getElementById('denoiseValue');
-
-        // 当前选中的算法
-        let selectedAlgorithm = '超分辨率增强';
-
-        // 事件监听器
-        uploadArea.addEventListener('click', () => fileInput.click());
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#ff8a00';
-            uploadArea.style.background = 'rgba(255, 138, 0, 0.1)';
-        });
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-            uploadArea.style.background = 'transparent';
-        });
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-            uploadArea.style.background = 'transparent';
+        // 倒计时功能
+        function updateCountdown() {
+            // 设置毕业日期（示例：2023年6月30日）
+            const graduationDate = new Date('June 30, 2023 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = graduationDate - now;
             
-            if (e.dataTransfer.files.length) {
-                handleFile(e.dataTransfer.files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                handleFile(e.target.files[0]);
-            }
-        });
-
-        // 算法选择
-        algorithmCards.forEach(card => {
-            card.addEventListener('click', () => {
-                algorithmCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                selectedAlgorithm = card.querySelector('.algorithm-name').textContent;
-            });
-        });
-
-        // 参数滑块更新
-        resolutionSlider.addEventListener('input', () => {
-            resolutionValue.textContent = `${resolutionSlider.value}x`;
-        });
-
-        framerateSlider.addEventListener('input', () => {
-            framerateValue.textContent = `${framerateSlider.value}x`;
-        });
-
-        denoiseSlider.addEventListener('input', () => {
-            denoiseValue.textContent = `${denoiseSlider.value}%`;
-        });
-
-        // 处理按钮点击
-        processBtn.addEventListener('click', processVideo);
-
-        // 下载按钮点击
-        downloadBtn.addEventListener('click', () => {
-            alert('在完整版中，这里将下载修复后的视频文件');
-        });
-
-        // 对比按钮点击
-        compareBtn.addEventListener('click', () => {
-            comparisonSection.style.display = 'flex';
-            originalComparison.src = originalVideo.src;
-            processedComparison.src = processedVideo.src;
-        });
-
-        // 处理上传的文件
-        function handleFile(file) {
-            if (!file.type.startsWith('video/')) {
-                alert('请上传视频文件！');
+            if (distance < 0) {
+                // 如果毕业日期已过，显示已毕业天数
+                const daysSince = Math.floor(Math.abs(distance) / (1000 * 60 * 60 * 24));
+                document.getElementById('days').innerText = daysSince;
+                document.getElementById('hours').innerText = 0;
+                document.getElementById('minutes').innerText = 0;
+                document.getElementById('seconds').innerText = 0;
                 return;
             }
-
-            const url = URL.createObjectURL(file);
-            originalVideo.src = url;
-            processBtn.disabled = false;
             
-            // 重置UI状态
-            resultPreview.style.display = 'none';
-            resultControls.style.display = 'none';
-            comparisonSection.style.display = 'none';
-        }
-
-        // 模拟视频处理
-        function processVideo() {
-            processingSection.style.display = 'block';
-            processBtn.disabled = true;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            // 模拟处理进度
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 10;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    // 处理完成
-                    setTimeout(() => {
-                        processingSection.style.display = 'none';
-                        resultPreview.style.display = 'block';
-                        resultControls.style.display = 'flex';
-                        
-                        // 在实际应用中，这里会显示处理后的视频
-                        processedVideo.src = originalVideo.src;
-                    }, 500);
-                }
-                
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `处理中... ${Math.round(progress)}%`;
-            }, 500);
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
         }
+        
+        // 每秒钟更新一次倒计时
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // 初始调用
+        
+        // 表单提交处理
+        document.getElementById('blessing-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message-text').value;
+            
+            if (name && message) {
+                alert(`感谢 ${name} 的祝福！\n你的祝福已成功提交。`);
+                document.getElementById('blessing-form').reset();
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html>
