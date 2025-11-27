@@ -1,450 +1,378 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>毕业快乐 | 前程似锦</title>
+    <title>Peta Malaysia - Negeri dan Wilayah Persekutuan</title>
     <style>
-        :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #6b8cbc;
-            --accent-color: #ffd166;
-            --light-color: #f8f9fa;
-            --dark-color: #333;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #f5f5f5;
-            color: var(--dark-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
             line-height: 1.6;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
-        
-        /* 导航栏样式 */
+
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 2rem;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-        
-        /* 英雄区域样式 */
-        .hero {
-            background: linear-gradient(rgba(74, 111, 165, 0.8), rgba(74, 111, 165, 0.9)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
             text-align: center;
-            padding: 8rem 0;
-            margin-bottom: 3rem;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
         }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--dark-color);
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .map-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #malaysia-map {
+            width: 100%;
+            height: 500px;
+        }
+
+        .state-path {
+            fill: #3498db;
+            stroke: white;
+            stroke-width: 1;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
-        
-        .btn:hover {
-            background-color: #ffc145;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+
+        .state-path:hover {
+            fill: #2980b9;
+            stroke-width: 2;
         }
-        
-        /* 祝福语区域样式 */
-        .wishes {
-            padding: 5rem 0;
-            background-color: white;
+
+        .state-path.active {
+            fill: #e74c3c;
+            stroke-width: 2;
         }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--primary-color);
-        }
-        
-        .wishes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .wish-card {
-            background-color: var(--light-color);
+
+        .info-panel {
+            background: white;
+            padding: 25px;
             border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: fit-content;
         }
-        
-        .wish-card:hover {
-            transform: translateY(-5px);
+
+        .state-info h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
         }
-        
-        .wish-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-        
-        /* 照片墙样式 */
-        .gallery {
-            padding: 5rem 0;
-            background-color: #f0f4f8;
-        }
-        
-        .photos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        
-        .photo-item {
-            border-radius: 10px;
-            overflow: hidden;
-            height: 250px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s;
-        }
-        
-        .photo-item:hover {
-            transform: scale(1.05);
-        }
-        
-        .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        /* 留言祝福区域样式 */
-        .message-form {
-            padding: 5rem 0;
-            background-color: white;
-        }
-        
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: var(--light-color);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .form-group textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        
-        /* 倒计时样式 */
-        .countdown {
-            padding: 5rem 0;
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-        }
-        
-        .countdown-container {
+
+        .info-item {
+            margin-bottom: 12px;
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
+            justify-content: space-between;
         }
-        
-        .countdown-item {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 1rem;
-            border-radius: 10px;
-            min-width: 100px;
-        }
-        
-        .countdown-number {
-            font-size: 2.5rem;
+
+        .info-label {
             font-weight: bold;
+            color: #7f8c8d;
         }
-        
-        /* 页脚样式 */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
+
+        .info-value {
+            color: #2c3e50;
+        }
+
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .state-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
             text-align: center;
-            padding: 2rem 0;
         }
-        
-        /* 响应式设计 */
+
+        .state-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .state-flag {
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .countdown-container {
-                flex-wrap: wrap;
+            .main-content {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">毕业快乐</div>
-                <ul class="nav-links">
-                    <li><a href="#home">首页</a></li>
-                    <li><a href="#wishes">祝福语</a></li>
-                    <li><a href="#gallery">照片墙</a></li>
-                    <li><a href="#message">留言祝福</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Peta Malaysia</h1>
+            <p class="subtitle">Negeri-negeri dan Wilayah-wilayah Persekutuan</p>
+        </header>
 
-    <!-- 英雄区域 -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h1>祝贺2023届毕业生</h1>
-            <p>愿你们前程似锦，未来可期，在新的征程中继续闪耀！</p>
-            <a href="#message" class="btn">送上祝福</a>
-        </div>
-    </section>
-
-    <!-- 祝福语区域 -->
-    <section class="wishes" id="wishes">
-        <div class="container">
-            <h2 class="section-title">来自师长的祝福</h2>
-            <div class="wishes-grid">
-                <div class="wish-card">
-                    <h3>校长寄语</h3>
-                    <p>亲爱的同学们，毕业不是终点，而是新生活的起点。愿你们带着母校的期望，勇敢追逐梦想，创造属于自己的精彩人生！</p>
-                </div>
-                <div class="wish-card">
-                    <h3>班主任的话</h3>
-                    <p>看着你们从青涩少年成长为有志青年，我由衷感到骄傲。愿你们在未来的道路上不忘初心，砥砺前行！</p>
-                </div>
-                <div class="wish-card">
-                    <h3>导师寄语</h3>
-                    <p>知识是你们最宝贵的财富，愿你们在人生的新阶段继续学习，不断成长，成为社会的栋梁之才！</p>
-                </div>
+        <div class="main-content">
+            <div class="map-container">
+                <svg id="malaysia-map" viewBox="0 0 800 800">
+                    <!-- 西马州属 -->
+                    <path id="perlis" class="state-path" d="M200,300 L220,310 L230,290 L210,280 Z" data-state="perlis"/>
+                    <path id="kedah" class="state-path" d="M220,280 L280,290 L270,350 L220,340 Z" data-state="kedah"/>
+                    <path id="penang" class="state-path" d="M250,350 L260,340 L270,350 L260,360 Z" data-state="penang"/>
+                    <path id="perak" class="state-path" d="M200,350 L300,360 L290,450 L200,440 Z" data-state="perak"/>
+                    <path id="selangor" class="state-path" d="M280,400 L350,410 L340,470 L280,460 Z" data-state="selangor"/>
+                    <path id="kl" class="state-path" d="M320,430 L330,440 L320,450 L310,440 Z" data-state="kl"/>
+                    <path id="putrajaya" class="state-path" d="M315,450 L325,455 L320,465 L310,460 Z" data-state="putrajaya"/>
+                    <path id="ns" class="state-path" d="M280,460 L340,470 L330,520 L270,510 Z" data-state="ns"/>
+                    <path id="melaka" class="state-path" d="M300,520 L320,530 L310,540 L290,530 Z" data-state="melaka"/>
+                    <path id="johor" class="state-path" d="M280,520 L400,530 L390,600 L270,590 Z" data-state="johor"/>
+                    <path id="kelantan" class="state-path" d="M350,250 L450,260 L440,330 L340,320 Z" data-state="kelantan"/>
+                    <path id="terengganu" class="state-path" d="M450,300 L550,310 L540,380 L440,370 Z" data-state="terengganu"/>
+                    <path id="pahang" class="state-path" d="M320,350 L500,360 L490,500 L310,490 Z" data-state="pahang"/>
+                    
+                    <!-- 东马州属 -->
+                    <path id="sarawak" class="state-path" d="M550,400 L700,410 L690,550 L540,540 Z" data-state="sarawak"/>
+                    <path id="sabah" class="state-path" d="M720,350 L780,360 L770,500 L710,490 Z" data-state="sabah"/>
+                    <path id="labuan" class="state-path" d="M700,320 L720,330 L710,340 L690,330 Z" data-state="labuan"/>
+                </svg>
             </div>
-        </div>
-    </section>
 
-    <!-- 照片墙 -->
-    <section class="gallery" id="gallery">
-        <div class="container">
-            <h2 class="section-title">青春纪念册</h2>
-            <div class="photos">
-                <div class="photo-item">
-                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="毕业合影">
-                </div>
-                <div class="photo-item">
-                    <img src="https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="校园生活">
-                </div>
-                <div class="photo-item">
-                    <img src="https://images.unsplash.com/photo-1549799856-53d1c6c46c4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="毕业典礼">
-                </div>
-                <div class="photo-item">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="抛帽瞬间">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 倒计时 -->
-    <section class="countdown">
-        <div class="container">
-            <h2 class="section-title">毕业纪念日</h2>
-            <div class="countdown-container">
-                <div class="countdown-item">
-                    <div class="countdown-number" id="days">0</div>
-                    <div>天</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="hours">0</div>
-                    <div>小时</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="minutes">0</div>
-                    <div>分钟</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="seconds">0</div>
-                    <div>秒</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 留言祝福 -->
-    <section class="message-form" id="message">
-        <div class="container">
-            <h2 class="section-title">送上你的祝福</h2>
-            <div class="form-container">
-                <form id="blessing-form">
-                    <div class="form-group">
-                        <label for="name">你的姓名</label>
-                        <input type="text" id="name" required>
+            <div class="info-panel">
+                <div class="state-info">
+                    <h2 id="state-name">Pilih Negeri</h2>
+                    <div class="info-item">
+                        <span class="info-label">Ibu Negeri:</span>
+                        <span class="info-value" id="state-capital">-</span>
                     </div>
-                    <div class="form-group">
-                        <label for="message">祝福语</label>
-                        <textarea id="message-text" required placeholder="写下你对毕业生的祝福..."></textarea>
+                    <div class="info-item">
+                        <span class="info-label">Populasi:</span>
+                        <span class="info-value" id="state-population">-</span>
                     </div>
-                    <button type="submit" class="btn">送出祝福</button>
-                </form>
+                    <div class="info-item">
+                        <span class="info-label">Luas:</span>
+                        <span class="info-value" id="state-area">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value" id="state-status">-</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <p>© 2023 毕业快乐祝福网站 | 设计制作：毕业生祝福团队</p>
+        <div class="states-grid">
+            <!-- 州属卡片将通过JavaScript动态生成 -->
         </div>
-    </footer>
+    </div>
 
     <script>
-        // 倒计时功能
-        function updateCountdown() {
-            // 设置毕业日期（示例：2023年6月30日）
-            const graduationDate = new Date('June 30, 2023 00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = graduationDate - now;
-            
-            if (distance < 0) {
-                // 如果毕业日期已过，显示已毕业天数
-                const daysSince = Math.floor(Math.abs(distance) / (1000 * 60 * 60 * 24));
-                document.getElementById('days').innerText = daysSince;
-                document.getElementById('hours').innerText = 0;
-                document.getElementById('minutes').innerText = 0;
-                document.getElementById('seconds').innerText = 0;
-                return;
+        // 马来西亚州属数据
+        const statesData = {
+            'johor': {
+                name: 'Johor',
+                capital: 'Johor Bahru',
+                population: '3.8 juta',
+                area: '19,210 km²',
+                status: 'Negeri'
+            },
+            'kedah': {
+                name: 'Kedah',
+                capital: 'Alor Setar',
+                population: '2.2 juta',
+                area: '9,500 km²',
+                status: 'Negeri'
+            },
+            'kelantan': {
+                name: 'Kelantan',
+                capital: 'Kota Bharu',
+                population: '1.9 juta',
+                area: '15,099 km²',
+                status: 'Negeri'
+            },
+            'melaka': {
+                name: 'Melaka',
+                capital: 'Bandar Melaka',
+                population: '0.9 juta',
+                area: '1,720 km²',
+                status: 'Negeri'
+            },
+            'ns': {
+                name: 'Negeri Sembilan',
+                capital: 'Seremban',
+                population: '1.1 juta',
+                area: '6,686 km²',
+                status: 'Negeri'
+            },
+            'pahang': {
+                name: 'Pahang',
+                capital: 'Kuantan',
+                population: '1.7 juta',
+                area: '36,137 km²',
+                status: 'Negeri'
+            },
+            'penang': {
+                name: 'Pulau Pinang',
+                capital: 'George Town',
+                population: '1.8 juta',
+                area: '1,048 km²',
+                status: 'Negeri'
+            },
+            'perak': {
+                name: 'Perak',
+                capital: 'Ipoh',
+                population: '2.5 juta',
+                area: '21,035 km²',
+                status: 'Negeri'
+            },
+            'perlis': {
+                name: 'Perlis',
+                capital: 'Kangar',
+                population: '0.25 juta',
+                area: '821 km²',
+                status: 'Negeri'
+            },
+            'selangor': {
+                name: 'Selangor',
+                capital: 'Shah Alam',
+                population: '6.5 juta',
+                area: '8,104 km²',
+                status: 'Negeri'
+            },
+            'terengganu': {
+                name: 'Terengganu',
+                capital: 'Kuala Terengganu',
+                population: '1.2 juta',
+                area: '13,035 km²',
+                status: 'Negeri'
+            },
+            'sabah': {
+                name: 'Sabah',
+                capital: 'Kota Kinabalu',
+                population: '3.9 juta',
+                area: '73,904 km²',
+                status: 'Negeri'
+            },
+            'sarawak': {
+                name: 'Sarawak',
+                capital: 'Kuching',
+                population: '2.8 juta',
+                area: '124,450 km²',
+                status: 'Negeri'
+            },
+            'kl': {
+                name: 'Wilayah Persekutuan Kuala Lumpur',
+                capital: 'Kuala Lumpur',
+                population: '1.8 juta',
+                area: '243 km²',
+                status: 'Wilayah Persekutuan'
+            },
+            'labuan': {
+                name: 'Wilayah Persekutuan Labuan',
+                capital: 'Labuan',
+                population: '0.1 juta',
+                area: '92 km²',
+                status: 'Wilayah Persekutuan'
+            },
+            'putrajaya': {
+                name: 'Wilayah Persekutuan Putrajaya',
+                capital: 'Putrajaya',
+                population: '0.09 juta',
+                area: '49 km²',
+                status: 'Wilayah Persekutuan'
             }
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
-        }
-        
-        // 每秒钟更新一次倒计时
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // 初始调用
-        
-        // 表单提交处理
-        document.getElementById('blessing-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message-text').value;
-            
-            if (name && message) {
-                alert(`感谢 ${name} 的祝福！\n你的祝福已成功提交。`);
-                document.getElementById('blessing-form').reset();
-            }
-        });
-        
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为SVG路径添加点击事件
+            const statePaths = document.querySelectorAll('.state-path');
+            statePaths.forEach(path => {
+                path.addEventListener('click', function() {
+                    const stateId = this.getAttribute('data-state');
+                    showStateInfo(stateId);
+                    
+                    // 移除所有active类
+                    statePaths.forEach(p => p.classList.remove('active'));
+                    // 为当前点击的州添加active类
+                    this.classList.add('active');
                 });
             });
+
+            // 生成州属卡片
+            generateStateCards();
         });
+
+        function showStateInfo(stateId) {
+            const state = statesData[stateId];
+            if (state) {
+                document.getElementById('state-name').textContent = state.name;
+                document.getElementById('state-capital').textContent = state.capital;
+                document.getElementById('state-population').textContent = state.population;
+                document.getElementById('state-area').textContent = state.area;
+                document.getElementById('state-status').textContent = state.status;
+            }
+        }
+
+        function generateStateCards() {
+            const grid = document.querySelector('.states-grid');
+            
+            Object.entries(statesData).forEach(([id, state]) => {
+                const card = document.createElement('div');
+                card.className = 'state-card';
+                card.innerHTML = `
+                    <div class="state-name">${state.name}</div>
+                `;
+                card.addEventListener('click', function() {
+                    showStateInfo(id);
+                    // 高亮对应的SVG路径
+                    const statePaths = document.querySelectorAll('.state-path');
+                    statePaths.forEach(p => p.classList.remove('active'));
+                    document.getElementById(id).classList.add('active');
+                });
+                grid.appendChild(card);
+            });
+        }
     </script>
 </body>
-</html>
+    </html>
