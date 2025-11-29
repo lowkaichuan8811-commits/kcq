@@ -1,192 +1,244 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta Malaysia - Negeri dan Wilayah Persekutuan</title>
+    <title>安卓微信聊天视频下载助手</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --android-green: #3DDC84;
+            --wechat-green: #07C160;
+            --dark-bg: #202124;
+            --card-bg: #2D2E30;
+            --text-light: #E8EAED;
+            --text-gray: #9AA0A6;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
             line-height: 1.6;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
         }
-
+        
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #cc0000 0%, #990000 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 0;
-        }
-
-        .map-container {
+            max-width: 100%;
             padding: 20px;
-            background: #f8f9fa;
         }
-
-        #malaysia-map {
-            width: 100%;
-            height: 600px;
-            background: #e8f4f8;
-        }
-
-        .state-path {
-            fill: #3498db;
-            stroke: white;
-            stroke-width: 1.5;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .state-path:hover {
-            fill: #2980b9;
-            stroke-width: 2.5;
-            filter: brightness(1.1);
-        }
-
-        .state-path.active {
-            fill: #e74c3c;
-            stroke-width: 3;
-            filter: brightness(1.2);
-        }
-
-        .info-panel {
-            background: white;
-            padding: 30px;
-            border-left: 3px solid #ecf0f1;
-        }
-
-        .state-info h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #ecf0f1;
-            font-size: 1.8em;
-        }
-
-        .info-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #7f8c8d;
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
-
-        .info-value {
-            color: #2c3e50;
-            font-size: 1.1em;
-        }
-
-        .states-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-top: 3px solid #ecf0f1;
-        }
-
-        .state-card {
-            background: white;
-            padding: 20px 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        
+        header {
             text-align: center;
-            border: 2px solid transparent;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-
-        .state-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border-color: #3498db;
-        }
-
-        .state-card.active {
-            border-color: #e74c3c;
-            background: #fff5f5;
-        }
-
-        .state-flag {
-            width: 40px;
-            height: 25px;
-            object-fit: cover;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .map-legend {
+        
+        .logo-container {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
         }
-
-        .legend-item {
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--android-green), var(--wechat-green));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 10px rgba(61, 220, 132, 0.3);
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--android-green), var(--wechat-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
+            margin-bottom: 15px;
         }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 2px solid white;
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--android-green), var(--wechat-green));
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
         }
-
-        @media (max-width: 968px) {
-            .main-content {
-                grid-template-columns: 1fr;
+        
+        .card-icon i {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .steps-container {
+            margin: 30px 0;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 25px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--android-green), var(--wechat-green));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(61, 220, 132, 0.3);
+        }
+        
+        .step-content h3 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .step-content p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--android-green), var(--wechat-green));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 30px 0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(61, 220, 132, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(61, 220, 132, 0.4);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        .warning-box {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #FFC107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #FFC107;
+        }
+        
+        .warning-box h4 i {
+            margin-right: 10px;
+        }
+        
+        .faq-section {
+            margin-top: 40px;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #3C4043;
+            padding-bottom: 15px;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .faq-answer {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-gray);
+            font-size: 14px;
+            border-top: 1px solid #3C4043;
+            margin-top: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
             }
             
-            .info-panel {
-                border-left: none;
-                border-top: 3px solid #ecf0f1;
+            h1 {
+                font-size: 32px;
             }
         }
     </style>
@@ -194,313 +246,129 @@
 <body>
     <div class="container">
         <header>
-            <h1>Peta Malaysia</h1>
-            <p class="subtitle">Negeri-negeri dan Wilayah-wilayah Persekutuan</p>
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fab fa-android"></i>
+                </div>
+                <div>
+                    <h1>安卓微信聊天视频下载助手</h1>
+                    <p class="subtitle">安全、简单、高效地保存微信聊天视频</p>
+                </div>
+            </div>
         </header>
-
-        <div class="main-content">
-            <div class="map-container">
-                <!-- 真实的马来西亚SVG地图 -->
-                <svg id="malaysia-map" viewBox="320 0 600 800" preserveAspectRatio="xMidYMid meet">
-                    <!-- 西马来西亚 -->
-                    <!-- 玻璃市 -->
-                    <path id="perlis" class="state-path" d="M435,225 L455,230 L460,220 L445,215 Z" data-state="perlis"/>
-                    
-                    <!-- 吉打 -->
-                    <path id="kedah" class="state-path" d="M430,200 L480,210 L490,250 L460,260 L450,240 L440,230 L435,225 L430,220 Z" data-state="kedah"/>
-                    
-                    <!-- 槟城 -->
-                    <path id="penang" class="state-path" d="M460,260 L470,255 L475,265 L465,270 Z" data-state="penang"/>
-                    
-                    <!-- 霹雳 -->
-                    <path id="perak" class="state-path" d="M430,220 L480,230 L500,280 L510,320 L500,350 L470,340 L460,300 L450,280 L440,260 Z" data-state="perak"/>
-                    
-                    <!-- 雪兰莪 -->
-                    <path id="selangor" class="state-path" d="M500,320 L530,330 L540,360 L520,370 L510,350 L500,340 Z" data-state="selangor"/>
-                    
-                    <!-- 吉隆坡 -->
-                    <path id="kl" class="state-path" d="M520,340 L530,345 L525,355 L515,350 Z" data-state="kl"/>
-                    
-                    <!-- 布城 -->
-                    <path id="putrajaya" class="state-path" d="M525,355 L535,360 L530,370 L520,365 Z" data-state="putrajaya"/>
-                    
-                    <!-- 森美兰 -->
-                    <path id="ns" class="state-path" d="M510,350 L540,360 L550,390 L530,400 L520,380 Z" data-state="ns"/>
-                    
-                    <!-- 马六甲 -->
-                    <path id="melaka" class="state-path" d="M530,400 L545,405 L540,420 L525,415 Z" data-state="melaka"/>
-                    
-                    <!-- 柔佛 -->
-                    <path id="johor" class="state-path" d="M500,350 L550,360 L580,400 L570,450 L540,440 L520,420 L510,400 L500,380 Z" data-state="johor"/>
-                    
-                    <!-- 吉兰丹 -->
-                    <path id="kelantan" class="state-path" d="M520,180 L580,190 L590,230 L570,240 L560,220 L540,210 Z" data-state="kelantan"/>
-                    
-                    <!-- 登嘉楼 -->
-                    <path id="terengganu" class="state-path" d="M580,200 L640,210 L650,250 L630,260 L620,240 L600,230 Z" data-state="terengganu"/>
-                    
-                    <!-- 彭亨 -->
-                    <path id="pahang" class="state-path" d="M500,280 L580,290 L600,350 L590,400 L570,390 L550,370 L540,340 L520,330 L510,300 Z" data-state="pahang"/>
-                    
-                    <!-- 东马来西亚 -->
-                    <!-- 砂拉越 -->
-                    <path id="sarawak" class="state-path" d="M650,350 L750,360 L760,450 L740,460 L730,440 L710,430 L690,420 L670,410 L660,390 L650,370 Z" data-state="sarawak"/>
-                    
-                    <!-- 沙巴 -->
-                    <path id="sabah" class="state-path" d="M770,300 L850,310 L860,400 L840,410 L830,390 L810,380 L790,370 L780,350 L770,330 Z" data-state="sabah"/>
-                    
-                    <!-- 纳闽 -->
-                    <path id="labuan" class="state-path" d="M760,330 L775,335 L770,345 L755,340 Z" data-state="labuan"/>
-                </svg>
-                
-                <div class="map-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #3498db;"></div>
-                        <span>Negeri</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #e74c3c;"></div>
-                        <span>Dipilih</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background-color: #2ecc71;"></div>
-                        <span>Wilayah Persekutuan</span>
-                    </div>
+        
+        <div class="feature-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h2 class="card-title">专为安卓设备优化</h2>
+            </div>
+            <p>我们的工具专门针对安卓系统的文件管理特性设计，可以快速定位和下载微信聊天中的视频文件，无需复杂操作。</p>
+        </div>
+        
+        <div class="steps-container">
+            <h2 style="margin-bottom: 20px; text-align: center;">下载步骤</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>打开微信并找到视频</h3>
+                    <p>在微信聊天中找到您想要下载的视频消息，长按视频选择"收藏"或"保存到手机"。</p>
                 </div>
             </div>
-
-            <div class="info-panel">
-                <div class="state-info">
-                    <h2 id="state-name">Pilih Negeri</h2>
-                    <div class="info-item">
-                        <span class="info-label">Ibu Negeri:</span>
-                        <span class="info-value" id="state-capital">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Populasi (anggaran):</span>
-                        <span class="info-value" id="state-population">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Luas Kawasan:</span>
-                        <span class="info-value" id="state-area">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status:</span>
-                        <span class="info-value" id="state-status">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Tarikh Penubuhan:</span>
-                        <span class="info-value" id="state-established">-</span>
-                    </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>打开本工具并连接设备</h3>
+                    <p>确保您的安卓设备已连接到电脑，并开启USB调试模式。</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>扫描并选择视频</h3>
+                    <p>工具会自动扫描您的设备，找到微信保存的视频文件，您可以选择需要下载的视频。</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>下载到指定位置</h3>
+                    <p>选择保存位置，点击下载按钮，视频将保存到您选择的文件夹中。</p>
                 </div>
             </div>
         </div>
-
-        <div class="states-grid" id="states-grid-container">
-            <!-- 州属卡片将通过JavaScript动态生成 -->
+        
+        <button class="download-btn">
+            <i class="fas fa-download"></i> 立即下载工具 (v2.1.5)
+        </button>
+        
+        <div class="warning-box">
+            <h4><i class="fas fa-exclamation-triangle"></i> 重要提示</h4>
+            <p>请确保您仅下载自己有权限访问的聊天视频，尊重他人隐私和版权。本工具仅用于个人数据备份目的。</p>
         </div>
+        
+        <div class="feature-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 class="card-title">安全可靠</h2>
+            </div>
+            <p>我们的工具不会上传您的任何数据到服务器，所有操作均在本地完成，确保您的隐私安全。</p>
+        </div>
+        
+        <div class="faq-section">
+            <h2 style="margin-bottom: 20px;">常见问题</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">这个工具需要root权限吗？</div>
+                <div class="faq-answer">不需要，我们的工具无需root权限即可工作，但部分深度功能可能需要授权。</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">支持哪些安卓版本？</div>
+                <div class="faq-answer">支持Android 6.0及以上版本，包括Android 12。</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">下载的视频质量会下降吗？</div>
+                <div class="faq-answer">不会，我们直接提取原始文件，视频质量与原始聊天中的完全一致。</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">工具是免费的吗？</div>
+                <div class="faq-answer">基础功能完全免费，高级功能需要购买授权。</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 安卓微信视频下载助手 | 尊重隐私，安全第一</p>
+            <p style="margin-top: 10px;">联系我们: support@wechatvideotool.com</p>
+        </footer>
     </div>
 
     <script>
-        // 详细的马来西亚州属数据
-        const statesData = {
-            'johor': {
-                name: 'Johor',
-                capital: 'Johor Bahru',
-                population: '3.8 juta',
-                area: '19,210 km²',
-                status: 'Negeri',
-                established: '1895'
-            },
-            'kedah': {
-                name: 'Kedah',
-                capital: 'Alor Setar',
-                population: '2.2 juta',
-                area: '9,500 km²',
-                status: 'Negeri',
-                established: '1136'
-            },
-            'kelantan': {
-                name: 'Kelantan',
-                capital: 'Kota Bharu',
-                population: '1.9 juta',
-                area: '15,099 km²',
-                status: 'Negeri',
-                established: '1267'
-            },
-            'melaka': {
-                name: 'Melaka',
-                capital: 'Bandar Melaka',
-                population: '0.9 juta',
-                area: '1,720 km²',
-                status: 'Negeri',
-                established: '1396'
-            },
-            'ns': {
-                name: 'Negeri Sembilan',
-                capital: 'Seremban',
-                population: '1.1 juta',
-                area: '6,686 km²',
-                status: 'Negeri',
-                established: '1895'
-            },
-            'pahang': {
-                name: 'Pahang',
-                capital: 'Kuantan',
-                population: '1.7 juta',
-                area: '36,137 km²',
-                status: 'Negeri',
-                established: '1770'
-            },
-            'penang': {
-                name: 'Pulau Pinang',
-                capital: 'George Town',
-                population: '1.8 juta',
-                area: '1,048 km²',
-                status: 'Negeri',
-                established: '1786'
-            },
-            'perak': {
-                name: 'Perak',
-                capital: 'Ipoh',
-                population: '2.5 juta',
-                area: '21,035 km²',
-                status: 'Negeri',
-                established: '1874'
-            },
-            'perlis': {
-                name: 'Perlis',
-                capital: 'Kangar',
-                population: '0.25 juta',
-                area: '821 km²',
-                status: 'Negeri',
-                established: '1843'
-            },
-            'selangor': {
-                name: 'Selangor',
-                capital: 'Shah Alam',
-                population: '6.5 juta',
-                area: '8,104 km²',
-                status: 'Negeri',
-                established: '1743'
-            },
-            'terengganu': {
-                name: 'Terengganu',
-                capital: 'Kuala Terengganu',
-                population: '1.2 juta',
-                area: '13,035 km²',
-                status: 'Negeri',
-                established: '1724'
-            },
-            'sabah': {
-                name: 'Sabah',
-                capital: 'Kota Kinabalu',
-                population: '3.9 juta',
-                area: '73,904 km²',
-                status: 'Negeri',
-                established: '1963'
-            },
-            'sarawak': {
-                name: 'Sarawak',
-                capital: 'Kuching',
-                population: '2.8 juta',
-                area: '124,450 km²',
-                status: 'Negeri',
-                established: '1841'
-            },
-            'kl': {
-                name: 'Wilayah Persekutuan Kuala Lumpur',
-                capital: 'Kuala Lumpur',
-                population: '1.8 juta',
-                area: '243 km²',
-                status: 'Wilayah Persekutuan',
-                established: '1974'
-            },
-            'labuan': {
-                name: 'Wilayah Persekutuan Labuan',
-                capital: 'Labuan',
-                population: '0.1 juta',
-                area: '92 km²',
-                status: 'Wilayah Persekutuan',
-                established: '1984'
-            },
-            'putrajaya': {
-                name: 'Wilayah Persekutuan Putrajaya',
-                capital: 'Putrajaya',
-                population: '0.09 juta',
-                area: '49 km²',
-                status: 'Wilayah Persekutuan',
-                established: '2001'
-            }
-        };
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为SVG路径添加点击事件
-            const statePaths = document.querySelectorAll('.state-path');
-            statePaths.forEach(path => {
-                path.addEventListener('click', function() {
-                    const stateId = this.getAttribute('data-state');
-                    showStateInfo(stateId);
-                    
-                    // 更新地图高亮
-                    statePaths.forEach(p => p.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 更新卡片高亮
-                    const cards = document.querySelectorAll('.state-card');
-                    cards.forEach(card => card.classList.remove('active'));
-                    document.querySelector(`.state-card[data-state="${stateId}"]`).classList.add('active');
-                });
-            });
-
-            // 生成州属卡片
-            generateStateCards();
+        // 简单的下载按钮交互
+        document.querySelector('.download-btn').addEventListener('click', function() {
+            // 模拟下载过程
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 准备下载...';
             
-            // 默认显示第一个州
-            showStateInfo('johor');
-            document.getElementById('johor').classList.add('active');
-            document.querySelector('.state-card[data-state="johor"]').classList.add('active');
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check"></i> 下载完成！';
+                this.style.background = 'linear-gradient(to right, #4CAF50, #2E7D32)';
+                
+                // 恢复原状
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-download"></i> 立即下载工具 (v2.1.5)';
+                    this.style.background = 'linear-gradient(to right, var(--android-green), var(--wechat-green))';
+                }, 2000);
+            }, 1500);
         });
-
-        function showStateInfo(stateId) {
-            const state = statesData[stateId];
-            if (state) {
-                document.getElementById('state-name').textContent = state.name;
-                document.getElementById('state-capital').textContent = state.capital;
-                document.getElementById('state-population').textContent = state.population;
-                document.getElementById('state-area').textContent = state.area;
-                document.getElementById('state-status').textContent = state.status;
-                document.getElementById('state-established').textContent = state.established;
-            }
-        }
-
-        function generateStateCards() {
-            const grid = document.querySelector('#states-grid-container');
-            
-            Object.entries(statesData).forEach(([id, state]) => {
-                const card = document.createElement('div');
-                card.className = 'state-card';
-                card.setAttribute('data-state', id);
-                card.innerHTML = `
-                    <div style="font-weight: bold; color: #2c3e50;">${state.name}</div>
-                    <div style="font-size: 0.8em; color: #7f8c8d; margin-top: 5px;">${state.capital}</div>
-                `;
-                card.addEventListener('click', function() {
-                    showStateInfo(id);
-                    // 高亮对应的SVG路径
-                    const statePaths = document.querySelectorAll('.state-path');
-                    statePaths.forEach(p => p.classList.remove('active'));
-                    document.getElementById(id).classList.add('active');
-                    
-                    // 高亮卡片
-                    const cards = document.querySelectorAll('.state-card');
-                    cards.forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                });
-                grid.appendChild(card);
-            });
-        }
     </script>
 </body>
-</html>
+    </html>
