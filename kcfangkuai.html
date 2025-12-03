@@ -95,40 +95,85 @@
             color: var(--secondary);
         }
         
-        /* 头像上传区域 */
-        .avatar-section {
-            text-align: center;
+        /* 国旗和国徽上传区域 */
+        .symbol-section {
             margin-bottom: 30px;
+        }
+        
+        .symbols-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .symbol-upload-box {
+            text-align: center;
             padding: 20px;
             border: 2px dashed #bdc3c7;
             border-radius: var(--border-radius);
             transition: all 0.3s ease;
             cursor: pointer;
+            background-color: #f9f9f9;
         }
         
-        .avatar-section:hover {
+        .symbol-upload-box:hover {
             border-color: var(--secondary);
-            background-color: #f8f9fa;
+            background-color: #f0f7ff;
         }
         
-        .avatar-preview {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
+        .symbol-upload-box h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .preview-container {
+            position: relative;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .flag-preview {
+            width: 180px;
+            height: 120px;
             object-fit: cover;
             border: 5px solid var(--light);
             box-shadow: 0 5px 15px var(--shadow);
-            margin-bottom: 15px;
             background-color: #f1f2f6;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #7f8c8d;
-            margin: 0 auto 20px;
         }
         
-        .avatar-preview img {
+        .flag-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .emblem-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--light);
+            box-shadow: 0 5px 15px var(--shadow);
+            background-color: #f1f2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #7f8c8d;
+        }
+        
+        .emblem-preview img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
@@ -139,7 +184,7 @@
             background-color: var(--secondary);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
@@ -147,6 +192,7 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .upload-btn:hover {
@@ -154,8 +200,60 @@
             transform: scale(1.05);
         }
         
-        #avatarInput {
+        .file-input {
             display: none;
+        }
+        
+        /* 国旗比例选择 */
+        .flag-ratio-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .ratio-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .ratio-option:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .ratio-option.selected {
+            border-color: var(--secondary);
+            background-color: #e8f4ff;
+        }
+        
+        .ratio-preview {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #ddd;
+            background-color: #f1f1f1;
+        }
+        
+        .ratio-preview.square {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .ratio-preview.standard {
+            width: 60px;
+            height: 40px;
+        }
+        
+        .ratio-preview.rect {
+            width: 70px;
+            height: 40px;
         }
         
         /* 表单输入样式 */
@@ -323,16 +421,28 @@
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            gap: 15px;
         }
         
-        .country-avatar {
-            width: 60px;
-            height: 60px;
+        .country-flag-small {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .country-emblem-small {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 15px;
-            border: 3px solid white;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .country-info {
+            flex: 1;
         }
         
         .country-name {
@@ -395,37 +505,13 @@
                 font-size: 2.2rem;
             }
             
+            .symbols-container {
+                flex-direction: column;
+            }
+            
             .button-group {
                 flex-direction: column;
             }
-        }
-        
-        /* 国旗颜色选择器 */
-        .flag-colors {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .color-option {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .color-option:hover {
-            transform: scale(1.1);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-        }
-        
-        .color-option.selected {
-            transform: scale(1.1);
-            box-shadow: 0 0 0 3px white, 0 0 0 6px var(--secondary);
         }
         
         /* 通知消息 */
@@ -457,28 +543,13 @@
         .notification.error {
             background-color: var(--accent);
         }
-        
-        /* 加载动画 */
-        .loader {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🏛️ 虚拟国家创建器</h1>
-            <p>创建您梦想中的国家，自定义国旗、主义、宪法和一切！</p>
+            <p>创建您梦想中的国家，自定义国旗、国徽、主义、宪法和一切！</p>
         </header>
         
         <div class="app-wrapper">
@@ -489,17 +560,57 @@
                     <span>创建新国家</span>
                 </div>
                 
-                <!-- 头像上传 -->
-                <div class="avatar-section" id="avatarUpload">
-                    <div class="avatar-preview" id="avatarPreview">
-                        <i class="fas fa-flag"></i>
+                <!-- 国旗和国徽上传区域 -->
+                <div class="symbol-section">
+                    <div class="symbols-container">
+                        <!-- 国旗上传 -->
+                        <div class="symbol-upload-box" id="flagUploadBox">
+                            <h3><i class="fas fa-flag"></i> 国家国旗</h3>
+                            <div class="preview-container">
+                                <div class="flag-preview" id="flagPreview">
+                                    <i class="fas fa-flag"></i>
+                                </div>
+                            </div>
+                            <button class="upload-btn" id="flagUploadBtn">
+                                <i class="fas fa-image"></i>
+                                选择国旗
+                            </button>
+                            <input type="file" id="flagInput" class="file-input" accept="image/*">
+                            <p class="form-hint">支持 JPG、PNG 格式，建议尺寸比例适当</p>
+                            
+                            <!-- 国旗比例选择 -->
+                            <div class="flag-ratio-selector">
+                                <div class="ratio-option" data-ratio="1:1">
+                                    <div class="ratio-preview square"></div>
+                                    <span>正方形</span>
+                                </div>
+                                <div class="ratio-option selected" data-ratio="3:2">
+                                    <div class="ratio-preview standard"></div>
+                                    <span>标准(3:2)</span>
+                                </div>
+                                <div class="ratio-option" data-ratio="2:1">
+                                    <div class="ratio-preview rect"></div>
+                                    <span>长方形(2:1)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 国徽上传 -->
+                        <div class="symbol-upload-box" id="emblemUploadBox">
+                            <h3><i class="fas fa-shield-alt"></i> 国家国徽</h3>
+                            <div class="preview-container">
+                                <div class="emblem-preview" id="emblemPreview">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                            </div>
+                            <button class="upload-btn" id="emblemUploadBtn">
+                                <i class="fas fa-camera"></i>
+                                选择国徽
+                            </button>
+                            <input type="file" id="emblemInput" class="file-input" accept="image/*">
+                            <p class="form-hint">支持 JPG、PNG 格式，建议圆形或盾形设计</p>
+                        </div>
                     </div>
-                    <button class="upload-btn" id="uploadTrigger">
-                        <i class="fas fa-camera"></i>
-                        选择国家头像
-                    </button>
-                    <input type="file" id="avatarInput" accept="image/*">
-                    <p class="form-hint">支持 JPG、PNG 格式，建议尺寸 300x300 像素</p>
                 </div>
                 
                 <!-- 国家名称 -->
@@ -518,38 +629,20 @@
                         <i class="fas fa-brain"></i>
                         国家主义
                     </label>
-                    <input type="text" id="ideologyInput" class="form-control" placeholder="例如：和平主义、科技至上、生态优先">
+                    <input type="text" id="ideologyInput" class="form-control" placeholder="例如：社会主义、共产主义、资本主义、帝国主义" maxlength="50">
                     <span class="form-hint">输入或选择以下主义标签</span>
                     
                     <div class="ideology-tags">
-                        <span class="tag" data-ideology="和平主义">和平主义</span>
+                        <span class="tag" data-ideology="社会主义">社会主义</span>
+                        <span class="tag" data-ideology="共产主义">共产主义</span>
+                        <span class="tag" data-ideology="资本主义">资本主义</span>
+                        <span class="tag" data-ideology="帝国主义">帝国主义</span>
+                        <span class="tag" data-ideology="封建主义">封建主义</span>
+                        <span class="tag" data-ideology="民主主义">民主主义</span>
+                        <span class="tag" data-ideology="军国主义">军国主义</span>
                         <span class="tag" data-ideology="科技至上">科技至上</span>
                         <span class="tag" data-ideology="生态优先">生态优先</span>
-                        <span class="tag" data-ideology="自由市场">自由市场</span>
-                        <span class="tag" data-ideology="集体主义">集体主义</span>
-                        <span class="tag" data-ideology="文化多元">文化多元</span>
-                        <span class="tag" data-ideology="军事强国">军事强国</span>
-                        <span class="tag" data-ideology="艺术至上">艺术至上</span>
                     </div>
-                </div>
-                
-                <!-- 国旗主色 -->
-                <div class="form-group">
-                    <label>
-                        <i class="fas fa-palette"></i>
-                        国旗主色
-                    </label>
-                    <div class="flag-colors">
-                        <div class="color-option" style="background-color: #C70039;" data-color="#C70039"></div>
-                        <div class="color-option" style="background-color: #2E86C1;" data-color="#2E86C1"></div>
-                        <div class="color-option" style="background-color: #28B463;" data-color="#28B463"></div>
-                        <div class="color-option" style="background-color: #F1C40F;" data-color="#F1C40F"></div>
-                        <div class="color-option" style="background-color: #6C3483;" data-color="#6C3483"></div>
-                        <div class="color-option" style="background-color: #1C2833;" data-color="#1C2833"></div>
-                        <div class="color-option" style="background-color: #F39C12;" data-color="#F39C12"></div>
-                        <div class="color-option" style="background-color: #E74C3C;" data-color="#E74C3C"></div>
-                    </div>
-                    <span class="form-hint">选择您国旗的主色调</span>
                 </div>
                 
                 <!-- 国家介绍 -->
@@ -558,8 +651,8 @@
                         <i class="fas fa-book-open"></i>
                         国家介绍
                     </label>
-                    <textarea id="countryDescription" class="form-control" placeholder="描述您的国家理念、制度、文化特色、历史背景等..." maxlength="500"></textarea>
-                    <span class="form-hint">最多500个字符，当前已输入 <span id="charCount">0</span> 个字符</span>
+                    <textarea id="countryDescription" class="form-control" placeholder="描述您的国家理念、制度、文化特色、历史背景等..." maxlength="800"></textarea>
+                    <span class="form-hint">最多800个字符，当前已输入 <span id="charCount">0</span> 个字符</span>
                 </div>
                 
                 <!-- 创建按钮 -->
@@ -615,9 +708,12 @@
     
     <script>
         // DOM元素
-        const avatarInput = document.getElementById('avatarInput');
-        const avatarPreview = document.getElementById('avatarPreview');
-        const uploadTrigger = document.getElementById('uploadTrigger');
+        const flagInput = document.getElementById('flagInput');
+        const emblemInput = document.getElementById('emblemInput');
+        const flagPreview = document.getElementById('flagPreview');
+        const emblemPreview = document.getElementById('emblemPreview');
+        const flagUploadBtn = document.getElementById('flagUploadBtn');
+        const emblemUploadBtn = document.getElementById('emblemUploadBtn');
         const countryNameInput = document.getElementById('countryName');
         const ideologyInput = document.getElementById('ideologyInput');
         const countryDescriptionInput = document.getElementById('countryDescription');
@@ -630,11 +726,13 @@
         const countriesCount = document.getElementById('countriesCount');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notificationText');
+        const ratioOptions = document.querySelectorAll('.ratio-option');
         
         // 国家数据存储
         let countries = JSON.parse(localStorage.getItem('virtualCountries')) || [];
-        let selectedColor = '#2E86C1'; // 默认国旗颜色
-        let selectedAvatar = null;
+        let selectedFlag = null;
+        let selectedEmblem = null;
+        let flagRatio = '3:2'; // 默认国旗比例
         
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -646,16 +744,32 @@
             
             // 更新字符计数
             updateCharCount();
-            
-            // 默认选择第一个颜色
-            document.querySelector('.color-option[data-color="#2E86C1"]').classList.add('selected');
         });
         
         // 初始化所有事件监听器
         function initEventListeners() {
-            // 头像上传
-            uploadTrigger.addEventListener('click', () => avatarInput.click());
-            avatarInput.addEventListener('change', handleAvatarUpload);
+            // 国旗上传
+            flagUploadBtn.addEventListener('click', () => flagInput.click());
+            flagInput.addEventListener('change', (e) => handleImageUpload(e, 'flag'));
+            
+            // 国徽上传
+            emblemUploadBtn.addEventListener('click', () => emblemInput.click());
+            emblemInput.addEventListener('change', (e) => handleImageUpload(e, 'emblem'));
+            
+            // 国旗比例选择
+            ratioOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // 高亮选中的比例
+                    ratioOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    flagRatio = option.getAttribute('data-ratio');
+                    
+                    // 如果有国旗图片，调整预览比例
+                    if (selectedFlag) {
+                        updateFlagPreviewSize();
+                    }
+                });
+            });
             
             // 主义标签点击
             document.querySelectorAll('.tag').forEach(tag => {
@@ -664,16 +778,6 @@
                     // 高亮选中的标签
                     document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
                     tag.classList.add('active');
-                });
-            });
-            
-            // 颜色选择
-            document.querySelectorAll('.color-option').forEach(colorOption => {
-                colorOption.addEventListener('click', () => {
-                    selectedColor = colorOption.getAttribute('data-color');
-                    // 高亮选中的颜色
-                    document.querySelectorAll('.color-option').forEach(co => co.classList.remove('selected'));
-                    colorOption.classList.add('selected');
                 });
             });
             
@@ -693,8 +797,8 @@
             exportDataBtn.addEventListener('click', exportCountriesData);
         }
         
-        // 处理头像上传
-        function handleAvatarUpload(event) {
+        // 处理图片上传
+        function handleImageUpload(event, type) {
             const file = event.target.files[0];
             if (!file) return;
             
@@ -712,10 +816,45 @@
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                selectedAvatar = e.target.result;
-                avatarPreview.innerHTML = `<img src="${selectedAvatar}" alt="国家头像">`;
+                if (type === 'flag') {
+                    selectedFlag = e.target.result;
+                    flagPreview.innerHTML = `<img src="${selectedFlag}" alt="国家国旗">`;
+                    updateFlagPreviewSize();
+                } else if (type === 'emblem') {
+                    selectedEmblem = e.target.result;
+                    emblemPreview.innerHTML = `<img src="${selectedEmblem}" alt="国家国徽">`;
+                }
             };
             reader.readAsDataURL(file);
+        }
+        
+        // 更新国旗预览尺寸
+        function updateFlagPreviewSize() {
+            // 根据选择的国旗比例调整预览尺寸
+            const flagImg = flagPreview.querySelector('img');
+            if (!flagImg) return;
+            
+            // 设置不同的宽度高度比
+            let width, height;
+            
+            switch(flagRatio) {
+                case '1:1':
+                    width = 140; // 正方形
+                    height = 140;
+                    break;
+                case '2:1':
+                    width = 160; // 长方形
+                    height = 80;
+                    break;
+                case '3:2':
+                default:
+                    width = 150; // 标准
+                    height = 100;
+                    break;
+            }
+            
+            flagPreview.style.width = width + 'px';
+            flagPreview.style.height = height + 'px';
         }
         
         // 更新字符计数
@@ -724,9 +863,9 @@
             charCountSpan.textContent = count;
             
             // 根据字符数改变颜色
-            if (count > 450) {
+            if (count > 700) {
                 charCountSpan.style.color = '#e74c3c';
-            } else if (count > 300) {
+            } else if (count > 500) {
                 charCountSpan.style.color = '#f39c12';
             } else {
                 charCountSpan.style.color = '#7f8c8d';
@@ -758,17 +897,29 @@
                 return;
             }
             
+            if (!selectedFlag) {
+                showNotification('请上传国家国旗', 'error');
+                return;
+            }
+            
+            if (!selectedEmblem) {
+                showNotification('请上传国家国徽', 'error');
+                return;
+            }
+            
             // 创建国家对象
             const country = {
                 id: Date.now().toString(),
                 name: name,
                 ideology: ideology,
                 description: description,
-                color: selectedColor,
-                avatar: selectedAvatar || '',
+                flagRatio: flagRatio,
+                flag: selectedFlag || '',
+                emblem: selectedEmblem || '',
                 created: new Date().toLocaleString('zh-CN'),
-                population: Math.floor(Math.random() * 1000000) + 10000,
-                area: (Math.random() * 1000).toFixed(1) + '万平方公里'
+                population: Math.floor(Math.random() * 10000000) + 1000000,
+                area: (Math.random() * 2000 + 100).toFixed(1) + '万平方公里',
+                gdp: (Math.random() * 5000 + 1000).toFixed(1) + '亿美元'
             };
             
             // 添加到国家列表
@@ -814,24 +965,45 @@
             countries.forEach(country => {
                 const countryCard = document.createElement('div');
                 countryCard.className = 'country-card';
+                
+                // 根据国旗比例调整显示尺寸
+                let flagWidth = 80;
+                let flagHeight = 50;
+                
+                if (country.flagRatio === '1:1') {
+                    flagWidth = 60;
+                    flagHeight = 60;
+                } else if (country.flagRatio === '2:1') {
+                    flagWidth = 85;
+                    flagHeight = 42;
+                }
+                
                 countryCard.innerHTML = `
                     <div class="country-header">
-                        <div class="country-avatar" style="border-color: ${country.color};">
-                            ${country.avatar ? 
-                                `<img src="${country.avatar}" alt="${country.name}">` : 
-                                `<i class="fas fa-flag" style="color: ${country.color}; font-size: 1.5rem;"></i>`
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            ${country.flag ? 
+                                `<img class="country-flag-small" src="${country.flag}" alt="${country.name}国旗" style="width: ${flagWidth}px; height: ${flagHeight}px;">` : 
+                                `<div class="country-flag-small" style="display: flex; align-items: center; justify-content: center; background-color: #f1f2f6; width: ${flagWidth}px; height: ${flagHeight}px;">
+                                    <i class="fas fa-flag" style="color: #7f8c8d;"></i>
+                                </div>`
+                            }
+                            ${country.emblem ? 
+                                `<img class="country-emblem-small" src="${country.emblem}" alt="${country.name}国徽">` : 
+                                `<div class="country-emblem-small" style="display: flex; align-items: center; justify-content: center; background-color: #f1f2f6;">
+                                    <i class="fas fa-shield-alt" style="color: #7f8c8d;"></i>
+                                </div>`
                             }
                         </div>
-                        <div>
+                        <div class="country-info">
                             <div class="country-name">${country.name}</div>
-                            <div class="country-ideology" style="background-color: ${country.color};">${country.ideology}</div>
+                            <div class="country-ideology">${country.ideology}</div>
                         </div>
                     </div>
                     <div class="country-description">${country.description}</div>
                     <div class="country-meta">
-                        <span><i class="fas fa-users"></i> 人口: ${country.population.toLocaleString()}</span>
+                        <span><i class="fas fa-users"></i> 人口: ${parseInt(country.population).toLocaleString()}</span>
                         <span><i class="fas fa-mountain"></i> 面积: ${country.area}</span>
-                        <span><i class="fas fa-calendar-alt"></i> ${country.created}</span>
+                        <span><i class="fas fa-chart-line"></i> GDP: ${country.gdp}</span>
                     </div>
                 `;
                 
@@ -849,22 +1021,29 @@
             countryNameInput.value = '';
             ideologyInput.value = '';
             countryDescriptionInput.value = '';
-            selectedAvatar = null;
-            avatarPreview.innerHTML = '<i class="fas fa-flag"></i>';
+            selectedFlag = null;
+            selectedEmblem = null;
+            flagRatio = '3:2';
+            
+            // 重置预览
+            flagPreview.innerHTML = '<i class="fas fa-flag"></i>';
+            emblemPreview.innerHTML = '<i class="fas fa-shield-alt"></i>';
+            flagPreview.style.width = '180px';
+            flagPreview.style.height = '120px';
             
             // 重置主义标签高亮
             document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('active'));
             
-            // 重置颜色选择
-            selectedColor = '#2E86C1';
-            document.querySelectorAll('.color-option').forEach(co => co.classList.remove('selected'));
-            document.querySelector('.color-option[data-color="#2E86C1"]').classList.add('selected');
+            // 重置比例选择
+            ratioOptions.forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.ratio-option[data-ratio="3:2"]').classList.add('selected');
             
             // 重置字符计数
             updateCharCount();
             
             // 重置文件输入
-            avatarInput.value = '';
+            flagInput.value = '';
+            emblemInput.value = '';
             
             showNotification('表单已重置', 'success');
         }
@@ -927,24 +1106,28 @@
                 {
                     id: "1",
                     name: "星辰共和国",
-                    ideology: "科技至上",
-                    description: "一个以科技创新为核心驱动力的未来国家，致力于人工智能、太空探索和可持续发展。公民享有高度数字化生活，国家资源优先投入科研和教育。",
-                    color: "#2E86C1",
-                    avatar: "",
+                    ideology: "社会主义",
+                    description: "一个以社会主义为核心的国家，强调社会公平和全民福利。国家主导经济发展，同时鼓励科技创新和国际合作。",
+                    flagRatio: "3:2",
+                    flag: "",
+                    emblem: "",
                     created: new Date().toLocaleString('zh-CN'),
-                    population: 1250000,
-                    area: "85.3万平方公里"
+                    population: 14200000,
+                    area: "356.7万平方公里",
+                    gdp: "2156.4亿美元"
                 },
                 {
                     id: "2",
-                    name: "翡翠生态联邦",
-                    ideology: "生态优先",
-                    description: "完全与自然和谐共生的国家，全国99%的能源来自可再生能源。法律规定每位公民每年必须参与环保活动，城市与森林完美融合。",
-                    color: "#28B463",
-                    avatar: "",
+                    name: "自由联邦",
+                    ideology: "资本主义",
+                    description: "实行自由市场经济，强调个人自由和私有财产权。国家提供完善的法律保障和商业环境，鼓励企业家精神。",
+                    flagRatio: "2:1",
+                    flag: "",
+                    emblem: "",
                     created: new Date(Date.now() - 86400000).toLocaleString('zh-CN'),
-                    population: 890000,
-                    area: "120.7万平方公里"
+                    population: 9800000,
+                    area: "218.9万平方公里",
+                    gdp: "3452.1亿美元"
                 }
             ];
             saveCountries();
