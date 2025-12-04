@@ -34,7 +34,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
         
@@ -72,7 +72,7 @@
             box-shadow: 0 10px 30px var(--shadow);
             padding: 30px;
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             transition: transform 0.3s ease;
         }
         
@@ -258,7 +258,7 @@
         
         /* 表单输入样式 */
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .form-group label {
@@ -273,7 +273,7 @@
         
         .form-control {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: var(--border-radius);
             font-size: 1rem;
@@ -287,7 +287,7 @@
         }
         
         textarea.form-control {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
             font-family: inherit;
         }
@@ -303,16 +303,16 @@
         .ideology-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-top: 10px;
         }
         
         .tag {
             background-color: #e0f7fa;
             color: #006064;
-            padding: 6px 15px;
+            padding: 5px 12px;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid #b2ebf2;
@@ -327,6 +327,57 @@
             background-color: var(--secondary);
             color: white;
             border-color: var(--secondary);
+        }
+        
+        /* 详细数据区域 */
+        .details-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            cursor: pointer;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .details-toggle:hover {
+            background-color: #e9ecef;
+        }
+        
+        .details-toggle h3 {
+            margin: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .details-content {
+            display: none;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border: 2px dashed #dee2e6;
+        }
+        
+        .details-content.show {
+            display: block;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+            min-width: 200px;
         }
         
         /* 按钮样式 */
@@ -377,7 +428,7 @@
             box-shadow: 0 10px 30px var(--shadow);
             padding: 30px;
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             max-height: 800px;
             overflow-y: auto;
         }
@@ -410,11 +461,17 @@
             margin-bottom: 20px;
             border-left: 5px solid var(--secondary);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .country-card:hover {
             transform: translateX(5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .country-card.expanded {
+            background-color: white;
+            border-left: 5px solid var(--accent);
         }
         
         .country-header {
@@ -471,11 +528,50 @@
         .country-meta {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px dashed #ddd;
             font-size: 0.85rem;
             color: #7f8c8d;
+            gap: 10px;
+        }
+        
+        .country-details {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .country-details.show {
+            display: block;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            background-color: #f1f8ff;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            margin-top: 5px;
+            color: #555;
+            font-size: 0.95rem;
         }
         
         .empty-state {
@@ -510,6 +606,10 @@
             }
             
             .button-group {
+                flex-direction: column;
+            }
+            
+            .form-row {
                 flex-direction: column;
             }
         }
@@ -549,7 +649,7 @@
     <div class="container">
         <header>
             <h1>🏛️ 虚拟国家创建器</h1>
-            <p>创建您梦想中的国家，自定义国旗、国徽、主义、宪法和一切！</p>
+            <p>创建您梦想中的国家，自定义所有国家数据！</p>
         </header>
         
         <div class="app-wrapper">
@@ -637,11 +737,11 @@
                         <span class="tag" data-ideology="共产主义">共产主义</span>
                         <span class="tag" data-ideology="资本主义">资本主义</span>
                         <span class="tag" data-ideology="帝国主义">帝国主义</span>
-                        <span class="tag" data-ideology="封建主义">封建主义</span>
                         <span class="tag" data-ideology="民主主义">民主主义</span>
                         <span class="tag" data-ideology="军国主义">军国主义</span>
                         <span class="tag" data-ideology="科技至上">科技至上</span>
                         <span class="tag" data-ideology="生态优先">生态优先</span>
+                        <span class="tag" data-ideology="封建主义">封建主义</span>
                     </div>
                 </div>
                 
@@ -653,6 +753,123 @@
                     </label>
                     <textarea id="countryDescription" class="form-control" placeholder="描述您的国家理念、制度、文化特色、历史背景等..." maxlength="800"></textarea>
                     <span class="form-hint">最多800个字符，当前已输入 <span id="charCount">0</span> 个字符</span>
+                </div>
+                
+                <!-- 详细数据区域 -->
+                <div class="details-toggle" id="detailsToggle">
+                    <h3><i class="fas fa-info-circle"></i> 国家详细数据（点击展开）</h3>
+                    <i class="fas fa-chevron-down" id="detailsToggleIcon"></i>
+                </div>
+                
+                <div class="details-content" id="detailsContent">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="countryPopulation">
+                                <i class="fas fa-users"></i>
+                                人口数量
+                            </label>
+                            <input type="text" id="countryPopulation" class="form-control" placeholder="例如：1,420,000,000">
+                        </div>
+                        <div class="form-col">
+                            <label for="countryArea">
+                                <i class="fas fa-mountain"></i>
+                                国土面积
+                            </label>
+                            <input type="text" id="countryArea" class="form-control" placeholder="例如：9,600,000 平方公里">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="countryGDP">
+                                <i class="fas fa-chart-line"></i>
+                                国内生产总值
+                            </label>
+                            <input type="text" id="countryGDP" class="form-control" placeholder="例如：18.8万亿美元">
+                        </div>
+                        <div class="form-col">
+                            <label for="countryCapital">
+                                <i class="fas fa-city"></i>
+                                首都
+                            </label>
+                            <input type="text" id="countryCapital" class="form-control" placeholder="例如：北京市">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="countryGovernment">
+                                <i class="fas fa-landmark"></i>
+                                政体形式
+                            </label>
+                            <input type="text" id="countryGovernment" class="form-control" placeholder="例如：人民代表大会制度">
+                        </div>
+                        <div class="form-col">
+                            <label for="countryLeader">
+                                <i class="fas fa-user-tie"></i>
+                                国家元首
+                            </label>
+                            <input type="text" id="countryLeader" class="form-control" placeholder="例如：习近平">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="countryLanguage">
+                                <i class="fas fa-language"></i>
+                                官方语言
+                            </label>
+                            <input type="text" id="countryLanguage" class="form-control" placeholder="例如：汉语（普通话）">
+                        </div>
+                        <div class="form-col">
+                            <label for="countryCurrency">
+                                <i class="fas fa-money-bill-wave"></i>
+                                货币单位
+                            </label>
+                            <input type="text" id="countryCurrency" class="form-control" placeholder="例如：人民币（元）">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="countryTimezone">
+                                <i class="fas fa-clock"></i>
+                                时区
+                            </label>
+                            <input type="text" id="countryTimezone" class="form-control" placeholder="例如：UTC+8">
+                        </div>
+                        <div class="form-col">
+                            <label for="countryCallingCode">
+                                <i class="fas fa-phone"></i>
+                                电话区号
+                            </label>
+                            <input type="text" id="countryCallingCode" class="form-control" placeholder="例如：+86">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="countryEthnicGroups">
+                            <i class="fas fa-people-group"></i>
+                            民族构成
+                        </label>
+                        <textarea id="countryEthnicGroups" class="form-control" placeholder="例如：汉族 91.11%，壮族 1.39%，维吾尔族 0.84%，回族 0.81%，苗族 0.79%，满族 0.74%，彝族 0.70%，土家族 0.68%，藏族 0.50%，蒙古族 0.45%，其他 1.99%" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="countryReligion">
+                            <i class="fas fa-place-of-worship"></i>
+                            宗教信仰
+                        </label>
+                        <textarea id="countryReligion" class="form-control" placeholder="例如：无宗教 73.56%，佛教 15.87%，基督教 2.53%，道教 0.85%，中国民间信仰 0.81%，伊斯兰教 0.45%" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="countryAnthem">
+                            <i class="fas fa-music"></i>
+                            国歌名称
+                        </label>
+                        <input type="text" id="countryAnthem" class="form-control" placeholder="例如：《义勇军进行曲》">
+                    </div>
                 </div>
                 
                 <!-- 创建按钮 -->
@@ -718,6 +935,9 @@
         const ideologyInput = document.getElementById('ideologyInput');
         const countryDescriptionInput = document.getElementById('countryDescription');
         const charCountSpan = document.getElementById('charCount');
+        const detailsToggle = document.getElementById('detailsToggle');
+        const detailsContent = document.getElementById('detailsContent');
+        const detailsToggleIcon = document.getElementById('detailsToggleIcon');
         const createCountryBtn = document.getElementById('createCountryBtn');
         const resetFormBtn = document.getElementById('resetFormBtn');
         const clearAllBtn = document.getElementById('clearAllBtn');
@@ -727,6 +947,21 @@
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notificationText');
         const ratioOptions = document.querySelectorAll('.ratio-option');
+        
+        // 详细数据输入字段
+        const countryPopulation = document.getElementById('countryPopulation');
+        const countryArea = document.getElementById('countryArea');
+        const countryGDP = document.getElementById('countryGDP');
+        const countryCapital = document.getElementById('countryCapital');
+        const countryGovernment = document.getElementById('countryGovernment');
+        const countryLeader = document.getElementById('countryLeader');
+        const countryLanguage = document.getElementById('countryLanguage');
+        const countryCurrency = document.getElementById('countryCurrency');
+        const countryTimezone = document.getElementById('countryTimezone');
+        const countryCallingCode = document.getElementById('countryCallingCode');
+        const countryEthnicGroups = document.getElementById('countryEthnicGroups');
+        const countryReligion = document.getElementById('countryReligion');
+        const countryAnthem = document.getElementById('countryAnthem');
         
         // 国家数据存储
         let countries = JSON.parse(localStorage.getItem('virtualCountries')) || [];
@@ -783,6 +1018,9 @@
             
             // 字符计数
             countryDescriptionInput.addEventListener('input', updateCharCount);
+            
+            // 详细数据区域切换
+            detailsToggle.addEventListener('click', toggleDetails);
             
             // 创建国家按钮
             createCountryBtn.addEventListener('click', createCountry);
@@ -872,6 +1110,19 @@
             }
         }
         
+        // 切换详细数据区域显示
+        function toggleDetails() {
+            detailsContent.classList.toggle('show');
+            
+            if (detailsContent.classList.contains('show')) {
+                detailsToggleIcon.className = 'fas fa-chevron-up';
+                detailsToggle.querySelector('h3').innerHTML = '<i class="fas fa-info-circle"></i> 国家详细数据（点击收起）';
+            } else {
+                detailsToggleIcon.className = 'fas fa-chevron-down';
+                detailsToggle.querySelector('h3').innerHTML = '<i class="fas fa-info-circle"></i> 国家详细数据（点击展开）';
+            }
+        }
+        
         // 创建国家
         function createCountry() {
             const name = countryNameInput.value.trim();
@@ -917,9 +1168,21 @@
                 flag: selectedFlag || '',
                 emblem: selectedEmblem || '',
                 created: new Date().toLocaleString('zh-CN'),
-                population: Math.floor(Math.random() * 10000000) + 1000000,
-                area: (Math.random() * 2000 + 100).toFixed(1) + '万平方公里',
-                gdp: (Math.random() * 5000 + 1000).toFixed(1) + '亿美元'
+                
+                // 详细数据
+                population: countryPopulation.value.trim() || '未设置',
+                area: countryArea.value.trim() || '未设置',
+                gdp: countryGDP.value.trim() || '未设置',
+                capital: countryCapital.value.trim() || '未设置',
+                government: countryGovernment.value.trim() || '未设置',
+                leader: countryLeader.value.trim() || '未设置',
+                language: countryLanguage.value.trim() || '未设置',
+                currency: countryCurrency.value.trim() || '未设置',
+                timezone: countryTimezone.value.trim() || '未设置',
+                callingCode: countryCallingCode.value.trim() || '未设置',
+                ethnicGroups: countryEthnicGroups.value.trim() || '未设置',
+                religion: countryReligion.value.trim() || '未设置',
+                anthem: countryAnthem.value.trim() || '未设置'
             };
             
             // 添加到国家列表
@@ -965,6 +1228,7 @@
             countries.forEach(country => {
                 const countryCard = document.createElement('div');
                 countryCard.className = 'country-card';
+                countryCard.dataset.id = country.id;
                 
                 // 根据国旗比例调整显示尺寸
                 let flagWidth = 80;
@@ -1001,11 +1265,82 @@
                     </div>
                     <div class="country-description">${country.description}</div>
                     <div class="country-meta">
-                        <span><i class="fas fa-users"></i> 人口: ${parseInt(country.population).toLocaleString()}</span>
+                        <span><i class="fas fa-users"></i> 人口: ${country.population}</span>
                         <span><i class="fas fa-mountain"></i> 面积: ${country.area}</span>
                         <span><i class="fas fa-chart-line"></i> GDP: ${country.gdp}</span>
+                        <span><i class="fas fa-city"></i> 首都: ${country.capital}</span>
+                    </div>
+                    <div class="country-details" id="details-${country.id}">
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-landmark"></i> 政体形式</div>
+                                <div class="detail-value">${country.government}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-user-tie"></i> 国家元首</div>
+                                <div class="detail-value">${country.leader}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-language"></i> 官方语言</div>
+                                <div class="detail-value">${country.language}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-money-bill-wave"></i> 货币单位</div>
+                                <div class="detail-value">${country.currency}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-clock"></i> 时区</div>
+                                <div class="detail-value">${country.timezone}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-phone"></i> 电话区号</div>
+                                <div class="detail-value">${country.callingCode}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label"><i class="fas fa-music"></i> 国歌</div>
+                                <div class="detail-value">${country.anthem}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <div class="detail-label"><i class="fas fa-people-group"></i> 民族构成</div>
+                            <div class="detail-value" style="white-space: pre-line;">${country.ethnicGroups}</div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <div class="detail-label"><i class="fas fa-place-of-worship"></i> 宗教信仰</div>
+                            <div class="detail-value" style="white-space: pre-line;">${country.religion}</div>
+                        </div>
+                        <div style="margin-top: 15px; font-size: 0.85rem; color: #7f8c8d;">
+                            <i class="fas fa-calendar-alt"></i> 创建时间: ${country.created}
+                        </div>
                     </div>
                 `;
+                
+                // 添加点击事件展开详细信息
+                countryCard.addEventListener('click', function(e) {
+                    // 防止点击内部按钮时触发
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                        return;
+                    }
+                    
+                    const countryId = this.dataset.id;
+                    const detailsElement = document.getElementById(`details-${countryId}`);
+                    
+                    // 切换当前卡片的展开状态
+                    this.classList.toggle('expanded');
+                    detailsElement.classList.toggle('show');
+                    
+                    // 收起其他展开的卡片
+                    document.querySelectorAll('.country-card').forEach(card => {
+                        if (card !== this && card.classList.contains('expanded')) {
+                            card.classList.remove('expanded');
+                            const otherDetailsId = card.dataset.id;
+                            const otherDetailsElement = document.getElementById(`details-${otherDetailsId}`);
+                            if (otherDetailsElement) {
+                                otherDetailsElement.classList.remove('show');
+                            }
+                        }
+                    });
+                });
                 
                 countriesList.appendChild(countryCard);
             });
@@ -1018,12 +1353,28 @@
         
         // 重置表单
         function resetForm() {
+            // 重置基本表单
             countryNameInput.value = '';
             ideologyInput.value = '';
             countryDescriptionInput.value = '';
             selectedFlag = null;
             selectedEmblem = null;
             flagRatio = '3:2';
+            
+            // 重置详细数据
+            countryPopulation.value = '';
+            countryArea.value = '';
+            countryGDP.value = '';
+            countryCapital.value = '';
+            countryGovernment.value = '';
+            countryLeader.value = '';
+            countryLanguage.value = '';
+            countryCurrency.value = '';
+            countryTimezone.value = '';
+            countryCallingCode.value = '';
+            countryEthnicGroups.value = '';
+            countryReligion.value = '';
+            countryAnthem.value = '';
             
             // 重置预览
             flagPreview.innerHTML = '<i class="fas fa-flag"></i>';
@@ -1044,6 +1395,11 @@
             // 重置文件输入
             flagInput.value = '';
             emblemInput.value = '';
+            
+            // 收起详细数据区域
+            if (detailsContent.classList.contains('show')) {
+                toggleDetails();
+            }
             
             showNotification('表单已重置', 'success');
         }
@@ -1112,9 +1468,19 @@
                     flag: "",
                     emblem: "",
                     created: new Date().toLocaleString('zh-CN'),
-                    population: 14200000,
-                    area: "356.7万平方公里",
-                    gdp: "2156.4亿美元"
+                    population: "1,420,000,000",
+                    area: "9,600,000 平方公里",
+                    gdp: "18.8万亿美元",
+                    capital: "星辰市",
+                    government: "人民代表大会制度",
+                    leader: "李明",
+                    language: "汉语（普通话）",
+                    currency: "星辰元（CNY）",
+                    timezone: "UTC+8",
+                    callingCode: "+86",
+                    ethnicGroups: "星辰族 85%，汉族 10%，其他少数民族 5%",
+                    religion: "无宗教 70%，佛教 15%，道教 10%，其他 5%",
+                    anthem: "《星辰之歌》"
                 },
                 {
                     id: "2",
@@ -1125,9 +1491,19 @@
                     flag: "",
                     emblem: "",
                     created: new Date(Date.now() - 86400000).toLocaleString('zh-CN'),
-                    population: 9800000,
-                    area: "218.9万平方公里",
-                    gdp: "3452.1亿美元"
+                    population: "340,000,000",
+                    area: "9,830,000 平方公里",
+                    gdp: "25.5万亿美元",
+                    capital: "自由城",
+                    government: "联邦共和制",
+                    leader: "约翰·史密斯",
+                    language: "英语",
+                    currency: "自由元（USD）",
+                    timezone: "UTC-5 至 UTC-10",
+                    callingCode: "+1",
+                    ethnicGroups: "欧裔 60%，非裔 13%，亚裔 6%，原住民 1%，其他 20%",
+                    religion: "基督教 65%，无宗教 26%，其他 9%",
+                    anthem: "《自由之星》"
                 }
             ];
             saveCountries();
