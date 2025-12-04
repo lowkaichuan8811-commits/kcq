@@ -397,17 +397,19 @@
             min-width: 200px;
         }
         
-        /* 国家信息显示区域 */
-        .country-display {
+        /* 国家信息显示区域 - 类似短视频卡片 */
+        .country-card {
             margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            background-color: white;
             border-radius: var(--border-radius);
-            border: 2px solid #dee2e6;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
             display: none;
         }
         
-        .country-display.show {
+        .country-card.show {
             display: block;
             animation: fadeIn 0.5s ease;
         }
@@ -417,19 +419,71 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .country-display-header {
+        .country-card-header {
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-bottom: 2px solid var(--secondary);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .country-card-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .country-symbols-small {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .flag-small {
+            width: 100px;
+            height: 66px;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f1f2f6;
+        }
+        
+        .flag-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .emblem-small {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f1f2f6;
+        }
+        
+        .emblem-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
         
         .country-name-large {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--primary);
+            margin-bottom: 8px;
         }
         
         .country-ideology-badge {
@@ -442,11 +496,27 @@
             font-weight: 600;
         }
         
+        .country-card-content {
+            padding: 25px;
+        }
+        
+        .country-description-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: #555;
+            font-size: 1.05rem;
+        }
+        
+        /* 国家信息网格 - 类似信息卡片 */
         .country-info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 25px;
+            margin-top: 10px;
         }
         
         .info-card {
@@ -455,6 +525,11 @@
             border-radius: var(--border-radius);
             border-left: 4px solid var(--secondary);
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
         }
         
         .info-label {
@@ -623,6 +698,27 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .country-card-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .country-symbols-small {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .flag-small {
+                width: 120px;
+                height: 80px;
+            }
+            
+            .emblem-small {
+                width: 80px;
+                height: 80px;
+            }
         }
         
         /* 通知消息 */
@@ -657,6 +753,62 @@
         
         .notification.info {
             background-color: var(--secondary);
+        }
+        
+        /* 分享按钮样式 */
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            background-color: #f1f8ff;
+            border: 2px solid #e0f0ff;
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            background-color: #e0f0ff;
+            transform: translateY(-2px);
+        }
+        
+        /* 国家统计信息 */
+        .country-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
         }
     </style>
 </head>
@@ -943,12 +1095,24 @@
                         </div>
                     </div>
                     
-                    <!-- 国家信息显示区域 -->
-                    <div class="country-display" id="countryDisplay">
-                        <div class="country-display-header">
-                            <div>
-                                <div class="country-name-large" id="displayCountryName">未命名国家</div>
-                                <div class="country-ideology-badge" id="displayIdeology" style="margin-top: 10px;">未设置主义</div>
+                    <!-- 国家信息显示区域 - 类似短视频卡片 -->
+                    <div class="country-card" id="countryCard">
+                        <div class="country-card-header">
+                            <div class="country-card-title">
+                                <div class="country-symbols-small">
+                                    <div class="flag-small" id="displayFlagSmall">
+                                        <i class="fas fa-flag" id="displayFlagIcon"></i>
+                                        <img id="displayFlagImg" src="" alt="国旗">
+                                    </div>
+                                    <div class="emblem-small" id="displayEmblemSmall">
+                                        <i class="fas fa-shield-alt" id="displayEmblemIcon"></i>
+                                        <img id="displayEmblemImg" src="" alt="国徽">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="country-name-large" id="displayCountryName">未命名国家</div>
+                                    <div class="country-ideology-badge" id="displayIdeology">未设置主义</div>
+                                </div>
                             </div>
                             <button class="change-btn" id="editCountryBtn">
                                 <i class="fas fa-edit"></i>
@@ -956,12 +1120,51 @@
                             </button>
                         </div>
                         
-                        <div id="displayCountryDescription" style="color: #555; line-height: 1.6; font-size: 1.05rem;">
-                            暂无国家介绍
-                        </div>
-                        
-                        <div class="country-info-grid" id="countryInfoGrid">
-                            <!-- 国家信息将通过JavaScript动态生成 -->
+                        <div class="country-card-content">
+                            <div class="country-description-box" id="displayCountryDescription">
+                                暂无国家介绍
+                            </div>
+                            
+                            <!-- 国家统计信息 -->
+                            <div class="country-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="displayPopulation">0</div>
+                                    <div class="stat-label">人口</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="displayArea">0</div>
+                                    <div class="stat-label">面积(km²)</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="displayGDP">0</div>
+                                    <div class="stat-label">GDP</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="displayCapital">-</div>
+                                    <div class="stat-label">首都</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 国家详细信息网格 -->
+                            <div class="country-info-grid" id="countryInfoGrid">
+                                <!-- 国家信息将通过JavaScript动态生成 -->
+                            </div>
+                            
+                            <!-- 分享按钮 -->
+                            <div class="share-buttons">
+                                <button class="share-btn" id="shareCountryBtn">
+                                    <i class="fas fa-share-alt"></i>
+                                    分享我的国家
+                                </button>
+                                <button class="share-btn" id="exportCountryBtn">
+                                    <i class="fas fa-download"></i>
+                                    导出国家数据
+                                </button>
+                                <button class="share-btn" id="printCountryBtn">
+                                    <i class="fas fa-print"></i>
+                                    打印国家信息
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1005,7 +1208,7 @@
         const viewCountryBtn = document.getElementById('viewCountryBtn');
         const deleteCountryBtn = document.getElementById('deleteCountryBtn');
         const editCountryBtn = document.getElementById('editCountryBtn');
-        const countryDisplay = document.getElementById('countryDisplay');
+        const countryCard = document.getElementById('countryCard');
         
         // 表单元素
         const flagInput = document.getElementById('flagInput');
@@ -1038,11 +1241,30 @@
         const countryReligion = document.getElementById('countryReligion');
         const countryAnthem = document.getElementById('countryAnthem');
         
-        // 显示元素
+        // 显示元素 - 卡片风格
         const displayCountryName = document.getElementById('displayCountryName');
         const displayIdeology = document.getElementById('displayIdeology');
         const displayCountryDescription = document.getElementById('displayCountryDescription');
         const countryInfoGrid = document.getElementById('countryInfoGrid');
+        
+        // 国旗和国徽显示元素
+        const displayFlagSmall = document.getElementById('displayFlagSmall');
+        const displayFlagIcon = document.getElementById('displayFlagIcon');
+        const displayFlagImg = document.getElementById('displayFlagImg');
+        const displayEmblemSmall = document.getElementById('displayEmblemSmall');
+        const displayEmblemIcon = document.getElementById('displayEmblemIcon');
+        const displayEmblemImg = document.getElementById('displayEmblemImg');
+        
+        // 统计显示元素
+        const displayPopulation = document.getElementById('displayPopulation');
+        const displayArea = document.getElementById('displayArea');
+        const displayGDP = document.getElementById('displayGDP');
+        const displayCapital = document.getElementById('displayCapital');
+        
+        // 分享按钮
+        const shareCountryBtn = document.getElementById('shareCountryBtn');
+        const exportCountryBtn = document.getElementById('exportCountryBtn');
+        const printCountryBtn = document.getElementById('printCountryBtn');
         
         // 密码验证元素
         const passwordModal = document.getElementById('passwordModal');
@@ -1094,7 +1316,7 @@
             startCreateBtn.addEventListener('click', () => {
                 createState.classList.remove('show');
                 editState.style.display = 'block';
-                countryDisplay.classList.remove('show');
+                countryCard.classList.remove('show');
             });
             
             // 国旗上传
@@ -1140,7 +1362,7 @@
             saveCountryBtn.addEventListener('click', saveCountry);
             
             // 查看国家按钮
-            viewCountryBtn.addEventListener('click', showCountryDisplay);
+            viewCountryBtn.addEventListener('click', showCountryCard);
             
             // 删除国家按钮
             deleteCountryBtn.addEventListener('click', () => {
@@ -1153,6 +1375,11 @@
                 currentOperation = 'edit';
                 checkPassword();
             });
+            
+            // 分享按钮
+            shareCountryBtn.addEventListener('click', shareCountry);
+            exportCountryBtn.addEventListener('click', exportCountryData);
+            printCountryBtn.addEventListener('click', printCountryInfo);
             
             // 密码验证
             confirmPasswordBtn.addEventListener('click', verifyPassword);
@@ -1195,12 +1422,12 @@
             
             // 如果有国家数据，显示国家信息
             if (myCountry) {
-                showCountryDisplay();
+                showCountryCard();
                 countryTitle.textContent = myCountry.name;
             } else {
                 createState.classList.add('show');
                 editState.style.display = 'none';
-                countryDisplay.classList.remove('show');
+                countryCard.classList.remove('show');
             }
         }
         
@@ -1356,8 +1583,8 @@
         
         // 显示编辑表单
         function showEditForm() {
-            // 隐藏国家显示，显示编辑表单
-            countryDisplay.classList.remove('show');
+            // 隐藏国家卡片，显示编辑表单
+            countryCard.classList.remove('show');
             editState.style.display = 'block';
             
             // 如果有现有国家数据，填充表单
@@ -1476,73 +1703,68 @@
             // 显示成功消息
             showNotification(myCountry.id ? '国家信息已更新！' : '国家创建成功！', 'success');
             
-            // 显示国家信息
-            showCountryDisplay();
+            // 显示国家卡片
+            showCountryCard();
         }
         
-        // 显示国家信息
-        function showCountryDisplay() {
+        // 显示国家卡片 - 类似短视频卡片风格
+        function showCountryCard() {
             if (!myCountry) {
                 showNotification('尚未创建国家', 'error');
                 return;
             }
             
-            // 隐藏编辑表单，显示国家信息
+            // 隐藏编辑表单，显示国家卡片
             editState.style.display = 'none';
-            countryDisplay.classList.add('show');
+            countryCard.classList.add('show');
             
             // 更新显示内容
             displayCountryName.textContent = myCountry.name;
             displayIdeology.textContent = myCountry.ideology;
             displayCountryDescription.textContent = myCountry.description;
             
-            // 更新国旗和国徽显示
+            // 更新统计信息
+            displayPopulation.textContent = myCountry.population;
+            displayArea.textContent = myCountry.area;
+            displayGDP.textContent = myCountry.gdp;
+            displayCapital.textContent = myCountry.capital;
+            
+            // 更新国旗显示
             if (myCountry.flag) {
-                const flagImg = flagPreview.querySelector('img');
-                if (flagImg) {
-                    flagImg.src = myCountry.flag;
-                }
+                displayFlagIcon.style.display = 'none';
+                displayFlagImg.src = myCountry.flag;
+                displayFlagImg.style.display = 'block';
+            } else {
+                displayFlagIcon.style.display = 'block';
+                displayFlagImg.style.display = 'none';
             }
             
+            // 更新国徽显示
             if (myCountry.emblem) {
-                const emblemImg = emblemPreview.querySelector('img');
-                if (emblemImg) {
-                    emblemImg.src = myCountry.emblem;
-                }
+                displayEmblemIcon.style.display = 'none';
+                displayEmblemImg.src = myCountry.emblem;
+                displayEmblemImg.style.display = 'block';
+            } else {
+                displayEmblemIcon.style.display = 'block';
+                displayEmblemImg.style.display = 'none';
             }
             
             // 生成国家信息网格
             countryInfoGrid.innerHTML = `
                 <div class="info-card">
-                    <div class="info-label"><i class="fas fa-users"></i> 人口</div>
-                    <div class="info-value">${myCountry.population}</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-label"><i class="fas fa-mountain"></i> 面积</div>
-                    <div class="info-value">${myCountry.area}</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-label"><i class="fas fa-chart-line"></i> GDP</div>
-                    <div class="info-value">${myCountry.gdp}</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-label"><i class="fas fa-city"></i> 首都</div>
-                    <div class="info-value">${myCountry.capital}</div>
-                </div>
-                <div class="info-card">
-                    <div class="info-label"><i class="fas fa-landmark"></i> 政体</div>
+                    <div class="info-label"><i class="fas fa-landmark"></i> 政体形式</div>
                     <div class="info-value">${myCountry.government}</div>
                 </div>
                 <div class="info-card">
-                    <div class="info-label"><i class="fas fa-user-tie"></i> 元首</div>
+                    <div class="info-label"><i class="fas fa-user-tie"></i> 国家元首</div>
                     <div class="info-value">${myCountry.leader}</div>
                 </div>
                 <div class="info-card">
-                    <div class="info-label"><i class="fas fa-language"></i> 语言</div>
+                    <div class="info-label"><i class="fas fa-language"></i> 官方语言</div>
                     <div class="info-value">${myCountry.language}</div>
                 </div>
                 <div class="info-card">
-                    <div class="info-label"><i class="fas fa-money-bill-wave"></i> 货币</div>
+                    <div class="info-label"><i class="fas fa-money-bill-wave"></i> 货币单位</div>
                     <div class="info-value">${myCountry.currency}</div>
                 </div>
                 <div class="info-card">
@@ -1568,6 +1790,115 @@
             `;
         }
         
+        // 分享国家
+        function shareCountry() {
+            if (!myCountry) {
+                showNotification('没有国家数据可以分享', 'error');
+                return;
+            }
+            
+            // 创建分享内容
+            const shareText = `我的虚拟国家：${myCountry.name}\n主义：${myCountry.ideology}\n人口：${myCountry.population}\n面积：${myCountry.area}\nGDP：${myCountry.gdp}\n首都：${myCountry.capital}`;
+            
+            // 检查是否支持Web Share API
+            if (navigator.share) {
+                navigator.share({
+                    title: `我的虚拟国家：${myCountry.name}`,
+                    text: shareText,
+                    url: window.location.href
+                })
+                .then(() => showNotification('国家信息已分享！', 'success'))
+                .catch(error => {
+                    console.error('分享失败:', error);
+                    copyToClipboard(shareText);
+                });
+            } else {
+                // 如果不支持Web Share API，则复制到剪贴板
+                copyToClipboard(shareText);
+            }
+        }
+        
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => showNotification('国家信息已复制到剪贴板！', 'success'))
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    showNotification('复制失败，请手动复制', 'error');
+                });
+        }
+        
+        // 导出国家数据
+        function exportCountryData() {
+            if (!myCountry) {
+                showNotification('没有国家数据可以导出', 'error');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(myCountry, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            // 创建下载链接
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(dataBlob);
+            downloadLink.download = `${myCountry.name}_国家数据_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            showNotification('国家数据导出成功', 'success');
+        }
+        
+        // 打印国家信息
+        function printCountryInfo() {
+            if (!myCountry) {
+                showNotification('没有国家数据可以打印', 'error');
+                return;
+            }
+            
+            // 创建打印内容
+            const printContent = `
+                <html>
+                <head>
+                    <title>${myCountry.name} - 国家信息</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h1 { color: #2c3e50; }
+                        .info { margin: 10px 0; }
+                        .label { font-weight: bold; color: #3498db; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${myCountry.name}</h1>
+                    <p><span class="label">主义：</span>${myCountry.ideology}</p>
+                    <p><span class="label">描述：</span>${myCountry.description}</p>
+                    <hr>
+                    <h2>国家详细信息</h2>
+                    <div class="info"><span class="label">人口：</span>${myCountry.population}</div>
+                    <div class="info"><span class="label">面积：</span>${myCountry.area}</div>
+                    <div class="info"><span class="label">GDP：</span>${myCountry.gdp}</div>
+                    <div class="info"><span class="label">首都：</span>${myCountry.capital}</div>
+                    <div class="info"><span class="label">政体：</span>${myCountry.government}</div>
+                    <div class="info"><span class="label">元首：</span>${myCountry.leader}</div>
+                    <div class="info"><span class="label">语言：</span>${myCountry.language}</div>
+                    <div class="info"><span class="label">货币：</span>${myCountry.currency}</div>
+                    <div class="info"><span class="label">时区：</span>${myCountry.timezone}</div>
+                    <div class="info"><span class="label">电话区号：</span>${myCountry.callingCode}</div>
+                    <div class="info"><span class="label">国歌：</span>${myCountry.anthem}</div>
+                    <div class="info"><span class="label">民族构成：</span><br>${myCountry.ethnicGroups.replace(/\n/g, '<br>')}</div>
+                    <div class="info"><span class="label">宗教信仰：</span><br>${myCountry.religion.replace(/\n/g, '<br>')}</div>
+                    <hr>
+                    <p><em>打印时间：${new Date().toLocaleString('zh-CN')}</em></p>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
         // 删除国家
         function deleteCountry() {
             if (confirm('确定要删除您的国家吗？此操作不可撤销！')) {
@@ -1581,7 +1912,7 @@
                 // 显示创建状态
                 createState.classList.add('show');
                 editState.style.display = 'none';
-                countryDisplay.classList.remove('show');
+                countryCard.classList.remove('show');
                 
                 // 更新页面标题
                 countryTitle.textContent = '我的国家';
