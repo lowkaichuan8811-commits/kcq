@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>虚拟国家创建器 - Supabase版</title>
+    <title>虚拟国家创建器 - 邮箱验证码版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase客户端库 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* 所有样式代码 */
         * {
             margin: 0;
             padding: 0;
@@ -394,6 +395,28 @@
         .login-input:focus {
             border-color: var(--secondary);
             outline: none;
+        }
+        
+        .verification-code-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .verification-code-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: 5px;
+        }
+        
+        .countdown-timer {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 10px;
         }
         
         /* 国家创建界面 */
@@ -790,49 +813,69 @@
         <!-- 登录界面 -->
         <div class="login-panel" id="loginPanel">
             <div class="login-title">🏛️ 虚拟国家创建器</div>
-            <div class="login-subtitle">基于Supabase数据库的在线版本</div>
+            <div class="login-subtitle">使用邮箱验证码注册登录</div>
             
             <div class="login-form">
-                <div class="form-group">
-                    <label for="registerEmail"><i class="fas fa-envelope"></i> 邮箱</label>
-                    <input type="email" id="registerEmail" class="login-input" placeholder="输入您的邮箱">
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerPassword"><i class="fas fa-lock"></i> 密码</label>
-                    <input type="password" id="registerPassword" class="login-input" placeholder="设置密码（至少6位）">
-                </div>
-                
-                <div class="form-group">
-                    <label for="registerUsername"><i class="fas fa-user"></i> 用户名</label>
-                    <input type="text" id="registerUsername" class="login-input" placeholder="设置用户名">
-                </div>
-                
-                <div class="button-group" style="display: flex; gap: 10px; margin-top: 30px;">
-                    <button class="btn btn-primary" id="registerBtn" style="flex: 1;">
-                        <i class="fas fa-user-plus"></i>
+                <!-- 注册/登录切换 -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-primary" id="showRegisterBtn" style="flex: 1;">
                         注册账号
                     </button>
-                    <button class="btn btn-secondary" id="loginTabBtn" style="flex: 1;">
-                        <i class="fas fa-sign-in-alt"></i>
-                        已有账号
+                    <button class="btn btn-secondary" id="showLoginBtn" style="flex: 1;">
+                        登录账号
                     </button>
                 </div>
                 
-                <div id="loginSection" style="display: none; margin-top: 30px;">
+                <!-- 注册表单 -->
+                <div id="registerForm">
                     <div class="form-group">
-                        <label for="loginEmail"><i class="fas fa-envelope"></i> 邮箱</label>
-                        <input type="email" id="loginEmail" class="login-input" placeholder="输入您的邮箱">
+                        <label for="registerEmail"><i class="fas fa-envelope"></i> 邮箱地址</label>
+                        <input type="email" id="registerEmail" class="login-input" placeholder="输入您的邮箱地址">
                     </div>
                     
                     <div class="form-group">
-                        <label for="loginPassword"><i class="fas fa-lock"></i> 密码</label>
-                        <input type="password" id="loginPassword" class="login-input" placeholder="输入密码">
+                        <label for="registerUsername"><i class="fas fa-user"></i> 用户名</label>
+                        <input type="text" id="registerUsername" class="login-input" placeholder="设置您的用户名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-shield-alt"></i> 邮箱验证码</label>
+                        <div class="verification-code-container">
+                            <input type="text" id="registerVerificationCode" class="verification-code-input" placeholder="6位验证码" maxlength="6">
+                            <button class="btn btn-secondary" id="sendRegisterCodeBtn">
+                                发送验证码
+                            </button>
+                        </div>
+                        <div class="countdown-timer" id="registerCountdown" style="display: none;"></div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="registerBtn" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i>
+                        注册账号
+                    </button>
+                </div>
+                
+                <!-- 登录表单 -->
+                <div id="loginForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="fas fa-envelope"></i> 邮箱地址</label>
+                        <input type="email" id="loginEmail" class="login-input" placeholder="输入您的邮箱地址">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-shield-alt"></i> 邮箱验证码</label>
+                        <div class="verification-code-container">
+                            <input type="text" id="loginVerificationCode" class="verification-code-input" placeholder="6位验证码" maxlength="6">
+                            <button class="btn btn-secondary" id="sendLoginCodeBtn">
+                                发送验证码
+                            </button>
+                        </div>
+                        <div class="countdown-timer" id="loginCountdown" style="display: none;"></div>
                     </div>
                     
                     <button class="btn btn-primary" id="loginBtn" style="width: 100%;">
                         <i class="fas fa-sign-in-alt"></i>
-                        登录
+                        登录账号
                     </button>
                 </div>
             </div>
@@ -1087,12 +1130,10 @@
         </div>
     </div>
 
-    <!-- Supabase配置 -->
     <script>
-        // 在这里配置您的Supabase项目信息
-        // 请替换为您的实际Supabase URL和anon key
-        const supabaseUrl = 'https://umqforcdslzbppsruxor.supabase.co'; // 替换为您的Supabase URL
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtcWZvcmNkc2x6YnBwc3J1eG9yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzQ1MzQsImV4cCI6MjA4MDQxMDUzNH0.VfOsVjOKTKZ18kt-yEuC9pCSiwSEEuPOmwtyJz-MOEk'; // 替换为您的Supabase anon key
+        // Supabase配置 - 请替换为您的实际Supabase URL和anon key
+        const supabaseUrl = 'https://your-project.supabase.co'; // 替换为您的Supabase URL
+        const supabaseKey = 'your-anon-key'; // 替换为您的Supabase anon key
         
         // 创建Supabase客户端
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -1105,6 +1146,10 @@
         let currentChatFriend = null;
         let chatSubscription = null;
         
+        // 倒计时计时器
+        let registerCountdownTimer = null;
+        let loginCountdownTimer = null;
+        
         // DOM元素
         const loginPanel = document.getElementById('loginPanel');
         const mainApp = document.getElementById('mainApp');
@@ -1114,15 +1159,25 @@
         const panelTitle = document.getElementById('panelTitle');
         
         // 登录/注册元素
-        const registerBtn = document.getElementById('registerBtn');
-        const loginTabBtn = document.getElementById('loginTabBtn');
-        const loginSection = document.getElementById('loginSection');
-        const loginBtn = document.getElementById('loginBtn');
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const showLoginBtn = document.getElementById('showLoginBtn');
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        
+        // 注册表单元素
         const registerEmail = document.getElementById('registerEmail');
-        const registerPassword = document.getElementById('registerPassword');
         const registerUsername = document.getElementById('registerUsername');
+        const registerVerificationCode = document.getElementById('registerVerificationCode');
+        const sendRegisterCodeBtn = document.getElementById('sendRegisterCodeBtn');
+        const registerCountdown = document.getElementById('registerCountdown');
+        const registerBtn = document.getElementById('registerBtn');
+        
+        // 登录表单元素
         const loginEmail = document.getElementById('loginEmail');
-        const loginPassword = document.getElementById('loginPassword');
+        const loginVerificationCode = document.getElementById('loginVerificationCode');
+        const sendLoginCodeBtn = document.getElementById('sendLoginCodeBtn');
+        const loginCountdown = document.getElementById('loginCountdown');
+        const loginBtn = document.getElementById('loginBtn');
         
         // 国家创建/编辑元素
         const editState = document.getElementById('editState');
@@ -1203,14 +1258,38 @@
         
         // 初始化所有事件监听器
         function initEventListeners() {
-            // 登录/注册按钮
-            registerBtn.addEventListener('click', handleRegister);
-            loginTabBtn.addEventListener('click', () => {
-                loginSection.style.display = 'block';
-                loginTabBtn.style.display = 'none';
-                registerBtn.style.display = 'none';
+            // 登录/注册切换
+            showRegisterBtn.addEventListener('click', () => {
+                showRegisterBtn.classList.add('btn-primary');
+                showRegisterBtn.classList.remove('btn-secondary');
+                showLoginBtn.classList.remove('btn-primary');
+                showLoginBtn.classList.add('btn-secondary');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
             });
-            loginBtn.addEventListener('click', handleLogin);
+            
+            showLoginBtn.addEventListener('click', () => {
+                showLoginBtn.classList.add('btn-primary');
+                showLoginBtn.classList.remove('btn-secondary');
+                showRegisterBtn.classList.remove('btn-primary');
+                showRegisterBtn.classList.add('btn-secondary');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            });
+            
+            // 发送注册验证码
+            sendRegisterCodeBtn.addEventListener('click', () => sendVerificationCode('register'));
+            
+            // 发送登录验证码
+            sendLoginCodeBtn.addEventListener('click', () => sendVerificationCode('login'));
+            
+            // 注册按钮
+            registerBtn.addEventListener('click', handleRegisterWithCode);
+            
+            // 登录按钮
+            loginBtn.addEventListener('click', handleLoginWithCode);
+            
+            // 退出登录
             logoutBtn.addEventListener('click', handleLogout);
             
             // 国家创建/编辑按钮
@@ -1275,39 +1354,130 @@
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(searchUsers, 500);
             });
+            
+            // 验证码输入限制
+            registerVerificationCode.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+            });
+            
+            loginVerificationCode.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+            });
         }
         
-        // 用户注册
-        async function handleRegister() {
-            const email = registerEmail.value.trim();
-            const password = registerPassword.value.trim();
-            const username = registerUsername.value.trim();
+        // 发送验证码
+        async function sendVerificationCode(type) {
+            let email, button, countdownElement;
             
-            if (!email || !password || !username) {
+            if (type === 'register') {
+                email = registerEmail.value.trim();
+                button = sendRegisterCodeBtn;
+                countdownElement = registerCountdown;
+                
+                if (!email) {
+                    showNotification('请输入邮箱地址', 'error');
+                    return;
+                }
+                
+                // 验证邮箱格式
+                if (!validateEmail(email)) {
+                    showNotification('请输入有效的邮箱地址', 'error');
+                    return;
+                }
+            } else if (type === 'login') {
+                email = loginEmail.value.trim();
+                button = sendLoginCodeBtn;
+                countdownElement = loginCountdown;
+                
+                if (!email) {
+                    showNotification('请输入邮箱地址', 'error');
+                    return;
+                }
+            }
+            
+            try {
+                // 使用OTP（一次性密码）方式发送验证码
+                const { error } = await supabase.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        shouldCreateUser: false // 不自动创建用户
+                    }
+                });
+                
+                if (error) throw error;
+                
+                showNotification('验证码已发送到您的邮箱，请查收', 'success');
+                
+                // 禁用按钮并开始倒计时
+                button.disabled = true;
+                startCountdown(button, countdownElement);
+                
+            } catch (error) {
+                console.error('发送验证码失败:', error);
+                showNotification(`发送验证码失败: ${error.message}`, 'error');
+            }
+        }
+        
+        // 开始倒计时
+        function startCountdown(button, countdownElement) {
+            let seconds = 60;
+            
+            countdownElement.style.display = 'block';
+            countdownElement.textContent = `${seconds}秒后可重新发送`;
+            
+            const timer = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = `${seconds}秒后可重新发送`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    button.disabled = false;
+                    countdownElement.style.display = 'none';
+                    countdownElement.textContent = '';
+                }
+            }, 1000);
+        }
+        
+        // 验证邮箱格式
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // 使用验证码注册
+        async function handleRegisterWithCode() {
+            const email = registerEmail.value.trim();
+            const username = registerUsername.value.trim();
+            const verificationCode = registerVerificationCode.value.trim();
+            
+            if (!email || !username || !verificationCode) {
                 showNotification('请填写所有字段', 'error');
                 return;
             }
             
-            if (password.length < 6) {
-                showNotification('密码至少需要6位', 'error');
+            if (verificationCode.length !== 6) {
+                showNotification('请输入6位验证码', 'error');
                 return;
             }
             
             try {
-                // 1. 注册用户
-                const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            username: username
-                        }
-                    }
+                // 先验证OTP
+                const { data: authData, error: authError } = await supabase.auth.verifyOtp({
+                    email: email,
+                    token: verificationCode,
+                    type: 'email'
                 });
                 
                 if (authError) throw authError;
                 
-                // 2. 创建用户资料
+                // 更新用户元数据（添加用户名）
+                const { error: updateError } = await supabase.auth.updateUser({
+                    data: { username: username }
+                });
+                
+                if (updateError) throw updateError;
+                
+                // 创建用户资料
                 const { error: profileError } = await supabase
                     .from('profiles')
                     .insert([
@@ -1319,17 +1489,14 @@
                     ]);
                 
                 if (profileError) {
-                    // 如果创建资料失败，可能需要删除刚创建的用户
-                    // 但在Supabase中，我们无法直接删除用户，所以只是记录错误
                     console.error('创建用户资料失败:', profileError);
+                    // 如果用户资料创建失败，我们仍然让用户登录，但稍后可能会出现问题
                 }
                 
-                showNotification('注册成功！请检查邮箱确认账户', 'success');
-                
-                // 切换到登录界面
-                loginSection.style.display = 'block';
-                loginTabBtn.style.display = 'none';
-                registerBtn.style.display = 'none';
+                currentUser = authData.user;
+                await loadUserData();
+                showMainApp();
+                showNotification('注册成功！', 'success');
                 
             } catch (error) {
                 console.error('注册失败:', error);
@@ -1337,25 +1504,32 @@
             }
         }
         
-        // 用户登录
-        async function handleLogin() {
+        // 使用验证码登录
+        async function handleLoginWithCode() {
             const email = loginEmail.value.trim();
-            const password = loginPassword.value.trim();
+            const verificationCode = loginVerificationCode.value.trim();
             
-            if (!email || !password) {
-                showNotification('请填写邮箱和密码', 'error');
+            if (!email || !verificationCode) {
+                showNotification('请填写所有字段', 'error');
+                return;
+            }
+            
+            if (verificationCode.length !== 6) {
+                showNotification('请输入6位验证码', 'error');
                 return;
             }
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
+                // 验证OTP
+                const { data: authData, error: authError } = await supabase.auth.verifyOtp({
+                    email: email,
+                    token: verificationCode,
+                    type: 'email'
                 });
                 
-                if (error) throw error;
+                if (authError) throw authError;
                 
-                currentUser = data.user;
+                currentUser = authData.user;
                 await loadUserData();
                 showMainApp();
                 showNotification('登录成功！', 'success');
@@ -1384,15 +1558,14 @@
                 
                 // 重置表单
                 registerEmail.value = '';
-                registerPassword.value = '';
                 registerUsername.value = '';
+                registerVerificationCode.value = '';
                 loginEmail.value = '';
-                loginPassword.value = '';
+                loginVerificationCode.value = '';
                 
                 // 重置界面状态
-                loginSection.style.display = 'none';
-                loginTabBtn.style.display = 'block';
-                registerBtn.style.display = 'block';
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
                 
                 showNotification('已退出登录', 'info');
                 
